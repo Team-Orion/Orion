@@ -78,15 +78,15 @@ class Vue():
         self.qteIA=Entry(bg="pink")
         self.qteIA.insert(0, 4)
         self.btnlancerpartie=Button(text="Lancer partie",bg="pink",command=self.lancerpartie,state=DISABLED)
-        self.canevaslobby.create_window(440,240,window=self.listelobby,width=200,height=400)
-        self.canevaslobby.create_window(200,200,window=self.diametre,width=100,height=30)
-        self.canevaslobby.create_text(20,200,text="Diametre en annee lumiere")
+        self.canevaslobby.create_window(520,240,window=self.listelobby,width=200,height=400)
+        self.canevaslobby.create_window(300,200,window=self.diametre,width=100,height=30)
+        self.canevaslobby.create_text(150,200,text="Diametre en annee lumiere")
         
-        self.canevaslobby.create_window(200,250,window=self.densitestellaire,width=100,height=30)
-        self.canevaslobby.create_text(20,250,text="Nb systeme/AL cube")
+        self.canevaslobby.create_window(300,250,window=self.densitestellaire,width=100,height=30)
+        self.canevaslobby.create_text(150,250,text="Nb systeme/AL cube")
         
-        self.canevaslobby.create_window(200,300,window=self.qteIA,width=100,height=30)
-        self.canevaslobby.create_text(20,300,text="Nb d'IA")
+        self.canevaslobby.create_window(300,300,window=self.qteIA,width=100,height=30)
+        self.canevaslobby.create_text(150,300,text="Nb d'IA")
         
         self.canevaslobby.create_window(200,450,window=self.btnlancerpartie,width=100,height=30)
 
