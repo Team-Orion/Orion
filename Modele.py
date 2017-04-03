@@ -39,7 +39,67 @@ class Pulsar():
             self.phase=-1
         else:
             self.taille=self.mintaille+(self.moment*self.pas)
- 
+class TourDefense():
+    def __init__(self):
+        pass
+    def attaquer(self):
+        pass
+class UsineVaisseau(): 
+    def __init__(self):
+        self.capacitechargement=0
+        pass
+    def creervaisseaucargo(self):
+        pass
+    def creervaisseauattaque(self):
+        pass
+class HotelVille():
+    def __init__(self):
+        self.limitepop=500
+    def augmentepopulation(self):
+        pass
+class Universite():
+    def __init__(self):
+        pass
+    def recherche(self):
+        pass
+class Caserne():
+    def __init__(self):
+        pass
+    def creationtroupe(self):
+        pass
+class Ferme():
+    def __init__(self):
+        self.capacite=100
+    def nourrirpopulation(self):
+        pass
+    def exploitationnouriture(self):
+        pass
+    
+class Scierie():
+    def __init__(self):
+        self.bois=0
+        pass
+    def exploitationbois(self):
+        pass
+class Temple():
+    def __init__(self):
+        pass
+    def creerdisciple(self):
+        pass
+class Ruine():
+    def __init__(self):
+        pass
+    def trouverartefact(self):
+        pass
+class Troupe():
+    def __init__(self):
+        pass
+    def avancer(self):
+        pass
+    def ciblerdestination(self):
+        pass
+    def attaque(self):
+        pass
 class Ville():
     def __init__(self,parent,proprio="inconnu",x=2500,y=2500):
         self.id=Id.prochainid()
@@ -58,6 +118,9 @@ class Mine():
         self.systemeid=systemeid
         self.planeteid=planeteid
         self.entrepot=0
+        self.capacite=100
+    def exploitationminerai(self):
+        pass
                 
 class Planete():
     def __init__(self,parent,type,dist,taille,angle):
@@ -72,6 +135,8 @@ class Planete():
         self.type=type
         self.taille=taille
         self.angle=angle
+    def creationtourdefense(self):
+        pass
         
 class Etoile():
     def __init__(self,parent,x,y):
@@ -105,7 +170,7 @@ class Systeme():
                 taille=random.randrange(50)/100 # en masse solaire
                 angle=random.randrange(360)
                 self.planetes.append(Planete(self,type,distsol,taille,angle))
-                
+#vaisseau baleine                
 class Vaisseau():
     def __init__(self,nom,systeme):
         self.id=Id.prochainid()
@@ -140,7 +205,141 @@ class Vaisseau():
         self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
         dist=hlp.calcDistance(self.x,self.y,p.x,p.y)
         #print("Distance",dist," en ", int(dist/self.vitesse))
+    def charger(self):
+        pass
+    def decharger(self):
+        pass
+class VaisseauAttaqueGalactique():
+    def __init__(self,nom,systeme):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.taille=16
+        self.base=systeme
+        self.angletrajet=0
+        self.angleinverse=0
+        self.x=self.base.x
+        self.y=self.base.y
+        self.taille=16
+        self.cargo=0
+        self.energie=100
+        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.cible=None 
+        
+    def avancer(self):
+        rep=None
+        if self.cible:
+            x=self.cible.x
+            y=self.cible.y
+            self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+                rep=self.cible
+                self.base=self.cible
+                self.cible=None
+            return rep
+        
+    def ciblerdestination(self,p):
+        self.cible=p
+        self.angletrajet=hlp.calcAngle(self.x,self.y,p.x,p.y)
+        self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
+        dist=hlp.calcDistance(self.x,self.y,p.x,p.y)
+    def attaque(self):
+        pass
+
+class VaisseauAttaquePlanetaire():
+    def __init__(self,nom,systeme):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.taille=16
+        self.base=systeme
+        self.angletrajet=0
+        self.angleinverse=0
+        self.x=self.base.x
+        self.y=self.base.y
+        self.taille=16
+        self.cargo=0
+        self.energie=100
+        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.cible=None 
+        
+    def avancer(self):
+        rep=None
+        if self.cible:
+            x=self.cible.x
+            y=self.cible.y
+            self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+                rep=self.cible
+                self.base=self.cible
+                self.cible=None
+            return rep
+        
+    def ciblerdestination(self,p):
+        self.cible=p
+        self.angletrajet=hlp.calcAngle(self.x,self.y,p.x,p.y)
+        self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
+        dist=hlp.calcDistance(self.x,self.y,p.x,p.y)
+    def attaque(self):
+        pass
     
+    
+class VaisseauCargoSysteme():
+    def __init__(self,nom,systeme):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.taille=16
+        self.base=systeme
+        self.angletrajet=0
+        self.angleinverse=0
+        self.x=self.base.x
+        self.y=self.base.y
+        self.taille=16
+        self.cargo=0
+        self.energie=100
+        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.cible=None 
+        
+    def avancer(self):
+        rep=None
+        if self.cible:
+            x=self.cible.x
+            y=self.cible.y
+            self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+                rep=self.cible
+                self.base=self.cible
+                self.cible=None
+            return rep
+        
+    def ciblerdestination(self,p):
+        self.cible=p
+        self.angletrajet=hlp.calcAngle(self.x,self.y,p.x,p.y)
+        self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
+        dist=hlp.calcDistance(self.x,self.y,p.x,p.y)
+        #print("Distance",dist," en ", int(dist/self.vitesse))
+    def charger(self):
+        pass
+    def decharger(self):
+        pass
+    def chargerressources():
+        pass
+class StationPlanetaire:
+    def __init__(self):
+         pass
+    def creercargogalactique(self):
+        pass
+    def creerattaquegalactique(self):
+        pass
+    def creerbouclierplanetaire(self):
+        pass
+class StationGalactique:
+    def __init__(self):
+        self.capacite=10 
+    def reparation(self):
+        pass
+    def troc(self):
+        pass
+    def deplacer(self):
+        pass
 class Joueur():
     def __init__(self,parent,nom,systemeorigine,couleur):
         self.id=Id.prochainid()
@@ -157,6 +356,10 @@ class Joueur():
                       "atterrirplanete":self.atterrirplanete,
                       "visitersysteme":self.visitersysteme,
                       "creermine":self.creermine}
+    def alliance(self):
+        pass
+    def gaintechnologique(self):
+        pass
         
     def creermine(self,listeparams):
         nom,systemeid,planeteid,x,y=listeparams
@@ -222,8 +425,10 @@ class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur):
         Joueur.__init__(self,parent,nom,systemeorigine,couleur)
         self.contexte="galaxie"
-        self.delaiaction=random.randrange(5,10)  # le delai est calcule pour chaque prochaine action en seconde
-        self.derniereaction=time.time()
+         # le delai est calcule pour chaque prochaine action en seconde
+        self.delaiaction=random.randrange(5,10)*20  # le 20 =nbr de boucle par sec.
+        
+        #self.derniereaction=time.time()
         
     # NOTE sur l'analyse de la situation   
     #          on utilise le temps (time.time() retourne le nombre de secondes depuis 1970) pour le delai de 'cool down'
@@ -231,8 +436,8 @@ class IA(Joueur):
     #          aussi presentement - on s'occupe uniquement d'avoir un vaisseau et de deplacer ce vaisseau vers 
     #          le systeme le plus proche non prealablement visite.
     def analysesituation(self):
-        t=time.time()
-        if self.derniereaction and t-self.derniereaction>self.delaiaction:
+        #t=time.time()
+        if self.delaiaction==0:#self.derniereaction and t-self.derniereaction>self.delaiaction:
             if self.contexte=="galaxie":
                 if len(self.vaisseauxinterstellaires)==0:
                     c=self.parent.parent.cadre+5
@@ -261,9 +466,12 @@ class IA(Joueur):
                             else:
                                 print("JE NE TROUVE PLUS DE CIBLE")
                                 
-                self.derniereaction=t
-                self.delaiaction=random.randrange(5,10)
+                #self.derniereaction=t
+                self.delaiaction=random.randrange(5,10)*20
+                
                 print("CIV:" ,self.nom,self.couleur, self.delaiaction)
+        else:
+            self.delaiaction-=1
         
 # FIN IA
 
