@@ -18,7 +18,10 @@ class VueSysteme(Perspective):
         
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau",command=self.creervaisseau)
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "attaquesolaire"}))
+        self.btncreervaisseau.pack()
+        
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "cargosolaire"}))
         self.btncreervaisseau.pack()
         
         self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=self.creerstation)
