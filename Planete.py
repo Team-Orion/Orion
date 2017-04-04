@@ -28,11 +28,11 @@ class Pulsar():
             self.taille=self.mintaille+(self.moment*self.pas)
                 
 class Planete():
-    def __init__(self,parent,type,dist,taille,angle,x,y):
+    def __init__(self,parent,type,dist,taille,angle):
         self.id=Id.prochainid()
         self.parent=parent
-        self.posXatterrissage=x
-        self.posYatterrissage=y 
+        self.posXatterrissage=random.randrange(5000)
+        self.posYatterrissage=random.randrange(5000)
         self.infrastructures=[Ville(self)]
         self.proprietaire="inconnu"
         self.visiteurs={}

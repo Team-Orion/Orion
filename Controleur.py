@@ -12,6 +12,7 @@ import math
 import time # IA
 from Vue import *
 from Modele import *
+from test.test_finalization import SelfCycleBase
 
 
 class Controleur():
@@ -27,7 +28,7 @@ class Controleur():
         self.serveur=None
         self.vue=Vue(self,self.monip,self.monnom)
         self.vue.root.mainloop()
-        
+ 
     def trouverIP(self): # fonction pour trouver le IP en 'pignant' gmail
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # on cree un socket
         s.connect(("gmail.com",80))    # on envoie le ping
@@ -142,6 +143,14 @@ class Controleur():
     # FONCTIONS DE COUP DU JOUEUR A ENVOYER AU SERVEUR
     def action_joueur(self, action, parametres):
         self.actions.append((self.monnom, action, parametres))
+        
+    def envoiemessage(self,messageenvoye):
+        
+        print("controleur print")
+        self.actions.append((self.monnom, "envoimessage",{"message": messageenvoye}))
+        
+        
+        print("fonction controleur")
 
     """ #io 03-04    
     def ciblerdestination(self,id_appelant,id_destination):

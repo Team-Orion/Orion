@@ -94,21 +94,18 @@ class VueSysteme(Perspective):
                         self.canevas.create_oval(x-t,y-t,x+t,y+t,dash=(2,2),
                                                  outline=joueur.couleur,
                                                  tags=("select","selecteur"))
-                        
-    
       
     def selectionner(self,evt):
         self.changecadreetat(None)
         
         t=self.canevas.gettags("current")
         print(t)
-        if t and t[2] != "etoile" and t[0]!="current":
+        if t and t[0]!="current":
             nom=t[0]
             idplanete=t[2]
             idsysteme=t[4]
             self.maselection=[self.parent.nom,t[1],t[2],t[5],t[6],t[4]]  # prop, type, id; self.canevas.find_withtag(CURRENT)#[0]
             if t[1] == "planete" and t[3]=="inconnu":
-                print(t)
                 self.montreplaneteselection()
                 
             # ici je veux envoyer un message comme quoi je visite cette planete
