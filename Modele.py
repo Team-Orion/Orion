@@ -13,6 +13,7 @@ from Systeme import *
 
 class Coord():
     def __init__(self, x, y):
+        self.proprietaire = None
         self.x = x
         self.y = y
         self.taille = 0
@@ -26,21 +27,14 @@ class Joueur():
         self.systemeorigine=systemeorigine
         self.couleur=couleur
         self.systemesvisites=[systemeorigine]
-        self.vaisseauxinterstellaires=[]
-        self.vaisseauxinterplanetaires=[]
-        self.messageenvoie=None
+        self.vaisseauxinterstellaires=[] #à supp |io 04-04
+        self.vaisseauxinterplanetaires=[] #à supp |io 04-04
         self.actions={"creervaisseau":self.creervaisseau,
                       "ciblerdestination":self.ciblerdestination,
                       "atterrirplanete":self.atterrirplanete,
                       #"creermine":self.creermine, # io 03-4
-                      "visitersysteme":self.visitersysteme,
-                      "envoimessage":self.envoiemessage
-                     }
-    ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
-    def envoiemessage(self, message):
-        self.messageenvoie=message
-        self.parent.parent.vue.setmessagerecu(self.messageenvoie)
-        #print("message recu modele:",self.messagerecu)
+                      "visitersysteme":self.visitersysteme
+                      }
     def alliance(self):
         pass
     def gaintechnologique(self):
@@ -71,51 +65,22 @@ class Joueur():
             if i.id==id_appelant:
                 self.systemesvisites.append(i)
                 
-    def creervaisseau(self, id_appelant, type_unite = None): 
-        #types = {"attaquegalaxie" : attaquegalaxie 
-        #         }
-        #self.vaisseaux.append(types[type_unite](self, i))
-        if type_unite == None:
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=Vaisseau(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
-        elif type_unite=="attaquegalaxie":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauAttaqueGalactique(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
-        elif type_unite=="cargogalaxie":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauCargoGalactique(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
-        elif type_unite=="attaquesolaire":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauAttaqueSolaire(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
-        elif type_unite=="cargosolaire":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauCargoSolaire(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
-        
+    def creervaisseau(self, id_appelant):
+        for i in self.systemesvisites:
+            if i.id==id_appelant:
+                v=Vaisseau(self, i) #io 04-04
+                self.vaisseauxinterstellaires.append(v) #à supp |io 04-04
+                self.parent.objetsCliquables[v.id] = v #io 04-04
+                return 1
+            
     def ciblerdestination(self, id_appelant, cible, mode = "id"):
         
-        unite = self.parent.chercherObjetParId(id_appelant, self.vaisseauxinterstellaires) #à revoir #io 03-04
+        unite = self.parent.objetsCliquables[id_appelant]
         if mode == "id":
-            lacible = self.parent.chercherObjetParId(cible, self.parent.systemes+self.systemesvisites) #à revoir #io 03-04
-            print("TESTE", lacible.x, lacible.y)
+            lacible =self.parent.objetsCliquables[cible]
         elif mode == "coord":
             print(cible)
             lacible = Coord(**cible)
-        print("cibler", unite, lacible)
         unite.cible = lacible
         unite.ciblerdestination(lacible)
         return
@@ -209,12 +174,14 @@ class Modele():
         self.joueurs={}
         self.joueurscles=joueurs
         self.actionsafaire={}
-        self.pulsars=[]
-        self.systemes=[]
+        self.objetsCliquables = dict()
+        self.pulsars=[] #à supp |io 04-04
+        self.systemes=[] #à supp |io 04-04
         self.terrain=[]
         self.unites = [] #io 03-04
         self.infrastructure = [] #io 03-04
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
+        
         
     
     def chercherObjetParId(self, id, liste): #io 03-04
@@ -228,17 +195,17 @@ class Modele():
         for i in range(self.nbsystemes):
             x=random.randrange(self.diametre*10)/10
             y=random.randrange(self.diametre*10)/10
-            for i in self.systemes:
-                if x == i.x:
-                    x=random.randrange(self.diametre*10)/10
-                if y == i.y:
-                    y=random.randrange(self.diametre*10)/10
-            self.systemes.append(Systeme(x,y))
+            systeme = Systeme(x,y, self)
+            self.systemes.append(systeme) #à supp |io 04-04
+            self.objetsCliquables[systeme.id] = systeme
         
         for i in range(20):
             x=random.randrange(self.diametre*10)/10
             y=random.randrange(self.diametre*10)/10
-            self.pulsars.append(Pulsar(x,y))
+            pulsar = Pulsar(x,y) 
+            self.pulsars.append(pulsar) #à supp |io 04-04
+            self.objetsCliquables[pulsar.id] = pulsar
+            
             
         np=len(self.joueurscles) + nbias  # on ajoute le nombre d'ias
         planes=[]
