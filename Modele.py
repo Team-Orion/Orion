@@ -32,12 +32,8 @@ class Joueur():
                       "ciblerdestination":self.ciblerdestination,
                       "atterrirplanete":self.atterrirplanete,
                       #"creermine":self.creermine, # io 03-4
-                      "visitersysteme":self.visitersysteme,
-                      "envoimessage":self.envoiemessage
+                      "visitersysteme":self.visitersysteme
                       }
-    def envoiemessage(self, message):
-        self.messagerecu=message
-        print("message recu")
     def alliance(self):
         pass
     def gaintechnologique(self):
@@ -80,7 +76,7 @@ class Joueur():
         unite = self.parent.chercherObjetParId(id_appelant, self.vaisseauxinterstellaires) #à revoir #io 03-04
         if mode == "id":
             lacible = self.parent.chercherObjetParId(cible, self.parent.systemes+self.systemesvisites) #à revoir #io 03-04
-            print("TESTE", lacible.x, lacible.y)
+            
         elif mode == "coord":
             print(cible)
             lacible = Coord(**cible)
@@ -197,11 +193,13 @@ class Modele():
         for i in range(self.nbsystemes):
             x=random.randrange(self.diametre*10)/10
             y=random.randrange(self.diametre*10)/10
+            
             for i in self.systemes:
                 if x == i.x:
                     x=random.randrange(self.diametre*10)/10
                 if y == i.y:
                     y=random.randrange(self.diametre*10)/10
+                    
             self.systemes.append(Systeme(x,y))
         
         for i in range(20):
