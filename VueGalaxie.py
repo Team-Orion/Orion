@@ -16,7 +16,13 @@ class VueGalaxie(Perspective):
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
         self.labid.bind("<Button-1>",self.identifierplanetemere) #io 03-04
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau", command= lambda: self.action_joueur("creervaisseau"))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Sonde", command= lambda: self.action_joueur("creervaisseau"))
+        self.btncreervaisseau.pack()
+        
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "attaquegalaxie"}))
+        self.btncreervaisseau.pack()
+        
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "cargogalaxie"}))
         self.btncreervaisseau.pack()
         
         self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerstation"))
