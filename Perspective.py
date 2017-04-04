@@ -8,6 +8,7 @@ class Perspective(Frame):
         self.modele=None
         self.cadreetatactif=None
         self.images={}
+        self.cible = False
         self.cadrevue=Frame(self,width=400,height=400, bg="lightgreen")
         self.cadrevue.pack(side=LEFT,expand=1,fill=BOTH)
         
@@ -23,7 +24,8 @@ class Perspective(Frame):
                              xscrollcommand=self.scrollX.set,
                              yscrollcommand=self.scrollY.set)
         
-        self.canevas.bind("<Button>",self.cliquervue)
+        self.canevas.bind("<Button-1>",self.selectionner) #io 03-04
+        self.canevas.bind("<Button-3>",self.cibler)
         
         self.scrollX.config(command=self.canevas.xview)
         self.scrollY.config(command=self.canevas.yview)
@@ -43,14 +45,38 @@ class Perspective(Frame):
         self.cadreminimap=Frame(self.cadreinfo,width=200,height=200,bg="grey20")
         self.cadreminimap.pack(side=BOTTOM)
         self.minimap=Canvas(self.cadreminimap,width=200,height=200,bg="grey11")
-        self.minimap.bind("<Button>",self.cliquerminimap)
+        self.minimap.bind("<Button-1>",self.cliquerminimap) #io 03-04
         self.minimap.pack()
-        
-    def cliquervue(self,evt):
+    
+    def selectionner(self,evt):
         pass
     
+    def cibler(self, evt):
+        if self.maselection and self.maselection[1]=="vaisseauinterstellaire":
+            cible=self.canevas.gettags("current")
+            if cible and cible[0] !="current":
+                cible = cible[2]
+                mode = "id"
+            else:
+                cible = {'x': evt.x, 'y': evt.y} #à mettre en unités wtf #io
+                mode = "coord"
+            self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": cible, "mode": mode})
+            
+        
+    
     def cliquerminimap(self,evt):
-        pass
+        x=evt.x
+        y=evt.y
+        xn=self.largeur/int(self.minimap.winfo_width())
+        yn=self.hauteur/int(self.minimap.winfo_height())
+        
+        ee=self.canevas.winfo_width()
+        ii=self.canevas.winfo_height()
+        eex=int(ee)/self.largeur/2
+        eey=int(ii)/self.hauteur/2
+        
+        self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
+        self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
     
     def changecadreetat(self,cadre):
         if self.cadreetatactif:
@@ -59,4 +85,10 @@ class Perspective(Frame):
         if cadre:
             self.cadreetatactif=cadre
             self.cadreetatactif.pack()
-        
+    
+    def action_joueur(self, action, parametres = {}, selectionner = False):
+        if selectionner:
+            pass
+        else:
+            parametres["id_appelant"] = self.maselection[2]
+            self.parent.parent.action_joueur(action, parametres)

@@ -15,11 +15,11 @@ class VueGalaxie(Perspective):
         
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
-        self.labid.bind("<Button>",self.identifierplanetemere)
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau",command=self.creervaisseau)
+        self.labid.bind("<Button-1>",self.identifierplanetemere) #io 03-04
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau", command= lambda: self.action_joueur("creervaisseau"))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=self.creerstation)
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerstation"))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
@@ -35,8 +35,7 @@ class VueGalaxie(Perspective):
                     if i.id==sid:
                         s=i
                         break
-                
-                self.parent.parent.visitersysteme(sid)
+                self.action_joueur("visitersysteme", {"id_appelant": sid}) #io
                 self.parent.voirsysteme(s) #normalement devrait pas planter
         else:                
             sid=systeme.id
@@ -184,7 +183,7 @@ class VueGalaxie(Perspective):
                                                       outline=joueur.couleur,
                                                       tags=("select","selecteur"))
       
-    def cliquervue(self,evt):
+    def selectionner(self,evt):
         self.changecadreetat(None)
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
@@ -196,10 +195,13 @@ class VueGalaxie(Perspective):
             
             elif t[1]=="systeme":
                 print("IN SYSTEME",t)
+                """
                 if self.maselection and self.maselection[1]=="vaisseauinterstellaire":
                     print("IN systeme + select VAISSEAUINTERSTELLAIRE")
-                    self.parent.parent.ciblerdestination(self.maselection[2],t[2])
-                elif self.parent.nom in t:
+                    #self.parent.parent.ciblerdestination(self.maselection[2],t[2])
+                    self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": t[2]})
+                """
+                if self.parent.nom in t:
                     print("IN systeme  PAS SELECTION")
                     self.maselection=[self.parent.nom,t[1],t[2]]
                     self.montresystemeselection()
@@ -224,7 +226,7 @@ class VueGalaxie(Perspective):
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-    
+    """
     def cliquerminimap(self,evt):
         x=evt.x
         y=evt.y
@@ -238,4 +240,4 @@ class VueGalaxie(Perspective):
         
         self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
         self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
-        
+    """

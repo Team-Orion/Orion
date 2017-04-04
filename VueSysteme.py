@@ -95,7 +95,7 @@ class VueSysteme(Perspective):
                                                  outline=joueur.couleur,
                                                  tags=("select","selecteur"))
       
-    def cliquervue(self,evt):
+    def selectionner(self,evt):
         self.changecadreetat(None)
         
         t=self.canevas.gettags("current")
@@ -124,7 +124,7 @@ class VueSysteme(Perspective):
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-    
+    """
     def cliquerminimap(self,evt):
         x=evt.x
         y=evt.y
@@ -138,3 +138,4 @@ class VueSysteme(Perspective):
         
         self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
         self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
+    """

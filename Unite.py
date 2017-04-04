@@ -42,6 +42,7 @@ class Vaisseau():
         pass
     def decharger(self):
         pass
+    
 class VaisseauAttaqueGalactique():
     def __init__(self,nom,systeme):
         self.id=Id.prochainid()

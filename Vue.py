@@ -72,7 +72,7 @@ class Vue():
         self.canevaslobby.pack()
         self.listelobby=Listbox(bg="red",borderwidth=0,relief=FLAT)
         self.diametre=Entry(bg="pink")
-        self.diametre.insert(0, 17)
+        self.diametre.insert(0, 5)
         self.densitestellaire=Entry(bg="pink")
         self.densitestellaire.insert(0, 2)
         self.qteIA=Entry(bg="pink")

@@ -11,6 +11,11 @@ from Id import *
 from Planete import *
 from Systeme import *
 
+class Coord():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.taille = 0
 
 class Joueur():
     def __init__(self,parent,nom,systemeorigine,couleur):
@@ -26,15 +31,15 @@ class Joueur():
         self.actions={"creervaisseau":self.creervaisseau,
                       "ciblerdestination":self.ciblerdestination,
                       "atterrirplanete":self.atterrirplanete,
-                      "visitersysteme":self.visitersysteme,
-                      "creermine":self.creermine}
+                      #"creermine":self.creermine, # io 03-4
+                      "visitersysteme":self.visitersysteme
+                      }
     def alliance(self):
         pass
     def gaintechnologique(self):
         pass
-        
-    def creermine(self,listeparams):
-        nom,systemeid,planeteid,x,y=listeparams
+    """ #io 03-04    
+    def creermine(self, nom, systemeid, planeteid, x, y):
         for i in self.systemesvisites:
             if i.id==systemeid:
                 for j in i.planetes:
@@ -42,9 +47,9 @@ class Joueur():
                         mine=Mine(self,nom,systemeid,planeteid,x,y)
                         j.infrastructures.append(mine)
                         self.parent.parent.affichermine(nom,systemeid,planeteid,x,y)
+    """
                         
-    def atterrirplanete(self,d):
-        nom,systeid,planeid=d
+    def atterrirplanete(self, id_appelant, id_planete):
         for i in self.systemesvisites:
             if i.id==systeid:
                 for j in i.planetes:
@@ -53,33 +58,45 @@ class Joueur():
                         if nom==self.parent.parent.monnom:
                             self.parent.parent.voirplanete(i.id,j.id)
                         return 1
-        
-    def visitersysteme(self,systeme_id):
+                    
+    def visitersysteme(self, id_appelant):
         for i in self.parent.systemes:
-            if i.id==systeme_id:
+            if i.id==id_appelant:
                 self.systemesvisites.append(i)
                 
-    def creervaisseau(self,id):
+    def creervaisseau(self, id_appelant):
         for i in self.systemesvisites:
-            if i.id==id:
-                v=Vaisseau(self.nom,i)
+            if i.id==id_appelant:
+                v=Vaisseau(self, i) #io 03-04
                 self.vaisseauxinterstellaires.append(v)
                 return 1
         
-    def ciblerdestination(self,ids):
-        idori,iddesti=ids
+    def ciblerdestination(self, id_appelant, cible, mode = "id"):
+        
+        unite = self.parent.chercherObjetParId(id_appelant, self.vaisseauxinterstellaires) #à revoir #io 03-04
+        if mode == "id":
+            lacible = self.parent.chercherObjetParId(cible, self.parent.systemes+self.systemesvisites) #à revoir #io 03-04
+            print("TESTE", lacible.x, lacible.y)
+        elif mode == "coord":
+            print(cible)
+            lacible = Coord(**cible)
+        print("cibler", unite, lacible)
+        unite.cible = lacible
+        unite.ciblerdestination(lacible)
+        return
+        """
         for i in self.vaisseauxinterstellaires:
-            if i.id== idori:
+            if i.id == id_appelant:
                 for j in self.parent.systemes:
-                    if j.id== iddesti:
-                        #i.cible=j
+                    if j.id== cible:
                         i.ciblerdestination(j)
                         return
                 for j in self.systemesvisites:
-                    if j.id== iddesti:
-                        #i.cible=j
+                    if j.id== cible:
                         i.ciblerdestination(j)
                         return
+        """
+        
         
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
         global modeauto
@@ -115,7 +132,7 @@ class IA(Joueur):
                     c=self.parent.parent.cadre+5
                     if c not in self.parent.actionsafaire.keys(): 
                         self.parent.actionsafaire[c]=[] 
-                    self.parent.actionsafaire[c].append([self.nom,"creervaisseau",self.systemeorigine.id])
+                    self.parent.actionsafaire[c].append([self.nom,"creervaisseau", {"id_appelant":self.systemeorigine.id}])
                     print("AJOUTER VAISSEAU ",self.systemeorigine.x,self.systemeorigine.y)
                 else:
                     for i in self.vaisseauxinterstellaires:
@@ -128,7 +145,7 @@ class IA(Joueur):
                             systdist=1000000000000
                             for j in self.parent.systemes:
                                 d=hlp.calcDistance(vi.x,vi.y,j.x,j.y)
-                                print ("DISTANCE ",i,d)
+                                #print ("DISTANCE ",i,d)
                                 if d<systdist and j not in self.systemesvisites:
                                     systdist=d
                                     systtemp=j
@@ -160,7 +177,16 @@ class Modele():
         self.pulsars=[]
         self.systemes=[]
         self.terrain=[]
+        self.unites = [] #io 03-04
+        self.infrastructure = [] #io 03-04
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
+        
+    
+    def chercherObjetParId(self, id, liste): #io 03-04
+        for objet in liste:
+            if objet.id == id:
+                return objet
+        return None
         
     def creersystemes(self,nbias):  # IA ajout du parametre du nombre d'ias a ajouter
         
@@ -204,8 +230,9 @@ class Modele():
             
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:
-            for i in self.actionsafaire[cadre]:
-                self.joueurs[i[0]].actions[i[1]](i[2])
+            for nom_joueur, action, parametres in self.actionsafaire[cadre]:
+                print(parametres)
+                self.joueurs[nom_joueur].actions[action](**parametres)
             del self.actionsafaire[cadre]
                 
         for i in self.joueurscles:

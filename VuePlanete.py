@@ -25,7 +25,7 @@ class VuePlanete(Perspective):
         
         self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
         self.btncreerstation.pack()
-        self.btnvuesysteme=Button(self.cadreetataction,text="Voir System",command=self.voirsysteme)
+        self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systemf",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
         
         self.changecadreetat(self.cadreetataction)
@@ -95,7 +95,7 @@ class VuePlanete(Perspective):
     def afficherselection(self):
         pass
       
-    def cliquervue(self,evt):
+    def selectionner(self,evt):
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
             if t[0]==self.parent.nom:
@@ -117,7 +117,7 @@ class VuePlanete(Perspective):
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-    
+    """
     def cliquerminimap(self,evt):
         x=evt.x
         y=evt.y
@@ -131,3 +131,4 @@ class VuePlanete(Perspective):
         
         self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
         self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
+    """
