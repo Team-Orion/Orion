@@ -140,26 +140,31 @@ class Controleur():
         self.vue.root.destroy()
         
     # FONCTIONS DE COUP DU JOUEUR A ENVOYER AU SERVEUR
+    def action_joueur(self, action, parametres):
+        self.actions.append((self.monnom, action, parametres))
+
+    """ #io 03-04    
+    def ciblerdestination(self,id_appelant,id_destination):
+        parametres = {"id_appelant": id_appelant, "id_destination": id_destination}
+        self.actions.append([self.monnom, "ciblerdestination", parametres])
+   
     def creervaisseau(self,systeme):
         self.modele.creervaisseau(systeme)
-        #self.actions.append([self.monnom,"creervaisseau",""])
-        
-    def ciblerdestination(self,idorigine,iddestination):
-        self.actions.append([self.monnom,"ciblerdestination",[idorigine,iddestination]])
-        
+        #self.actions.append([self.monnom,"creervaisseau",""]) 
+    
     def visitersysteme(self,systeme_id):
         self.actions.append([self.monnom,"visitersysteme",[systeme_id]])
         
     def atterrirdestination(self,joueur,systeme,planete):
         self.actions.append([self.monnom,"atterrirplanete",[self.monnom,systeme,planete]])
-        
-    
+
     def creermine(self,joueur,systeme,planete,x,y):
         self.actions.append([self.monnom,"creermine",[self.monnom,systeme,planete,x,y]])
         
     def affichermine(self,joueur,systemeid,planeteid,x,y):
         self.vue.affichermine(joueur,systemeid,planeteid,x,y)
-        
+    """
+     
     def voirplanete(self,idsysteme,idplanete):
         pass
     
@@ -169,3 +174,4 @@ class Controleur():
 if __name__=="__main__":
     c=Controleur()
     print("End Orion_empire")
+    
