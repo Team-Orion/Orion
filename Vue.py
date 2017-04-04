@@ -28,11 +28,24 @@ class Vue():
         self.creercadres(ip,nom)
         self.changecadre(self.cadresplash)
         
+        self.messageenvoi=None  
+        self.messagerecu="Recu:"
+        self.entreemessage = Entry(self.root) 
+        self.labelrecu=Label(self.root, text=self.messagerecu)
+        self.buttonmessage=Button(self.root,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.messagerecu}))
+        
+    def envoiemessage(self):
+        self.messageenvoi=self.entreemessage.get()
+        self.parent.envoiemessage(self.messageenvoi)
+        print("self.message",self.messageenvoi)     
     def changemode(self,cadre):
         if self.modecourant:
             self.modecourant.pack_forget()
         self.modecourant=cadre
-        self.modecourant.pack(expand=1,fill=BOTH)            
+        self.modecourant.pack(expand=1,fill=BOTH)  
+        self.buttonmessage.pack(side=LEFT)
+        self.entreemessage.pack(side=BOTTOM) 
+        self.labelrecu.pack(side=BOTTOM)           
 
     def changecadre(self,cadre,etend=0):
         if self.cadreactif:
@@ -186,5 +199,6 @@ class Vue():
         # Ici, on pourrait mettre des actions a faire avant de fermer (sauvegarder, avertir etc)
         self.parent.fermefenetre()
         
-
+    def action_joueur(self, action, parametres = {}):
+            self.parent.action_joueur(action, parametres)
         

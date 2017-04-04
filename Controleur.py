@@ -142,6 +142,11 @@ class Controleur():
     # FONCTIONS DE COUP DU JOUEUR A ENVOYER AU SERVEUR
     def action_joueur(self, action, parametres):
         self.actions.append((self.monnom, action, parametres))
+        
+    def envoiemessage(self,messageenvoye):
+        self.actions.append((self.monnom, "envoimessage",{"message": messageenvoye}))
+        
+        print("fonction controleur")
 
     """ #io 03-04    
     def ciblerdestination(self,id_appelant,id_destination):

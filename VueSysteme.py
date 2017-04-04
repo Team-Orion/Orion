@@ -100,7 +100,7 @@ class VueSysteme(Perspective):
         
         t=self.canevas.gettags("current")
         print(t)
-        if t and t!!="etoile" and t[0]!="current":
+        if t and t[0]!="current":
             nom=t[0]
             idplanete=t[2]
             idsysteme=t[4]

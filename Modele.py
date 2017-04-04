@@ -32,8 +32,12 @@ class Joueur():
                       "ciblerdestination":self.ciblerdestination,
                       "atterrirplanete":self.atterrirplanete,
                       #"creermine":self.creermine, # io 03-4
-                      "visitersysteme":self.visitersysteme
+                      "visitersysteme":self.visitersysteme,
+                      "envoimessage":self.envoiemessage
                       }
+    def envoiemessage(self, message):
+        self.messagerecu=message
+        print("message recu")
     def alliance(self):
         pass
     def gaintechnologique(self):
