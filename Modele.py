@@ -71,12 +71,40 @@ class Joueur():
             if i.id==id_appelant:
                 self.systemesvisites.append(i)
                 
-    def creervaisseau(self, id_appelant):
-        for i in self.systemesvisites:
-            if i.id==id_appelant:
-                v=Vaisseau(self, i) #io 03-04
-                self.vaisseauxinterstellaires.append(v)
-                return 1
+    def creervaisseau(self, id_appelant, type_unite = None): 
+        #types = {"attaquegalaxie" : attaquegalaxie 
+        #         }
+        #self.vaisseaux.append(types[type_unite](self, i))
+        if type_unite == None:
+            for i in self.systemesvisites:
+                if i.id==id_appelant:
+                    v=Vaisseau(self, i) #io 03-04
+                    self.vaisseauxinterstellaires.append(v)
+                    return 1
+        elif type_unite=="attaquegalaxie":
+            for i in self.systemesvisites:
+                if i.id==id_appelant:
+                    v=VaisseauAttaqueGalactique(self, i) #io 03-04
+                    self.vaisseauxinterstellaires.append(v)
+                    return 1
+        elif type_unite=="cargogalaxie":
+            for i in self.systemesvisites:
+                if i.id==id_appelant:
+                    v=VaisseauCargoGalactique(self, i) #io 03-04
+                    self.vaisseauxinterstellaires.append(v)
+                    return 1
+        elif type_unite=="attaquesolaire":
+            for i in self.systemesvisites:
+                if i.id==id_appelant:
+                    v=VaisseauAttaqueSolaire(self, i) #io 03-04
+                    self.vaisseauxinterstellaires.append(v)
+                    return 1
+        elif type_unite=="cargosolaire":
+            for i in self.systemesvisites:
+                if i.id==id_appelant:
+                    v=VaisseauCargoSolaire(self, i) #io 03-04
+                    self.vaisseauxinterstellaires.append(v)
+                    return 1
         
     def ciblerdestination(self, id_appelant, cible, mode = "id"):
         
