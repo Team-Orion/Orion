@@ -197,6 +197,11 @@ class Modele():
         for i in range(self.nbsystemes):
             x=random.randrange(self.diametre*10)/10
             y=random.randrange(self.diametre*10)/10
+            for i in self.systemes:
+                if x == i.x:
+                    x=random.randrange(self.diametre*10)/10
+                if y == i.y:
+                    y=random.randrange(self.diametre*10)/10
             self.systemes.append(Systeme(x,y))
         
         for i in range(20):
