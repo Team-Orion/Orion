@@ -37,10 +37,9 @@ class Joueur():
                       "envoimessage":self.envoiemessage
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
-    def envoiemessage(self, message):
+    def envoiemessage(self, message, nom):
         self.messageenvoie=message
-        self.parent.parent.vue.setmessagerecu(self.messageenvoie)
-        #print("message recu modele:",self.messagerecu)
+        self.parent.parent.vue.setmessagerecu(self.messageenvoie,nom)
     def alliance(self):
         pass
     def gaintechnologique(self):
