@@ -29,30 +29,46 @@ class Vue():
         self.changecadre(self.cadresplash)
         
         
-        self.messagerecu="Recu!!!!:"
-        self.entreemessage = Entry(self.root) 
+            #variable pour le message 
+        self.cadremessage=None
+        self.canevasmessage=None
+        self.messagerecu=None
+        self.entreemessage = None
         self.messageenvoi=None  
-        self.labelrecu=Label(self.root, text=self.messagerecu)
-        self.buttonmessage=Button(self.root,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get()}))
-    def setmessagerecu(self, messsage): 
-        self.messagerecu=messsage
+        self.labelrecu=None 
+        self.buttonmessage=None
+        self.creercadremessage()
+        self.tabmessage=[]
+        self.listejoueur=None
+        
+    def setmessagerecu(self, messsage,nom): 
+        self.messagerecu=nom+': '+messsage+"\n"
+        if len(self.tabmessage)==6:
+            self.tabmessage=[]
+        self.tabmessage.append(self.messagerecu)
+        if self.labelrecu:
+            self.labelrecu.pack_forget()
+        self.labelrecu=Label(self.canevasmessage, text=self.tabmessage,bg="azure")
+        self.labelrecu.pack(side=BOTTOM)  
         print("message final recu:", self.messagerecu)
         
-        """
-    def envoiemessage(self):
-        self.messageenvoi=self.entreemessage.get()
-        self.parent.envoiemessage(self.messageenvoi)
-        print(self.messageenvoi,"self.messageenvoi")
-        print("self.message envoie:",self.messageenvoi) 
-        """  
+    def creercadremessage(self): 
+        self.cadremessage=Frame(self.root,width=self.largeur)
+        self.canevasmessage=Canvas(self.cadrejeu,width=self.largeur,height=self.cadremessage.winfo_height(),bg="azure")
+        self.entreemessage = Entry(self.canevasmessage)  
+        self.labelrecu=None
+        self.buttonmessage=Button(self.canevasmessage,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get(),"nom":self.parent.monnom}))
+        self.canevasmessage.pack() 
+        self.entreemessage.pack(side=TOP) 
+        self.buttonmessage.pack(side=TOP)
+
     def changemode(self,cadre):
         if self.modecourant:
             self.modecourant.pack_forget()
         self.modecourant=cadre
         self.modecourant.pack(expand=1,fill=BOTH)  
-        self.buttonmessage.pack(side=LEFT)
-        self.entreemessage.pack(side=BOTTOM) 
-        self.labelrecu.pack(side=BOTTOM)           
+        self.canevasmessage.pack_forget()
+        self.canevasmessage.pack()           
 
     def changecadre(self,cadre,etend=0):
         if self.cadreactif:
@@ -66,7 +82,7 @@ class Vue():
     def creercadres(self,ip,nom):
         self.creercadresplash(ip, nom)
         self.creercadrelobby()
-        self.cadrejeu=Frame(self.root,bg="blue")
+        self.cadrejeu=Frame(self.root,bg="azure")
         self.modecourant=None
                 
     def creercadresplash(self,ip,nom):
