@@ -265,7 +265,7 @@ class Modele():
             self.ias.append(ia)  #IA
             
     def creervaisseau(self,systeme):
-        self.parent.actions.append([self.parent.monnom,"creervaisseau",systeme])
+        self.parent.actions.append(self.parent.monnom,"creervaisseau",{"id_appelant":self.systemeorigine.id})
             
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:
