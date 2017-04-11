@@ -62,55 +62,17 @@ class Joueur():
                 self.systemesvisites.append(i)
                 
     def creervaisseau(self, id_appelant, type_unite = None):
-        
         appelant = self.parent.objets_cliquables[id_appelant]
-        """
-        types = {"sonde": Sonde
-                      "cargo": Cargo
-                      }
+        types = {
+                 "sonde": Vaisseau,
+                 "attaquegalaxie": VaisseauAttaqueGalactique,
+                 "cargogalaxie": VaisseauCargoGalactique,
+                 "attaquesolaire": VaisseauAttaqueSolaire,
+                 "cargosolaire": VaisseauCargoSolaire
+                 
+                }
         unite = types[type_unite](self, appelant)
         self.parent.objets_cliquables[unite.id] = unite
-        """
-        if type_unite == None:
-            v=Vaisseau(self, appelant) #io 03-04
-            self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-            self.parent.objets_cliquables[v.id] = v
-        
-            """
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=Vaisseau(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-                    self.parent.objets_cliquables[v.id] = v
-            """
-        elif type_unite=="attaquegalaxie":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauAttaqueGalactique(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-                    self.parent.objets_cliquables[v.id] = v
-                    return 1
-        elif type_unite=="cargogalaxie":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauCargoGalactique(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-                    self.parent.objets_cliquables[v.id] = v
-                    return 1
-        elif type_unite=="attaquesolaire":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauAttaqueSolaire(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-                    self.parent.objets_cliquables[v.id] = v
-                    return 1
-        elif type_unite=="cargosolaire":
-            for i in self.systemesvisites:
-                if i.id==id_appelant:
-                    v=VaisseauCargoSolaire(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-                    self.parent.objets_cliquables[v.id] = v
-                    return 1 
         
     def ciblerdestination(self, id_appelant, cible, mode = "id"):
         unite = self.parent.objets_cliquables[id_appelant]
