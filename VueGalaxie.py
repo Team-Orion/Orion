@@ -54,11 +54,7 @@ class VueGalaxie(Perspective):
             # NOTE passer par le serveur est-il requis ????????????
             self.parent.parent.visitersysteme(sid)
             self.parent.voirsysteme(s) #normalement devrait pas planter
-            
-    def chargeimages(self):
-        im = Image.open
-        im = Image.open("./images/chasseur.png")
-        self.images["chasseur"] = ImageTk.PhotoImage(im)
+
         
     def afficherdecor(self):
         self.creerimagefond()

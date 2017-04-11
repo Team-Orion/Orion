@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os,os.path
 import sys
+
 import random
 from helper import Helper as hlp
 import math
@@ -10,6 +11,7 @@ from Infrastructure import *
 from Id import *
 from Planete import *
 from Systeme import *
+
 
 class Coord():
     def __init__(self, x, y):
@@ -32,7 +34,6 @@ class Joueur():
         self.actions={"creervaisseau":self.creervaisseau,
                       "ciblerdestination":self.ciblerdestination,
                       "atterrirplanete":self.atterrirplanete,
-                      #"creermine":self.creermine, # io 03-4
                       "visitersysteme":self.visitersysteme,
                       "envoimessage":self.envoiemessage
                      }
@@ -44,16 +45,6 @@ class Joueur():
         pass
     def gaintechnologique(self):
         pass
-    """ #io 03-04    
-    def creermine(self, nom, systemeid, planeteid, x, y):
-        for i in self.systemesvisites:
-            if i.id==systemeid:
-                for j in i.planetes:
-                    if j.id==planeteid:
-                        mine=Mine(self,nom,systemeid,planeteid,x,y)
-                        j.infrastructures.append(mine)
-                        self.parent.parent.affichermine(nom,systemeid,planeteid,x,y)
-    """
                         
     def atterrirplanete(self, id_appelant, id_planete):
         for i in self.systemesvisites:
@@ -71,8 +62,9 @@ class Joueur():
                 self.systemesvisites.append(i)
                 
     def creervaisseau(self, id_appelant, type_unite = None):
-        """
+        
         appelant = self.parent.objets_cliquables[id_appelant]
+        """
         types = {"sonde": Sonde
                       "cargo": Cargo
                       }
@@ -96,7 +88,7 @@ class Joueur():
                 if i.id==id_appelant:
                     v=VaisseauAttaqueGalactique(self, i) #io 03-04
                     self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
-                    
+                    self.parent.objets_cliquables[v.id] = v
                     return 1
         elif type_unite=="cargogalaxie":
             for i in self.systemesvisites:
@@ -190,8 +182,6 @@ class IA(Joueur):
                                 print("CIBLER ",systtemp,systtemp.x,systtemp.y)
                             else:
                                 print("JE NE TROUVE PLUS DE CIBLE")
-                                
-                #self.derniereaction=t
                 self.delaiaction=random.randrange(5,10)*20
                 
                 print("CIV:" ,self.nom,self.couleur, self.delaiaction)
@@ -270,12 +260,7 @@ class Modele():
             ia=IA(self,nomia,planes.pop(0),couleurs.pop(0))
             self.joueurs[nomia]=ia  #IA
             self.ias.append(ia)  #IA
-            
-        print(self.objets_cliquables)
-    """#à suppr #io 11-04       
-    def creervaisseau(self,systeme):
-        self.parent.actions.append([self.parent.monnom,"creervaisseau",systeme])
-    """        
+        
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:
             for nom_joueur, action, parametres in self.actionsafaire[cadre]:

@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image,ImageDraw, ImageTk
+import collections
 import os,os.path
 import sys
 import random
@@ -12,6 +13,45 @@ from VuePlanete import *
 
 
 class Vue():
+    InfosImg = collections.namedtuple("InfosImg", "nom source")
+    liste_images = [InfosImg("terre1", "images/tuiles/terre1.png"),
+                InfosImg("terre2", "images/tuiles/terre2.png"),
+                InfosImg("terre3", "images/tuiles/terre3.png"),
+                InfosImg("eau1", "images/tuiles/eau1.png"),
+                InfosImg("eau2", "images/tuiles/eau2.png"),
+                InfosImg("eau3", "images/tuiles/eau3.png"),
+                InfosImg("eau4", "images/tuiles/eau4.png"),
+                InfosImg("eau-NE", "images/tuiles/eau-NE.png"),
+                InfosImg("eau-SE", "images/tuiles/eau-SE.png"),
+                InfosImg("eau-SE-NE", "images/tuiles/eau-SE-NE.png"),
+                InfosImg("eau-SO", "images/tuiles/eau-SO.png"),
+                InfosImg("eau-SO-NE", "images/tuiles/eau-SO-NE.png"),
+                InfosImg("eau-SO-SE", "images/tuiles/eau-SO-SE.png"),
+                InfosImg("eau-NO", "images/tuiles/eau-NO.png"),
+                InfosImg("eau-NE-NO", "images/tuiles/eau-NE-NO.png"),
+                InfosImg("eau-SO-NO", "images/tuiles/eau-SO-NO.png"),
+                InfosImg("eau-SE-NO", "images/tuiles/eau-SE-NO.png"),
+                InfosImg("eau-N", "images/tuiles/eau-N.png"),
+                InfosImg("eau-E", "images/tuiles/eau-E.png"),
+                InfosImg("eau-S", "images/tuiles/eau-S.png"),
+                InfosImg("eau-O", "images/tuiles/eau-O.png"),
+                InfosImg("colline", "images/tuiles/colline.png"),
+                InfosImg("colline-SO", "images/tuiles/colline-SO.png"),
+                InfosImg("colline-SE", "images/tuiles/colline-SE.png"),
+                InfosImg("colline-NE", "images/tuiles/colline-NE.png"),
+                InfosImg("colline-NO", "images/tuiles/colline-NO.png"),
+                InfosImg("colline-SO-SE", "images/tuiles/colline-SO-SE.png"),
+                InfosImg("colline-SO-NO", "images/tuiles/colline-SO-NO.png"),
+                InfosImg("colline-SE-NE", "images/tuiles/colline-SE-NE.png"),
+                InfosImg("colline-NE-NO", "images/tuiles/colline-NE-NO.png"),
+                InfosImg("colline-N", "images/tuiles/colline-N.png"),
+                InfosImg("colline-O", "images/tuiles/colline-O.png"),
+                InfosImg("colline-S", "images/tuiles/colline-S.png"),
+                InfosImg("colline-E", "images/tuiles/colline-E.png"),
+                InfosImg("tortue", "images/unites/tortue.png")
+                ]
+
+    
     def __init__(self,parent,ip,nom,largeur=800,hauteur=600):
         self.root=Tk()
         self.root.title(os.path.basename(sys.argv[0]))
@@ -21,7 +61,7 @@ class Vue():
         self.nom=None
         self.largeur=largeur
         self.hauteur=hauteur
-        self.images={}
+        self.images = self.charger_images(self.liste_images)
         self.modes={}
         self.modecourant=None
         self.cadreactif=None
@@ -68,7 +108,14 @@ class Vue():
         self.modecourant.pack(expand=1,fill=BOTH)  
         self.canevasmessage.pack_forget()
         self.canevasmessage.pack()           
-
+    
+    def charger_images(self, liste_images):
+        images = dict()
+        for image in liste_images:
+            images[image.nom] = PhotoImage(file = image.source)
+        return images
+    
+    
     def changecadre(self,cadre,etend=0):
         if self.cadreactif:
             self.cadreactif.pack_forget()
@@ -206,7 +253,6 @@ class Vue():
         g.labid.config(text=self.nom)
         g.labid.config(fg=mod.joueurs[self.nom].couleur)
         
-        g.chargeimages()
         g.afficherdecor() #pourrait etre remplace par une image fait avec PIL -> moins d'objets
         self.changecadre(self.cadrejeu,1)
         self.changemode(self.modes["galaxie"])

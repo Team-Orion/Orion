@@ -15,6 +15,7 @@ from Modele import *
 from test.test_finalization import SelfCycleBase
 
 
+
 class Controleur():
     def __init__(self):
         print("IN CONTROLEUR")
