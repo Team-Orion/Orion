@@ -28,7 +28,6 @@ class Vue():
         self.creercadres(ip,nom)
         self.changecadre(self.cadresplash)
         
-        
             #variable pour le message 
         self.cadremessage=None
         self.canevasmessage=None

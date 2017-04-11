@@ -151,28 +151,6 @@ class Controleur():
         
         
         print("fonction controleur")
-
-    """ #io 03-04    
-    def ciblerdestination(self,id_appelant,id_destination):
-        parametres = {"id_appelant": id_appelant, "id_destination": id_destination}
-        self.actions.append([self.monnom, "ciblerdestination", parametres])
-   
-    def creervaisseau(self,systeme):
-        self.modele.creervaisseau(systeme)
-        #self.actions.append([self.monnom,"creervaisseau",""]) 
-    
-    def visitersysteme(self,systeme_id):
-        self.actions.append([self.monnom,"visitersysteme",[systeme_id]])
-        
-    def atterrirdestination(self,joueur,systeme,planete):
-        self.actions.append([self.monnom,"atterrirplanete",[self.monnom,systeme,planete]])
-
-    def creermine(self,joueur,systeme,planete,x,y):
-        self.actions.append([self.monnom,"creermine",[self.monnom,systeme,planete,x,y]])
-        
-    def affichermine(self,joueur,systemeid,planeteid,x,y):
-        self.vue.affichermine(joueur,systemeid,planeteid,x,y)
-    """
      
     def voirplanete(self,idsysteme,idplanete):
         pass

@@ -26,8 +26,8 @@ class Joueur():
         self.systemeorigine=systemeorigine
         self.couleur=couleur
         self.systemesvisites=[systemeorigine]
-        self.vaisseauxinterstellaires=[]
-        self.vaisseauxinterplanetaires=[]
+        self.vaisseauxinterstellaires=[] #à suppr #io 11-04
+        self.vaisseauxinterplanetaires=[] #à suppr #io 11-04
         self.messageenvoie=None
         self.actions={"creervaisseau":self.creervaisseau,
                       "ciblerdestination":self.ciblerdestination,
@@ -70,46 +70,60 @@ class Joueur():
             if i.id==id_appelant:
                 self.systemesvisites.append(i)
                 
-    def creervaisseau(self, id_appelant, type_unite = None): 
-        #types = {"attaquegalaxie" : attaquegalaxie 
-        #         }
-        #self.vaisseaux.append(types[type_unite](self, i))
+    def creervaisseau(self, id_appelant, type_unite = None):
+        """
+        appelant = self.parent.objets_cliquables[id_appelant]
+        types = {"sonde": Sonde
+                      "cargo": Cargo
+                      }
+        unite = types[type_unite](self, appelant)
+        self.parent.objets_cliquables[unite.id] = unite
+        """
         if type_unite == None:
+            v=Vaisseau(self, appelant) #io 03-04
+            self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
+            self.parent.objets_cliquables[v.id] = v
+        
+            """
             for i in self.systemesvisites:
                 if i.id==id_appelant:
                     v=Vaisseau(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
+                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
+                    self.parent.objets_cliquables[v.id] = v
+            """
         elif type_unite=="attaquegalaxie":
             for i in self.systemesvisites:
                 if i.id==id_appelant:
                     v=VaisseauAttaqueGalactique(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
+                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
+                    
                     return 1
         elif type_unite=="cargogalaxie":
             for i in self.systemesvisites:
                 if i.id==id_appelant:
                     v=VaisseauCargoGalactique(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
+                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
+                    self.parent.objets_cliquables[v.id] = v
                     return 1
         elif type_unite=="attaquesolaire":
             for i in self.systemesvisites:
                 if i.id==id_appelant:
                     v=VaisseauAttaqueSolaire(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
+                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
+                    self.parent.objets_cliquables[v.id] = v
                     return 1
         elif type_unite=="cargosolaire":
             for i in self.systemesvisites:
                 if i.id==id_appelant:
                     v=VaisseauCargoSolaire(self, i) #io 03-04
-                    self.vaisseauxinterstellaires.append(v)
-                    return 1
+                    self.vaisseauxinterstellaires.append(v) #à suppr #io 11-04
+                    self.parent.objets_cliquables[v.id] = v
+                    return 1 
         
     def ciblerdestination(self, id_appelant, cible, mode = "id"):
-        
-        unite = self.parent.chercherObjetParId(id_appelant, self.vaisseauxinterstellaires) #à revoir #io 03-04
+        unite = self.parent.objets_cliquables[id_appelant]
         if mode == "id":
-            lacible = self.parent.chercherObjetParId(cible, self.parent.systemes+self.systemesvisites) #à revoir #io 03-04
+            lacible = self.parent.objets_cliquables[cible]
             print("TESTE", lacible.x, lacible.y)
         elif mode == "coord":
             print(cible)
@@ -118,18 +132,6 @@ class Joueur():
         unite.cible = lacible
         unite.ciblerdestination(lacible)
         return
-        """
-        for i in self.vaisseauxinterstellaires:
-            if i.id == id_appelant:
-                for j in self.parent.systemes:
-                    if j.id== cible:
-                        i.ciblerdestination(j)
-                        return
-                for j in self.systemesvisites:
-                    if j.id== cible:
-                        i.ciblerdestination(j)
-                        return
-        """
         
         
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
@@ -208,15 +210,16 @@ class Modele():
         self.joueurs={}
         self.joueurscles=joueurs
         self.actionsafaire={}
-        self.pulsars=[]
-        self.systemes=[]
+        self.pulsars=[] #à suppr #io 11-04
+        self.systemes=[] #à suppr #io 11-04
         self.terrain=[]
         self.unites = [] #io 03-04
         self.infrastructure = [] #io 03-04
+        self.objets_cliquables = {} #io 11-04
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
         
     
-    def chercherObjetParId(self, id, liste): #io 03-04
+    def chercherObjetParId(self, id, liste): #à suprr #io 11-04
         for objet in liste:
             if objet.id == id:
                 return objet
@@ -232,21 +235,25 @@ class Modele():
                     x=random.randrange(self.diametre*10)/10
                 if y == i.y:
                     y=random.randrange(self.diametre*10)/10
-            self.systemes.append(Systeme(x,y))
+            systeme = Systeme(x,y)
+            self.systemes.append(systeme)
+            self.objets_cliquables[systeme.id] = systeme
         
         for i in range(20):
             x=random.randrange(self.diametre*10)/10
             y=random.randrange(self.diametre*10)/10
-            self.pulsars.append(Pulsar(x,y))
+            pulsar = Pulsar(x,y) #à suprr #io 11-04
+            self.pulsars.append(pulsar) #à suprr #io 11-04
+            self.objets_cliquables[pulsar.id] = pulsar
             
         np=len(self.joueurscles) + nbias  # on ajoute le nombre d'ias
         planes=[]
         systemetemp=self.systemes[:]
         while np:
-            p=random.choice(systemetemp)
-            if p not in planes and len(p.planetes)>0:
-                planes.append(p)
-                systemetemp.remove(p)
+            systeme=random.choice(systemetemp)
+            if systeme not in planes and len(systeme.planetes)>0:
+                planes.append(systeme)
+                systemetemp.remove(systeme)
                 np-=1
         couleurs=["cyan","goldenrod","orangered","greenyellow",
                   "dodgerblue","yellow2","maroon1","chartreuse3",
@@ -264,9 +271,11 @@ class Modele():
             self.joueurs[nomia]=ia  #IA
             self.ias.append(ia)  #IA
             
+        print(self.objets_cliquables)
+    """#à suppr #io 11-04       
     def creervaisseau(self,systeme):
-        self.parent.actions.append(self.parent.monnom,"creervaisseau",{"id_appelant":self.systemeorigine.id})
-            
+        self.parent.actions.append([self.parent.monnom,"creervaisseau",systeme])
+    """        
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:
             for nom_joueur, action, parametres in self.actionsafaire[cadre]:

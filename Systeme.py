@@ -11,7 +11,7 @@ class Systeme():
         self.x=x
         self.y=y
         self.etoile=Etoile(self,x,y)
-        self.planetes=[]
+        self.planetes=[] #à questionner #io 11-04
         self.planetesvisites=[]
         self.creerplanetes()
         

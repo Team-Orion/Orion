@@ -3,6 +3,8 @@ from Perspective import *
 import random
 from helper import Helper as hlp
 
+from Planete import Pulsar
+
 class VueGalaxie(Perspective):
     def __init__(self,parent):
         Perspective.__init__(self,parent)
@@ -131,7 +133,8 @@ class VueGalaxie(Perspective):
         self.afficherselection()
         
         e=self.AL2pixel
-        for i in mod.joueurscles:
+        
+        for i in mod.joueurscles: #a remplacer par dictionnaire # io 11-04
             i=mod.joueurs[i]
             for j in i.vaisseauxinterstellaires:
                 jx=j.x*e
@@ -146,12 +149,14 @@ class VueGalaxie(Perspective):
                                          tags=(j.proprietaire,"vaisseauinterstellaire",j.id,"artefact"))
                 self.canevas.create_line(x1,y1,x2,y2,fill="red",width=2,
                                          tags=(j.proprietaire,"vaisseauinterstellaire",j.id,"artefact"))
-                
-        for i in mod.pulsars:
-            t=i.taille
-            self.canevas.create_oval((i.x*e)-t,(i.y*e)-t,(i.x*e)+t,(i.y*e)+t,fill="orchid3",dash=(1,1),
-                                                 outline="maroon1",width=2,
-                                     tags=("inconnu","pulsar",i.id))
+
+        for i in mod.objets_cliquables.values(): #Ce qu'il faut faire
+            if isinstance(i, Pulsar):
+                t=i.taille
+                self.canevas.create_oval((i.x*e)-t,(i.y*e)-t,(i.x*e)+t,(i.y*e)+t,fill="orchid3",dash=(1,1),
+                                                     outline="maroon1",width=2,
+                                         tags=("inconnu","pulsar",i.id))
+        
                 
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
