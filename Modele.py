@@ -31,11 +31,12 @@ class Joueur():
         self.vaisseauxinterstellaires=[] #à suppr #io 11-04
         self.vaisseauxinterplanetaires=[] #à suppr #io 11-04
         self.messageenvoie=None
-        self.actions={"creervaisseau":self.creervaisseau,
+        self.actions={"atterrirplanete":self.atterrirplanete,
+                      "decouvrirplanete":self.decouvrirplanete,
                       "ciblerdestination":self.ciblerdestination,
-                      "atterrirplanete":self.atterrirplanete,
-                      "visitersysteme":self.visitersysteme,
-                      "envoimessage":self.envoiemessage
+                      "creervaisseau":self.creervaisseau,
+                      "envoimessage":self.envoiemessage,
+                      "visitersysteme":self.visitersysteme
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom):
@@ -45,6 +46,7 @@ class Joueur():
         pass
     def gaintechnologique(self):
         pass
+    
                         
     def atterrirplanete(self, id_appelant, id_planete):
         for i in self.systemesvisites:
@@ -55,13 +57,18 @@ class Joueur():
                         if nom==self.parent.parent.monnom:
                             self.parent.parent.voirplanete(i.id,j.id)
                         return 1
-                    
-    def visitersysteme(self, id_appelant):
-        for i in self.parent.systemes:
-            if i.id==id_appelant:
-                self.systemesvisites.append(i)
+
+    def ciblerdestination(self, id_appelant, cible, mode = "id"):
+        unite = self.parent.objets_cliquables[id_appelant]
+        if mode == "id":
+            lacible = self.parent.objets_cliquables[cible]
+        elif mode == "coord":
+            lacible = Coord(**cible)
+        unite.cible = lacible
+        unite.ciblerdestination(lacible)
+        return 
                 
-    def creervaisseau(self, id_appelant, type_unite = None):
+    def creervaisseau(self, id_appelant, type_unite = "sonde"):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
                  "sonde": Vaisseau,
@@ -69,24 +76,14 @@ class Joueur():
                  "cargogalaxie": VaisseauCargoGalactique,
                  "attaquesolaire": VaisseauAttaqueSolaire,
                  "cargosolaire": VaisseauCargoSolaire
-                 
                 }
         unite = types[type_unite](self, appelant)
         self.parent.objets_cliquables[unite.id] = unite
         
-    def ciblerdestination(self, id_appelant, cible, mode = "id"):
-        unite = self.parent.objets_cliquables[id_appelant]
-        if mode == "id":
-            lacible = self.parent.objets_cliquables[cible]
-            print("TESTE", lacible.x, lacible.y)
-        elif mode == "coord":
-            print(cible)
-            lacible = Coord(**cible)
-        print("cibler", unite, lacible)
-        unite.cible = lacible
-        unite.ciblerdestination(lacible)
-        return
-        
+    def decouvrirplanete(self, id_planete):
+        planete = self.parent.objets_cliquables[id_planete]
+        planete.initier_sol() 
+        print("Le SOL: ", planete.sol)
         
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
         global modeauto
@@ -98,7 +95,11 @@ class Joueur():
                         if rep not in self.systemesvisites:
                             self.systemesvisites.append(rep)
                             self.parent.changerproprietaire(self.nom,self.couleur,rep)
-
+                            
+    def visitersysteme(self, id_appelant):
+        for i in self.parent.systemes:
+            if i.id==id_appelant:
+                self.systemesvisites.append(i)
 #  DEBUT IA
 class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur):
@@ -123,7 +124,6 @@ class IA(Joueur):
                     if c not in self.parent.actionsafaire.keys(): 
                         self.parent.actionsafaire[c]=[] 
                     self.parent.actionsafaire[c].append([self.nom,"creervaisseau", {"id_appelant":self.systemeorigine.id}])
-                    print("AJOUTER VAISSEAU ",self.systemeorigine.x,self.systemeorigine.y)
                 else:
                     for i in self.vaisseauxinterstellaires:
                         sanscible=[]
@@ -135,18 +135,15 @@ class IA(Joueur):
                             systdist=1000000000000
                             for j in self.parent.systemes:
                                 d=hlp.calcDistance(vi.x,vi.y,j.x,j.y)
-                                #print ("DISTANCE ",i,d)
                                 if d<systdist and j not in self.systemesvisites:
                                     systdist=d
                                     systtemp=j
                             if systtemp:
                                 vi.ciblerdestination(systtemp)
-                                print("CIBLER ",systtemp,systtemp.x,systtemp.y)
                             else:
                                 print("JE NE TROUVE PLUS DE CIBLE")
                 self.delaiaction=random.randrange(5,10)*20
-                
-                print("CIV:" ,self.nom,self.couleur, self.delaiaction)
+
         else:
             self.delaiaction-=1
         
@@ -157,7 +154,6 @@ class Modele():
         self.parent=parent
         self.diametre,self.densitestellaire,qteIA=dd
         self.nbsystemes=int(self.diametre**2/self.densitestellaire)
-        print(self.nbsystemes)
         self.ias=[]    # IA 
         self.joueurs={}
         self.joueurscles=joueurs
@@ -170,15 +166,7 @@ class Modele():
         self.objets_cliquables = {} #io 11-04
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
         
-    
-    def chercherObjetParId(self, id, liste): #à suprr #io 11-04
-        for objet in liste:
-            if objet.id == id:
-                return objet
-        return None
-        
     def creersystemes(self,nbias):  # IA ajout du parametre du nombre d'ias a ajouter
-        
         for i in range(self.nbsystemes):
             x=random.randrange(self.diametre*10)/10
             y=random.randrange(self.diametre*10)/10
@@ -187,7 +175,7 @@ class Modele():
                     x=random.randrange(self.diametre*10)/10
                 if y == i.y:
                     y=random.randrange(self.diametre*10)/10
-            systeme = Systeme(x,y)
+            systeme = Systeme(x,y, self)
             self.systemes.append(systeme)
             self.objets_cliquables[systeme.id] = systeme
         
@@ -210,9 +198,7 @@ class Modele():
         couleurs=["cyan","goldenrod","orangered","greenyellow",
                   "dodgerblue","yellow2","maroon1","chartreuse3",
                   "firebrick1","MediumOrchid2","DeepPink2","blue"]    # IA ajout de 3 couleurs
-        
-        
-        
+
         for i in self.joueurscles:
             self.joueurs[i]=Joueur(self,i,planes.pop(0),couleurs.pop(0))
             
@@ -226,7 +212,6 @@ class Modele():
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:
             for nom_joueur, action, parametres in self.actionsafaire[cadre]:
-                print(parametres)
                 self.joueurs[nom_joueur].actions[action](**parametres)
             del self.actionsafaire[cadre]
                 

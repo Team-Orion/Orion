@@ -102,7 +102,6 @@ class VueSysteme(Perspective):
         self.changecadreetat(None)
         
         t=self.canevas.gettags("current")
-        print(t)
         if t and t[0]!="current":
             nom=t[0]
             idplanete=t[2]

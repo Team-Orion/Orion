@@ -4,11 +4,14 @@ import random
 from helper import Helper as hlp
 
 class VuePlanete(Perspective):
-    def __init__(self,parent,syste,plane):
+    def __init__(self,parent,systeme,planete):
         Perspective.__init__(self,parent)
         self.modele=self.parent.modele
-        self.planete=plane
-        self.systeme=syste
+        self.planete=planete
+        print("plannneeete", planete)
+        print("soolle", planete.sol)
+        self.sol = planete.sol
+        self.systeme=systeme
         self.infrastructures={}
         self.maselection=None
         self.macommande=None
@@ -40,8 +43,10 @@ class VuePlanete(Perspective):
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
             if i.id==self.systeme:
                 self.parent.voirsysteme(i)
-            
+    
+    """        
     def initplanete(self,sys,plane):
+        print(123)
         s=None
         p=None
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
@@ -53,10 +58,10 @@ class VuePlanete(Perspective):
                         break
         self.systemeid=sys
         self.planeteid=plane
-        self.affichermodelestatique(s,p)
+        #self.affichermodelestatique(s,p)
+    
     
     def affichermodelestatique(self,s,p):
-        self.chargeimages()
         xl=self.largeur/2
         yl=self.hauteur/2
         mini=2
@@ -64,19 +69,15 @@ class VuePlanete(Perspective):
         for i in p.infrastructures:
             pass
         
-        self.canevas.create_image(p.posXatterrissage,p.posYatterrissage,image=self.images["ville"])
+        self.canevas.create_image(p.posXatterrissage,p.posYatterrissage,image=self.parent.images["tortue"])
         
         canl=int(p.posXatterrissage-100)/self.largeur
         canh=int(p.posYatterrissage-100)/self.hauteur
         self.canevas.xview(MOVETO,canl)
-        self.canevas.yview(MOVETO, canh)  
-            
-    def chargeimages(self):
-        im = Image.open("./images/ville_100.png")
-        self.images["ville"] = ImageTk.PhotoImage(im)
-        im = Image.open("./images/mine_100.png")
-        self.images["mine"] = ImageTk.PhotoImage(im)
+        self.canevas.yview(MOVETO, canh)
         
+        pass  
+     """   
     def afficherdecor(self):
         pass
                 
@@ -117,18 +118,88 @@ class VuePlanete(Perspective):
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-    """
-    def cliquerminimap(self,evt):
-        x=evt.x
-        y=evt.y
-        xn=self.largeur/int(self.minimap.winfo_width())
-        yn=self.hauteur/int(self.minimap.winfo_height())
+
+    #### Affichage du terrain
+    def initier_affichage(self):
+        self.afficher_base()
+        self.afficher_sol()
+    
+    def afficher_base(self):
+        for y in range(self.sol.matrice_hauteur):
+            for x in range(self.sol.matrice_largeur):
+                type_tuile = "terre" + str(random.randrange(1, 4))
+                image = self.parent.images[type_tuile]
+                self.afficher_tuile(x, y, image)
+
+    def afficher_sol(self):
+        self.afficher_base()
+        for y in range(self.sol.matrice_hauteur):
+            for x in range(self.sol.matrice_largeur):
+                type_tuile = self.sol.terrain[y][x]
+                if type_tuile != "terre":
+                    if  type_tuile == "eau":
+                        type_tuile = self.selectionner_tuile_eau(x, y)
+                    elif type_tuile == "colline":
+                        type_tuile = self.selectionner_tuile_colline(x, y)
+                    image = self.parent.images[type_tuile]
+                    self.afficher_tuile(x, y, image)
+                    
+    def afficher_tuile(self, x, y, image):
+        vue_x, vue_y = self.sol.matrice_vers_iso(x, y)
+        self.canevas.create_image(vue_x, vue_y,
+                                      image = image)
+
+    def selectionner_tuile_colline(self, x, y):
+        nom_tuile = "colline"
+        i = (x+1)%self.sol.matrice_largeur #pour aller de l'autre cote si l'on depasse la matrice
+        j = (y+1)%self.sol.matrice_hauteur
+
+        if self.sol.terrain[j][x] != "colline":
+            nom_tuile += "-SO"
+        if self.sol.terrain[y][i] != "colline":
+            nom_tuile += "-SE"
+        if self.sol.terrain[y-1][x] != "colline":
+                nom_tuile += "-NE"
+        if self.sol.terrain[y][x-1] != "colline":
+            nom_tuile += "-NO"
+ 
+        if len(nom_tuile)>13:
+            nom_tuile = "colline"
+        if nom_tuile == "colline":
+            if self.sol.terrain[j][i] != "colline":
+                nom_tuile += "-S"
+            elif self.sol.terrain[y-1][i] != "colline":
+                nom_tuile += "-E"
+            elif self.sol.terrain[y-1][x-1] != "colline":
+                nom_tuile += "-N"
+            elif self.sol.terrain[j][x-1] != "colline":
+                nom_tuile += "-O"
+
+        return nom_tuile
+
+    def selectionner_tuile_eau(self, x, y):
+        nom_tuile = "eau"
+        i = (x+1)%self.sol.matrice_largeur #pour aller de l'autre cote si l'on depasse la matrice
+        j = (y+1)%self.sol.matrice_hauteur
+        if self.sol.terrain[j][x] != "eau":
+            nom_tuile += "-SO"
+        if self.sol.terrain[y][i] != "eau":
+            nom_tuile += "-SE"
+        if self.sol.terrain[y-1][x] != "eau":
+                nom_tuile += "-NE"
+        if self.sol.terrain[y][x-1] != "eau":
+            nom_tuile += "-NO"
+               
+        if len(nom_tuile) == 3:
+            if self.sol.terrain[j][i] != "eau":
+                nom_tuile += "-S"
+            elif self.sol.terrain[y-1][i] != "eau":
+                nom_tuile += "-E"
+            elif self.sol.terrain[y-1][x-1] != "eau":
+                nom_tuile += "-N"
+            elif self.sol.terrain[j][x-1] != "eau":
+                nom_tuile += "-O"
         
-        ee=self.canevas.winfo_width()
-        ii=self.canevas.winfo_height()
-        eex=int(ee)/self.largeur/2
-        eey=int(ii)/self.hauteur/2
-        
-        self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
-        self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
-    """
+        if nom_tuile == "eau":
+            nom_tuile += str(random.choice([1, 1, 1, 2, 2, 2, 3, 4])) #les tuiles n'ont pas le meme nombre de chances d'etre obtenue
+        return nom_tuile[:9] #Les tuiles d'eau a trois bords ne sont pas disponibles

@@ -187,6 +187,7 @@ class Vue():
                 s=VueSysteme(self)
                 self.modes["systemes"][sid]=s
                 s.initsysteme(systeme)
+                
             self.changemode(s)
         
     def voirplanete(self,maselection=None):
@@ -198,9 +199,13 @@ class Vue():
             if planeid in self.modes["planetes"].keys():
                 s=self.modes["planetes"][planeid]
             else:
-                s=VuePlanete(self,sysid,planeid)
+                print("passe par ici")
+                systeme = self.modele.objets_cliquables[sysid]
+                planete = self.modele.objets_cliquables[planeid]
+                self.action_joueur("decouvrirplanete", {"id_planete": planeid})
+                s=VuePlanete(self,systeme,planete)
                 self.modes["planetes"][planeid]=s
-                s.initplanete(sysid,planeid)
+            s.initier_affichage()
             self.changemode(s)
         else:
             print("aucune planete selectionnee pour atterrissage")
@@ -256,18 +261,11 @@ class Vue():
         g.afficherdecor() #pourrait etre remplace par une image fait avec PIL -> moins d'objets
         self.changecadre(self.cadrejeu,1)
         self.changemode(self.modes["galaxie"])
-        
-    def affichermine(self,joueur,systemeid,planeteid,x,y):
-        for i in self.modes["planetes"].keys():
-            if i == planeteid:
-                im=self.modes["planetes"][i].images["mine"]
-                self.modes["planetes"][i].canevas.create_image(x,y,image=im)
                 
     def fermerfenetre(self):
         # Ici, on pourrait mettre des actions a faire avant de fermer (sauvegarder, avertir etc)
         self.parent.fermefenetre()
         
     def action_joueur(self, action, parametres = {}):
-            
             self.parent.action_joueur(action, parametres)
         
