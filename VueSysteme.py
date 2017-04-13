@@ -39,11 +39,6 @@ class VueSysteme(Perspective):
         imgFoin = self.parent.images["foin"]
         imgArgent = self.parent.images["argent"]
         imgMinerai = self.parent.images["minerai"]
-        
-        imgBois = imgBois.subsample(17, 18)
-        imgFoin = imgFoin.subsample(17, 18)
-        imgArgent = imgArgent.subsample(17, 18)
-        imgMinerai = imgMinerai.subsample(10)
 
         labelBois = Label(self.cadreinfo, image = imgBois)
         labelFoin = Label(self.cadreinfo, image = imgFoin)
