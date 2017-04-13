@@ -58,7 +58,7 @@ class Perspective(Frame):
                 cible = cible[2]
                 mode = "id"
             else:
-                cible = {'x': evt.x, 'y': evt.y} #à mettre en unités wtf #io
+                cible = {'x': evt.x, 'y': evt.y} #Ã  mettre en unitÃ©s wtf #io
                 mode = "coord"
             self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": cible, "mode": mode})
             
@@ -90,5 +90,8 @@ class Perspective(Frame):
         if selectionner:
             pass
         else:
-            parametres["id_appelant"] = self.maselection[2]
+            try:
+                parametres["id_appelant"] = self.maselection[2]
+            except TypeError:
+                pass
             self.parent.parent.action_joueur(action, parametres)
