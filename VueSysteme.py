@@ -66,6 +66,10 @@ class VueSysteme(Perspective):
         labelMinerai.pack(fill=X)
         labelMineraitxt.pack(fill=X)
         
+        labelBois.image=imgBois
+        labelFoin.image=imgFoin
+        labelArgent=imgArgent
+        labelMinerai= imgMinerai
         
         self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey")
         self.lbselectecible.pack()
