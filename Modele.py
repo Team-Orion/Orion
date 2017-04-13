@@ -81,9 +81,9 @@ class Joueur():
         self.vaisseauxinterstellaires.append(unite)
         self.parent.objets_cliquables[unite.id] = unite
         
-    def decouvrirplanete(self, id_planete):
+    def decouvrirplanete(self, id_planete, sol):
         planete = self.parent.objets_cliquables[id_planete]
-        planete.initier_sol() 
+        planete.sol = sol 
         print("Le SOL: ", planete.sol)
         
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
