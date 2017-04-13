@@ -12,7 +12,7 @@ class Vaisseau():
         self.base=systeme
         self.angletrajet=0
         self.angleinverse=0
-        self.x=self.base.x
+        self.x=self.base.x+20/100
         self.y=self.base.y
         self.taille=16
         self.capacite=0
@@ -51,7 +51,7 @@ class VaisseauAttaqueGalactique():
         self.base=systeme
         self.angletrajet=0
         self.angleinverse=0
-        self.x=self.base.x
+        self.x=self.base.x+20/100
         self.y=self.base.y
         self.taille=16
         self.cargo=0
@@ -87,7 +87,7 @@ class VaisseauAttaqueSolaire():
         self.base=systeme
         self.angletrajet=0
         self.angleinverse=0
-        self.x=self.base.x
+        self.x=self.base.x+20/100
         self.y=self.base.y
         self.taille=16
         self.cargo=0
@@ -124,7 +124,7 @@ class VaisseauCargoSolaire():
         self.base=systeme
         self.angletrajet=0
         self.angleinverse=0
-        self.x=self.base.x
+        self.x=self.base.x+20/100
         self.y=self.base.y
         self.taille=16
         self.cargo=0
@@ -165,7 +165,7 @@ class VaisseauCargoGalactique():
         self.base=systeme
         self.angletrajet=0
         self.angleinverse=0
-        self.x=self.base.x
+        self.x=self.base.x+20/100
         self.y=self.base.y
         self.taille=16
         self.cargo=0
