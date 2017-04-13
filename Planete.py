@@ -44,12 +44,13 @@ class Planete():
         self.taille=taille
         self.angle=angle
         self.sol = None
+        
     def creationtourdefense(self):
         pass
     
     def initier_sol(self):
         self.sol = Sol(15, 15) #refaire plus propre #io 11-04
-    
+        return self.sol
 
 class Sol():
     def __init__(self, matrice_largeur, matrice_hauteur):

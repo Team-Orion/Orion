@@ -7,9 +7,7 @@ class VuePlanete(Perspective):
     def __init__(self,parent,systeme,planete):
         Perspective.__init__(self,parent)
         self.modele=self.parent.modele
-        self.planete=planete
-        print("plannneeete", planete)
-        print("soolle", planete.sol)
+        self.planete = planete
         self.sol = planete.sol
         self.systeme=systeme
         self.infrastructures={}
@@ -20,6 +18,7 @@ class VuePlanete(Perspective):
         self.largeur=self.modele.diametre*self.KM2pixel
         self.hauteur=self.largeur
         
+        """
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         self.canevas.config(bg="sandy brown")
         
@@ -28,6 +27,8 @@ class VuePlanete(Perspective):
         
         self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
         self.btncreerstation.pack()
+        """
+        
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systemf",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
         
@@ -121,6 +122,9 @@ class VuePlanete(Perspective):
 
     #### Affichage du terrain
     def initier_affichage(self):
+        if self.sol is None:
+            self.sol = self.planete.initier_sol()
+            self.action_joueur("decouvrirplanete", {"id_planete": self.planete.id, "sol": self.sol})
         self.afficher_base()
         self.afficher_sol()
     
