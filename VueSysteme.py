@@ -31,6 +31,42 @@ class VueSysteme(Perspective):
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir galaxie",command=self.voirgalaxie)
         self.btnvuesysteme.pack(side=BOTTOM)
         
+        self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
+        self.population.pack(fill=X)
+        
+        #imgBois = PhotoImage(file="images/ressources/bois.png")
+        imgBois = self.parent.images["bois"]
+        imgFoin = self.parent.images["foin"]
+        imgArgent = self.parent.images["argent"]
+        imgMinerai = self.parent.images["minerai"]
+        
+        imgBois = imgBois.subsample(17, 18)
+        imgFoin = imgFoin.subsample(17, 18)
+        imgArgent = imgArgent.subsample(17, 18)
+        imgMinerai = imgMinerai.subsample(10)
+
+        labelBois = Label(self.cadreinfo, image = imgBois)
+        labelFoin = Label(self.cadreinfo, image = imgFoin)
+        labelArgent = Label(self.cadreinfo, image = imgArgent)
+        labelMinerai = Label(self.cadreinfo, image = imgMinerai)
+
+        labelBoistxt = Label(self.cadreinfo, text = "qte Bois")
+        labelFointxt = Label(self.cadreinfo, text = "qte Foin")
+        labelArgenttxt = Label(self.cadreinfo, text = "qte Argent")
+        labelMineraitxt = Label(self.cadreinfo, text = "qte Minerai")
+
+
+        
+        labelBois.pack(fill=X)
+        labelBoistxt.pack(fill=X)
+        labelFoin.pack(fill=X)
+        labelFointxt.pack(fill=X)
+        labelArgent.pack(fill=X)
+        labelArgenttxt.pack(fill=X)    
+        labelMinerai.pack(fill=X)
+        labelMineraitxt.pack(fill=X)
+        
+        
         self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey")
         self.lbselectecible.pack()
         self.changecadreetat(self.cadreetataction)
