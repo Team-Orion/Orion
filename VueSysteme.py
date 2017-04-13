@@ -18,10 +18,10 @@ class VueSysteme(Perspective):
         
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "attaquesolaire"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creervaisseau", {"id_appelant":self.maselection[2],"type_unite": "attaquesolaire"}))
         self.btncreervaisseau.pack()
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "cargosolaire"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"id_appelant":self.maselection[2],"type_unite": "cargosolaire"}))
         self.btncreervaisseau.pack()
         
         self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=self.creerstation)
@@ -92,6 +92,8 @@ class VueSysteme(Perspective):
         self.minimap.create_oval(100-mini,100-mini,100+mini,100+mini,fill="yellow")
         for p in i.planetes:
             x,y=hlp.getAngledPoint(math.radians(p.angle),p.distance*self.UA2pixel,xl,yl)
+            p.x=int(x)
+            p.y=int(y)
             n=p.taille*self.UA2pixel
             self.canevas.create_oval(x-n,y-n,x+n,y+n,fill="red",tags=(i.proprietaire,"planete",p.id,"inconnu",i.id,int(x),int(y)))
             x,y=hlp.getAngledPoint(math.radians(p.angle),p.distance*UAmini,100,100)
