@@ -78,6 +78,7 @@ class Joueur():
                  "cargosolaire": VaisseauCargoSolaire
                 }
         unite = types[type_unite](self, appelant)
+        self.vaisseauxinterstellaires.append(unite)
         self.parent.objets_cliquables[unite.id] = unite
         
     def decouvrirplanete(self, id_planete):
