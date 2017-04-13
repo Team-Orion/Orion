@@ -4,10 +4,12 @@ import random
 from helper import Helper as hlp
 
 from Planete import Pulsar
+from Unite import *
 
 class VueGalaxie(Perspective):
     def __init__(self,parent):
         Perspective.__init__(self,parent)
+        self.vue = parent
         self.modele=self.parent.modele
         self.maselection=None
         self.AL2pixel=100
@@ -129,31 +131,25 @@ class VueGalaxie(Perspective):
         self.afficherselection()
         
         e=self.AL2pixel
+
         
         for i in mod.joueurscles: #a remplacer par dictionnaire # io 11-04
             i=mod.joueurs[i]
-            for j in i.vaisseauxinterstellaires:
-                jx=j.x*e
-                jy=j.y*e
-                x2,y2=hlp.getAngledPoint(j.angletrajet,8,jx,jy)
-                x1,y1=hlp.getAngledPoint(j.angletrajet,4,jx,jy)
-                x0,y0=hlp.getAngledPoint(j.angleinverse,4,jx,jy)
-                x,y=hlp.getAngledPoint(j.angleinverse,7,jx,jy)
-                self.canevas.create_line(x,y,x0,y0,fill="yellow",width=3,
-                                         tags=(j.proprietaire,"vaisseauinterstellaire",j.id,"artefact"))
-                self.canevas.create_line(x0,y0,x1,y1,fill=i.couleur,width=4,
-                                         tags=(j.proprietaire,"vaisseauinterstellaire",j.id,"artefact"))
-                self.canevas.create_line(x1,y1,x2,y2,fill="red",width=2,
-                                         tags=(j.proprietaire,"vaisseauinterstellaire",j.id,"artefact"))
-
-        for i in mod.objets_cliquables.values(): #Ce qu'il faut faire
-            if isinstance(i, Pulsar):
-                t=i.taille
-                self.canevas.create_oval((i.x*e)-t,(i.y*e)-t,(i.x*e)+t,(i.y*e)+t,fill="orchid3",dash=(1,1),
+            
+            for objet in mod.objets_cliquables.values():
+                if(isinstance(objet, VaisseauAttaqueGalactique)):
+                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseauattaque"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
+                            
+                elif isinstance(objet, Pulsar):
+                    t=objet.taille
+                    self.canevas.create_oval((objet.x*e)-t,(objet.y*e)-t,(objet.x*e)+t,(objet.y*e)+t,fill="orchid3",dash=(1,1),
                                                      outline="maroon1",width=2,
-                                         tags=("inconnu","pulsar",i.id))
-        
-                
+                                         tags=("inconnu","pulsar",objet.id))
+                elif (isinstance(objet, VaisseauCargoGalactique)):
+                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseaucargo"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
+                elif(isinstance(objet, Vaisseau)):  
+                     self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["sonde"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))        
+
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
         self.canevas.addtag_withtag(prop,systeme.id)
