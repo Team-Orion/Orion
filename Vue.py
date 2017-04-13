@@ -49,10 +49,9 @@ class Vue():
                 InfosImg("colline-S", "images/tuiles/colline-S.png"),
                 InfosImg("colline-E", "images/tuiles/colline-E.png"),
                 InfosImg("tortue", "images/unites/tortue.png"),
-                InfosImg("bois", "images/ressources/bois.png"),
-                InfosImg("foin", "images/ressources/foin.png"),
-                InfosImg("argent", "images/ressources/argent.png"),
-                InfosImg("minerai", "images/ressources/minerai.jpg")
+                InfosImg("vaisseauattaque", "images/vaisseaux/attaque.png"),
+                InfosImg("vaisseaucargo", "images/vaisseaux/cargo.png"),
+                 InfosImg("sonde", "images/vaisseaux/sonde.png")
                 ]
 
     
@@ -83,6 +82,8 @@ class Vue():
         self.creercadremessage()
         self.tabmessage=[]
         self.listejoueur=None
+        
+        
         
     def setmessagerecu(self, messsage,nom): 
         self.messagerecu=nom+': '+messsage+"\n"
@@ -198,7 +199,6 @@ class Vue():
         s=self.modes["planetes"]
         
         if maselection:
-            """
             sysid=maselection[5]
             planeid=maselection[2]
             if planeid in self.modes["planetes"].keys():
@@ -210,16 +210,6 @@ class Vue():
                 self.action_joueur("decouvrirplanete", {"id_planete": planeid})
                 s=VuePlanete(self,systeme,planete)
                 self.modes["planetes"][planeid]=s
-            s.initier_affichage()"""
-            id_systeme=maselection[5]
-            id_planete=maselection[2]
-            if id_planete in self.modes["planetes"].keys():
-                s=self.modes["planetes"][id_planete]
-            else:
-                systeme = self.modele.objets_cliquables[id_systeme]
-                planete = self.modele.objets_cliquables[id_planete]
-                s=VuePlanete(self, systeme, planete)
-                self.modes["planetes"][id_planete]=s
             s.initier_affichage()
             self.changemode(s)
         else:
