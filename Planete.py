@@ -2,8 +2,8 @@ from Id import *
 from Infrastructure import *
 import random
 
-DEMIELARGEUR_TUILES = 32 #à suppr #io 11-04
-DEMIEHAUTEUR_TUILES = 16 #à suppr #io 11-04
+DEMIELARGEUR_TUILES = 32 #Ã  suppr #io 11-04
+DEMIEHAUTEUR_TUILES = 16 #Ã  suppr #io 11-04
 
 class Pulsar():
     def __init__(self,x,y):
@@ -36,7 +36,7 @@ class Planete():
         self.parent=parent
         self.posXatterrissage=x
         self.posYatterrissage=y 
-        self.infrastructures=[Ville(self)]
+        #self.infrastructures=[Ville(self)]
         self.proprietaire="inconnu"
         self.visiteurs={}
         self.distance=dist
@@ -44,6 +44,8 @@ class Planete():
         self.taille=taille
         self.angle=angle
         self.sol = None
+        self.x=x
+        self.y=y
         
     def creationtourdefense(self):
         pass
