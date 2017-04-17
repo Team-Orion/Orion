@@ -68,7 +68,7 @@ class Joueur():
         unite.ciblerdestination(lacible)
         return 
                 
-    def creervaisseau(self, id_appelant, type_unite = "sonde"):
+    def creervaisseau(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
                  "sonde": Vaisseau,
@@ -101,6 +101,7 @@ class Joueur():
         for i in self.parent.systemes:
             if i.id==id_appelant:
                 self.systemesvisites.append(i)
+   
 #  DEBUT IA
 class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur):
@@ -124,7 +125,7 @@ class IA(Joueur):
                     c=self.parent.parent.cadre+5
                     if c not in self.parent.actionsafaire.keys(): 
                         self.parent.actionsafaire[c]=[] 
-                    self.parent.actionsafaire[c].append([self.nom,"creervaisseau", {"id_appelant":self.systemeorigine.id}])
+                    self.parent.actionsafaire[c].append([self.nom,"creervaisseau", {"id_appelant":self.systemeorigine.id,"type_unite": "attaquegalaxie"}])
                 else:
                     for i in self.vaisseauxinterstellaires:
                         sanscible=[]
