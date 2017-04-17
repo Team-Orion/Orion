@@ -12,7 +12,7 @@ class VueSysteme(Perspective):
     def __init__(self,parent):
         Perspective.__init__(self,parent)
         self.modele=self.parent.modele
-        self.planetes={}
+        self.planetes=[]
         self.systeme=None
         self.maselection=None
         
