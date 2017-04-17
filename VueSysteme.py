@@ -3,6 +3,10 @@ from Perspective import *
 import random
 import math
 from helper import Helper as hlp
+import Modele
+from Unite import *
+from Vue import *
+from Planete import *
 
 class VueSysteme(Perspective):
     def __init__(self,parent):
@@ -97,7 +101,13 @@ class VueSysteme(Perspective):
             self.canevas.create_oval(x-n,y-n,x+n,y+n,fill="red",tags=(i.proprietaire,"planete",p.id,"inconnu",i.id,int(x),int(y)))
             x,y=hlp.getAngledPoint(math.radians(p.angle),p.distance*UAmini,100,100)
             self.minimap.create_oval(x-mini,y-mini,x+mini,y+mini,fill="red",tags=())
-        
+            self.planetes.append(p)
+            appelant=self.modele.objets_cliquables[p.id] 
+            types = {
+                     "planete": Planete,
+                    }
+            laplanete = types["planete"](self.systeme,"habitable",p.distance,p.taille,p.angle,p.x,p.y)
+            self.modele.objets_cliquables[laplanete.id] = laplanete
         # NOTE Il y a un probleme ici je ne parviens pas a centrer l'objet convenablement comme dans la fonction 'identifierplanetemere'
         canl=int(self.canevas.cget("width"))/2
         canh=int(self.canevas.cget("height"))/2
@@ -117,7 +127,15 @@ class VueSysteme(Perspective):
         print("Creer station EN CONSTRUCTION")
          
     def afficherpartie(self,mod):
-        pass
+        self.canevas.delete("artefact")
+        self.afficherselection()
+        for i in mod.joueurscles: #a remplacer par dictionnaire # io 11-04
+            i=mod.joueurs[i]
+            for objet in mod.objets_cliquables.values():
+                    if(isinstance(objet, VaisseauCargoSolaire)):
+                        self.canevas.create_image(int(objet.x+30), int(objet.y+30), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"cargosolaire",objet.id,"artefact"))
+                    elif(isinstance(objet, VaisseauAttaqueSolaire)):
+                        self.canevas.create_image(int(objet.x+30), int(objet.y+30), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"attaquesolaire",objet.id,"artefact"))
             
     def changerproprietaire(self):
         pass
