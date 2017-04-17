@@ -158,11 +158,18 @@ class VueSysteme(Perspective):
         
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
-            nom=t[0]
-            idplanete=t[2]
-            idsysteme=t[4]
-            self.maselection=[self.parent.nom,t[1],t[2],t[5],t[6],t[4]]  # prop, type, id; self.canevas.find_withtag(CURRENT)#[0]
+            if t[1]=="attaquesolaire":
+                self.maselection=[self.parent.nom,t[1],t[2]]
+                self.montrevaisseauxselection()
+            elif t[1]=="cargosolaire":
+                self.maselection=[self.parent.nom,t[1],t[2]]
+                self.montrevaisseauxselection()
+            if t[1] == "planete" :
+                self.maselection=[self.parent.nom,t[1],t[2],t[5],t[6],t[4]]  # prop, type, id; self.canevas.find_withtag(CURRENT)#[0]
             if t[1] == "planete" and t[3]=="inconnu":
+                nom=t[0]
+                idplanete=t[2]
+                idsysteme=t[4]
                 self.montreplaneteselection()
                 
             # ici je veux envoyer un message comme quoi je visite cette planete
