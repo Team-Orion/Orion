@@ -29,7 +29,7 @@ class VueGalaxie(Perspective):
         self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "cargogalaxie"}))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerstation"))
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creervaisseau",{"type_unite": "stationgalaxie"}))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
@@ -149,7 +149,8 @@ class VueGalaxie(Perspective):
                     self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseaucargo"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
                 elif(isinstance(objet, Vaisseau)):  
                      self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["sonde"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))        
-
+                elif (isinstance(objet,StationGalactique)):
+                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
         self.canevas.addtag_withtag(prop,systeme.id)
