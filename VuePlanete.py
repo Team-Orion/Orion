@@ -32,10 +32,22 @@ class VuePlanete(Perspective):
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systemf",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
         
+        self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=self.creermine)
+        self.btncreermine.pack(side=BOTTOM)
+
+        self.btncreerferme=Button(self.cadreetataction,text="Construire Ferme",command=self.creerferme)
+        self.btncreerferme.pack(side=BOTTOM)
+        
+        
         self.changecadreetat(self.cadreetataction)
     
     def creermine(self):
+        print("creer mine")
         self.macommande="mine"
+    
+    def creerferme(self):
+        print("creer ferme")
+        pass
     
     def creermanufacture(self):
         pass
@@ -133,7 +145,7 @@ class VuePlanete(Perspective):
             for x in range(self.sol.matrice_largeur):
                 type_tuile = "terre" + str(random.randrange(1, 4))
                 image = self.parent.images[type_tuile]
-                self.afficher_tuile(x, y, image)
+                self.afficher_tuile(x, y, image, type_tuile)
 
     def afficher_sol(self):
         self.afficher_base()
@@ -146,12 +158,12 @@ class VuePlanete(Perspective):
                     elif type_tuile == "colline":
                         type_tuile = self.selectionner_tuile_colline(x, y)
                     image = self.parent.images[type_tuile]
-                    self.afficher_tuile(x, y, image)
+                    self.afficher_tuile(x, y, image, type_tuile)
                     
     def afficher_tuile(self, x, y, image):
         vue_x, vue_y = self.sol.matrice_vers_iso(x, y)
         self.canevas.create_image(vue_x, vue_y,
-                                      image = image)
+                                      image = image, tags=(type_tuile))
 
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"
