@@ -28,7 +28,7 @@ class VueSysteme(Perspective):
         self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"id_appelant":self.maselection[2],"type_unite": "cargosolaire"}))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=self.creerstation)
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=command=lambda: self.action_joueur("creerstationplanetaire", {"id_appelant":self.maselection[2],"type_unite": "stationplanetaire"}))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir planete",command=self.voirplanete)
         self.btnvuesysteme.pack(side=BOTTOM)
@@ -136,7 +136,8 @@ class VueSysteme(Perspective):
                         self.canevas.create_image(int(objet.x+30), int(objet.y+30), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"cargosolaire",objet.id,"artefact"))
                     elif(isinstance(objet, VaisseauAttaqueSolaire)):
                         self.canevas.create_image(int(objet.x+30), int(objet.y+30), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"attaquesolaire",objet.id,"artefact"))
-            
+                    elif (isinstance(objet,StationPlanetaire)):
+                        self.canevas.create_image(int(objet.x+30),int(objet.y+30),image = self.parent.images["stationplanetaire"],tags=(objet.proprietaire,"stationplanetaire",objet.id,"artefact"))
     def changerproprietaire(self):
         pass
                
