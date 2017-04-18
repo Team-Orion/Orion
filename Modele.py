@@ -75,7 +75,8 @@ class Joueur():
                  "attaquegalaxie": VaisseauAttaqueGalactique,
                  "cargogalaxie": VaisseauCargoGalactique,
                  "attaquesolaire": VaisseauAttaqueSolaire,
-                 "cargosolaire": VaisseauCargoSolaire
+                 "cargosolaire": VaisseauCargoSolaire,
+                 "stationgalaxie": StationGalactique
                 }
         unite = types[type_unite](self, appelant)
         self.vaisseauxinterstellaires.append(unite)
