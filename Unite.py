@@ -210,8 +210,37 @@ class StationPlanetaire:
         pass
     
 class StationGalactique:
-    def __init__(self):
+    def __init__(self,nom,systeme):
         self.capacite=10 
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.base=systeme
+        self.angletrajet=0
+        self.angleinverse=0
+        self.x=self.base.x+20/100
+        self.y=self.base.y
+        self.taille=16
+        self.angletrajet=0
+        self.angleinverse=0
+        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.cible=None 
+    def avancer(self):
+        rep=None
+        if self.cible:
+            x=self.cible.x
+            y=self.cible.y
+            self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+                rep=self.cible
+                self.base=self.cible
+                self.cible=None
+            return rep
+        
+    def ciblerdestination(self,p):
+        self.cible=p
+        self.angletrajet=hlp.calcAngle(self.x,self.y,p.x,p.y)
+        self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
+        dist=hlp.calcDistance(self.x,self.y,p.x,p.y)
     def reparation(self):
         pass
     def troc(self):
@@ -377,5 +406,5 @@ class Unite:
 class Disciple(Unite):
     def __init__(self):
         Unite.__init__(self,parent,lieu)
-        self.experience=None  # C'est ici qu'on met les attributs propres à chaque unité
+        self.experience=None  # C'est ici qu'on met les attributs propres Ã  chaque unitÃ©
     
