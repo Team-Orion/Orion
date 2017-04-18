@@ -373,3 +373,7 @@ class Unite:
     
     def attaquer(self):
         pass
+class Disciple(Unite):
+    def __init__(self):
+        Unite.__init__(self,parent,lieu)
+        self.experience=None  # C'est ici qu'on met les attributs propres à chaque unité
