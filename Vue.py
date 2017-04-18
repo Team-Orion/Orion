@@ -56,7 +56,8 @@ class Vue():
                 InfosImg("vaisseauattaque", "images/unites/attaque.png"),
                 InfosImg("vaisseaucargo", "images/unites/cargo.png"),
                 InfosImg("sonde", "images/unites/sonde.png"),
-                InfosImg("stationgalaxie", "images/unites/stationgalaxie.png")
+                InfosImg("stationgalaxie", "images/unites/stationgalaxie.png"),
+                InfosImg("stationplanetaire", "images/unites/stationplanete.png")
                 ]
 
     
