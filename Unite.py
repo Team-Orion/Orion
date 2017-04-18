@@ -18,7 +18,7 @@ class Vaisseau():
         self.taille=16
         self.capacite=0
         self.energie=100
-        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.vitesse=0.02*5 
         self.cible=None 
         
     def avancer(self):
@@ -57,7 +57,7 @@ class VaisseauAttaqueGalactique():
         self.taille=16
         self.cargo=0
         self.energie=100
-        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.vitesse=0.015*5 
         self.cible=None 
         
     def avancer(self):
@@ -171,7 +171,7 @@ class VaisseauCargoGalactique():
         self.taille=16
         self.cargo=0
         self.energie=100
-        self.vitesse=random.choice([0.001,0.003,0.005,0.01])*5 #0.5
+        self.vitesse=0.005*5 #0.5
         self.cible=None 
         
     def avancer(self):
@@ -373,7 +373,9 @@ class Unite:
     
     def attaquer(self):
         pass
+    
 class Disciple(Unite):
     def __init__(self):
         Unite.__init__(self,parent,lieu)
-        self.experience=None  # C'est ici qu'on met les attributs propres Ã  chaque unitÃ©
+        self.experience=None  # C'est ici qu'on met les attributs propres à chaque unité
+    
