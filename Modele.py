@@ -36,7 +36,8 @@ class Joueur():
                       "ciblerdestination":self.ciblerdestination,
                       "creervaisseau":self.creervaisseau,
                       "envoimessage":self.envoiemessage,
-                      "visitersysteme":self.visitersysteme
+                      "visitersysteme":self.visitersysteme,
+                      "creerstationplanetaire":self.creervaisseau
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom):
@@ -76,7 +77,8 @@ class Joueur():
                  "cargogalaxie": VaisseauCargoGalactique,
                  "attaquesolaire": VaisseauAttaqueSolaire,
                  "cargosolaire": VaisseauCargoSolaire,
-                 "stationgalaxie": StationGalactique
+                 "stationgalaxie": StationGalactique,
+                 "stationplanetaire": StationPlanetaire
                 }
         unite = types[type_unite](self, appelant)
         self.vaisseauxinterstellaires.append(unite)
@@ -90,7 +92,9 @@ class Joueur():
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
         global modeauto
         for i in self.vaisseauxinterstellaires:
-            if i.cible:
+            if(isinstance(i, StationPlanetaire)):
+                i.rotation()
+            elif i.cible:
                 rep=i.avancer()
                 if rep:
                     if rep.proprietaire=="inconnu":
