@@ -42,7 +42,7 @@ class VuePlanete(Perspective):
     
     def voirsysteme(self):
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
-            if i.id==self.systeme:
+            if i.id==self.systeme.id:
                 self.parent.voirsysteme(i)
     
     """        
