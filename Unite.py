@@ -199,15 +199,26 @@ class VaisseauCargoGalactique():
     def chargerressources():
         pass
     
-class StationPlanetaire:
-    def __init__(self):
-         pass
+class StationPlanetaire():
+    def __init__(self,nom,planete):
+        self.id=Id.prochainid()
+        self.proprietaire=nom
+        self.base=planete
+        self.x=self.base.x+10 
+        self.y=self.base.y-10
+
+    def rotation(self):
+        angleRotation = math.radians(2)
+        self.x,self.y=hlp.calcRotation(self.base.x-25, self.base.y-25, self.x, self.y, angleRotation)
+        
+        
     def creercargogalactique(self):
         pass
     def creerattaquegalactique(self):
         pass
     def creerbouclierplanetaire(self):
         pass
+    
     
 class StationGalactique:
     def __init__(self,nom,systeme):
