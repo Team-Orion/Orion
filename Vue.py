@@ -53,10 +53,10 @@ class Vue():
                 InfosImg("foin", "images/ressources/foin.png"),
                 InfosImg("argent", "images/ressources/argent.png"),
                 InfosImg("minerai", "images/ressources/minerai.png"),
-                InfosImg("vaisseauattaque", "images/unites/tortue.png"),
-                #InfosImg("vaisseauattaque", "images/unites/attaque.png"),
-                #InfosImg("vaisseaucargo", "images/unites/cargo.png"),
-                #InfosImg("sonde", "images/unites/sonde.png")
+                InfosImg("vaisseauattaque", "images/unites/attaque.png"),
+                InfosImg("vaisseaucargo", "images/unites/cargo.png"),
+                InfosImg("sonde", "images/unites/sonde.png"),
+                InfosImg("stationgalaxie", "images/unites/stationgalaxie.png")
                 ]
 
     
