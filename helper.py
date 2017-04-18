@@ -21,3 +21,11 @@ class Helper(object):
          distance=math.sqrt(dx+dy)
          return distance
     calcDistance = staticmethod(calcDistance)
+    
+    def calcRotation(oX, oY, pX, pY, angle):
+        #Rotation dans le sens antihoraire
+        #angle en radians
+        rX = oX + math.cos(angle) * (pX - oX) - math.sin(angle) * (pY - oY)
+        rY = oY + math.sin(angle) * (pX - oX) + math.cos(angle) * (pY - oY)
+        return rX, rY #resultat
+    calcRotation = staticmethod(calcRotation)
