@@ -228,7 +228,7 @@ class StationGalactique:
         self.base=systeme
         self.angletrajet=0
         self.angleinverse=0
-        self.x=self.base.x+20/100
+        self.x=self.base.x+40/100
         self.y=self.base.y
         self.taille=16
         self.angletrajet=0
