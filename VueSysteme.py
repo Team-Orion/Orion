@@ -28,7 +28,7 @@ class VueSysteme(Perspective):
         self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"id_appelant":self.maselection[2],"type_unite": "cargosolaire"}))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=command=lambda: self.action_joueur("creerstationplanetaire", {"id_appelant":self.maselection[2],"type_unite": "stationplanetaire"}))
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerstationplanetaire", {"id_appelant":self.maselection[2],"type_unite": "stationplanetaire"}))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir planete",command=self.voirplanete)
         self.btnvuesysteme.pack(side=BOTTOM)
