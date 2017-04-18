@@ -111,6 +111,7 @@ class VuePlanete(Perspective):
       
     def selectionner(self,evt):
         t=self.canevas.gettags("current")
+        print(t)
         if t and t[0]!="current":
             if t[0]==self.parent.nom:
                 pass
@@ -160,7 +161,7 @@ class VuePlanete(Perspective):
                     image = self.parent.images[type_tuile]
                     self.afficher_tuile(x, y, image, type_tuile)
                     
-    def afficher_tuile(self, x, y, image):
+    def afficher_tuile(self, x, y, image, type_tuile):
         vue_x, vue_y = self.sol.matrice_vers_iso(x, y)
         self.canevas.create_image(vue_x, vue_y,
                                       image = image, tags=(type_tuile))
