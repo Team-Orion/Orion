@@ -22,13 +22,13 @@ class VueSysteme(Perspective):
         
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creervaisseau", {"id_appelant":self.maselection[2],"type_unite": "attaquesolaire"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creerunite", {"id_appelant":self.maselection[2],"type_unite": "attaquesolaire"}))
         self.btncreervaisseau.pack()
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"id_appelant":self.maselection[2],"type_unite": "cargosolaire"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creerunite", {"id_appelant":self.maselection[2],"type_unite": "cargosolaire"}))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerstationplanetaire", {"id_appelant":self.maselection[2],"type_unite": "stationplanetaire"}))
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerunite", {"id_appelant":self.maselection[2],"type_unite": "stationplanetaire"}))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir planete",command=self.voirplanete)
         self.btnvuesysteme.pack(side=BOTTOM)
@@ -133,36 +133,43 @@ class VueSysteme(Perspective):
             i=mod.joueurs[i]
             for objet in mod.objets_cliquables.values():
                     if(isinstance(objet, VaisseauCargoSolaire)):
-                        self.canevas.create_image(int(objet.x+30), int(objet.y+30), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"cargosolaire",objet.id,"artefact"))
+                        self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
                     elif(isinstance(objet, VaisseauAttaqueSolaire)):
-                        self.canevas.create_image(int(objet.x+30), int(objet.y+30), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"attaquesolaire",objet.id,"artefact"))
+                        self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
                     elif (isinstance(objet,StationPlanetaire)):
-                        self.canevas.create_image(int(objet.x+30),int(objet.y+30),image = self.parent.images["stationplanetaire"],tags=(objet.proprietaire,"stationplanetaire",objet.id,"artefact"))
+                        self.canevas.create_image(int(objet.x),int(objet.y),image = self.parent.images["stationplanetaire"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+    
     def changerproprietaire(self):
         pass
                
     def afficherselection(self):
+        self.canevas.delete("selecteur")
         if self.maselection!=None:
             joueur=self.modele.joueurs[self.parent.nom]
-            if self.maselection[1]=="planete":
-                for i in self.systeme.planetes:
-                    if i.id == self.maselection[2]:
+            for objet in self.modele.objets_cliquables.values():
+                if objet.id == self.maselection[2]:
+                    if isinstance(objet, Planete):
+                        e=self.UA2pixel
                         x=int(self.maselection[3])
                         y=int(self.maselection[4])
-                        t=20
+                        t= objet.taille*e
                         self.canevas.create_oval(x-t,y-t,x+t,y+t,dash=(2,2),
                                                  outline=joueur.couleur,
                                                  tags=("select","selecteur"))
+                    elif isinstance(objet, Unite):
+                        x=objet.x
+                        y=objet.y
+                        t= objet.taille
+                        self.canevas.create_rectangle(x-t, y-t, x+t, y+t,dash=(2,2),
+                                                      outline= joueur.couleur,
+                                                      tags=("select","selecteur"))
       
     def selectionner(self,evt):
         self.changecadreetat(None)
         
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
-            if t[1]=="attaquesolaire":
-                self.maselection=[self.parent.nom,t[1],t[2]]
-                self.montrevaisseauxselection()
-            elif t[1]=="cargosolaire":
+            if t[1]=="unite":
                 self.maselection=[self.parent.nom,t[1],t[2]]
                 self.montrevaisseauxselection()
             if t[1] == "planete" :
@@ -189,18 +196,3 @@ class VueSysteme(Perspective):
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-    """
-    def cliquerminimap(self,evt):
-        x=evt.x
-        y=evt.y
-        xn=self.largeur/int(self.minimap.winfo_width())
-        yn=self.hauteur/int(self.minimap.winfo_height())
-        
-        ee=self.canevas.winfo_width()
-        ii=self.canevas.winfo_height()
-        eex=int(ee)/self.largeur/2
-        eey=int(ii)/self.hauteur/2
-        
-        self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
-        self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
-    """

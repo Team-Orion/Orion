@@ -7,6 +7,7 @@ class Systeme():
         self.id=Id.prochainid()
         self.modele = modele
         self.proprietaire="inconnu"
+        self.lieu = None
         self.visiteurs={}
         self.diametre=50 # UA unite astronomique = 150000000km
         self.x=x
@@ -29,6 +30,6 @@ class Systeme():
                     while (x < i.posXatterrissage+100 and x > i.posXatterrissage-100   or  y < i.posYatterrissage+100 and y > i.posYatterrissage-100) :
                         x=random.randrange(5000)
                         y=random.randrange(5000)
-                planete = Planete(self,type,distsol,taille,angle,x,y)
+                planete = Planete(self, type, distsol, taille, angle, x, y)
                 self.modele.objets_cliquables[planete.id] = planete   
                 self.planetes.append(planete) #à suppr #io 11-04

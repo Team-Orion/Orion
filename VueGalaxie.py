@@ -20,16 +20,16 @@ class VueGalaxie(Perspective):
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
         self.labid.bind("<Button-1>",self.identifierplanetemere) #io 03-04
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Sonde", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "sonde"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Sonde", command= lambda: self.action_joueur("creerunite", {"type_unite": "sonde"}))
         self.btncreervaisseau.pack()
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "attaquegalaxie"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creerunite", {"type_unite": "attaquegalaxie"}))
         self.btncreervaisseau.pack()
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creervaisseau", {"type_unite": "cargogalaxie"}))
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creerunite", {"type_unite": "cargogalaxie"}))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creervaisseau",{"type_unite": "stationgalaxie"}))
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerunite",{"type_unite": "stationgalaxie"}))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
@@ -138,7 +138,7 @@ class VueGalaxie(Perspective):
             
             for objet in mod.objets_cliquables.values():
                 if(isinstance(objet, VaisseauAttaqueGalactique)):
-                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseauattaque"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
+                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseauattaque"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
                             
                 elif isinstance(objet, Pulsar):
                     t=objet.taille
@@ -146,11 +146,12 @@ class VueGalaxie(Perspective):
                                                      outline="maroon1",width=2,
                                          tags=("inconnu","pulsar",objet.id))
                 elif (isinstance(objet, VaisseauCargoGalactique)):
-                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseaucargo"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
-                elif(isinstance(objet, Vaisseau)):  
-                     self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["sonde"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))        
+                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseaucargo"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                elif(isinstance(objet, Sonde)):  
+                     self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["sonde"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))        
                 elif (isinstance(objet,StationGalactique)):
-                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"],tags=(objet.proprietaire,"vaisseauinterstellaire",objet.id,"artefact"))
+                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+    
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
         self.canevas.addtag_withtag(prop,systeme.id)
@@ -177,7 +178,7 @@ class VueGalaxie(Perspective):
                         self.canevas.create_oval((x*e)-t,(y*e)-t,(x*e)+t,(y*e)+t,dash=(2,2),
                                                  outline=joueur.couleur,
                                                  tags=("select","selecteur"))
-            elif self.maselection[1]=="vaisseauinterstellaire":
+            elif self.maselection[1]=="unite":
                 for i in joueur.vaisseauxinterstellaires:
                     if i.id == self.maselection[2]:
                         x=i.x
@@ -192,21 +193,12 @@ class VueGalaxie(Perspective):
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
             
-            if t[1]=="vaisseauinterstellaire":
-                print("IN VAISSEAUINTERSTELLAIRE",t)
+            if t[1]=="unite":
                 self.maselection=[self.parent.nom,t[1],t[2]]
                 self.montrevaisseauxselection()
             
             elif t[1]=="systeme":
-                print("IN SYSTEME",t)
-                """
-                if self.maselection and self.maselection[1]=="vaisseauinterstellaire":
-                    print("IN systeme + select VAISSEAUINTERSTELLAIRE")
-                    #self.parent.parent.ciblerdestination(self.maselection[2],t[2])
-                    self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": t[2]})
-                """
                 if self.parent.nom in t:
-                    print("IN systeme  PAS SELECTION")
                     self.maselection=[self.parent.nom,t[1],t[2]]
                     self.montresystemeselection()
                 else:    
@@ -225,23 +217,5 @@ class VueGalaxie(Perspective):
     def montresystemeselection(self):
         self.changecadreetat(self.cadreetataction)
         
-    def montrevaisseauxselection(self):
-        self.changecadreetat(self.cadreetatmsg)
-    
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
-    """
-    def cliquerminimap(self,evt):
-        x=evt.x
-        y=evt.y
-        xn=self.largeur/int(self.minimap.winfo_width())
-        yn=self.hauteur/int(self.minimap.winfo_height())
-        
-        ee=self.canevas.winfo_width()
-        ii=self.canevas.winfo_height()
-        eex=int(ee)/self.largeur/2
-        eey=int(ii)/self.hauteur/2
-        
-        self.canevas.xview(MOVETO, (x*xn/self.largeur)-eex)
-        self.canevas.yview(MOVETO, (y*yn/self.hauteur)-eey)
-    """

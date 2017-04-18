@@ -8,6 +8,7 @@ DEMIEHAUTEUR_TUILES = 16 #à suppr #io 11-04
 class Pulsar():
     def __init__(self,x,y):
         self.id=Id.prochainid()
+        self.lieu = None
         self.proprietaire="inconnu"
         self.x=x
         self.y=y
@@ -31,12 +32,12 @@ class Pulsar():
             self.taille=self.mintaille+(self.moment*self.pas)
                 
 class Planete():
-    def __init__(self,parent,type,dist,taille,angle,x,y):
+    def __init__(self, parent, type, dist, taille, angle, x, y):
         self.id=Id.prochainid()
-        self.parent=parent
+        self.parent = parent #questionner la pertinence #io 18-04
+        self.lieu = parent
         self.posXatterrissage=x
         self.posYatterrissage=y 
-        #self.infrastructures=[Ville(self)]
         self.proprietaire="inconnu"
         self.visiteurs={}
         self.distance=dist
@@ -62,7 +63,6 @@ class Sol():
         self.demielargeur_tuiles = DEMIELARGEUR_TUILES
         self.demiehauteur_tuiles = DEMIEHAUTEUR_TUILES
         self.demielargeur_sol = self.demielargeur_tuiles*self.matrice_largeur
-        
 
     def generer_base(self):
         terrain = []
@@ -171,7 +171,8 @@ class Sol():
 class Etoile():
     def __init__(self,parent,x,y):
         self.id=Id.prochainid()
-        self.parent=parent
+        self.parent = parent #questionner la pertinence #io 04=08
+        self.lieu = parent
         self.type=random.choice(["rouge","rouge","rouge",
                                  "jaune","jaune",
                                  "bleu"])

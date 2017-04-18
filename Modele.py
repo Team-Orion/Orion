@@ -14,9 +14,10 @@ from Systeme import *
 
 
 class Coord():
-    def __init__(self, x, y):
+    def __init__(self, x, y, lieu = None):
         self.x = x
         self.y = y
+        self.lieu = lieu
         self.taille = 0
 
 class Joueur():
@@ -34,10 +35,9 @@ class Joueur():
         self.actions={"atterrirplanete":self.atterrirplanete,
                       "decouvrirplanete":self.decouvrirplanete,
                       "ciblerdestination":self.ciblerdestination,
-                      "creervaisseau":self.creervaisseau,
+                      "creerunite":self.creerunite,
                       "envoimessage":self.envoiemessage,
-                      "visitersysteme":self.visitersysteme,
-                      "creerstationplanetaire":self.creervaisseau
+                      "visitersysteme":self.visitersysteme
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom):
@@ -69,10 +69,10 @@ class Joueur():
         unite.ciblerdestination(lacible)
         return 
                 
-    def creervaisseau(self, id_appelant, type_unite):
+    def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
-                 "sonde": Vaisseau,
+                 "sonde": Sonde,
                  "attaquegalaxie": VaisseauAttaqueGalactique,
                  "cargogalaxie": VaisseauCargoGalactique,
                  "attaquesolaire": VaisseauAttaqueSolaire,
@@ -81,7 +81,7 @@ class Joueur():
                  "stationplanetaire": StationPlanetaire
                 }
         unite = types[type_unite](self, appelant)
-        self.vaisseauxinterstellaires.append(unite)
+        self.vaisseauxinterstellaires.append(unite) #a supprimer #io 18-04
         self.parent.objets_cliquables[unite.id] = unite
         
     def decouvrirplanete(self, id_planete, sol):
@@ -91,10 +91,10 @@ class Joueur():
         
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
         global modeauto
-        for i in self.vaisseauxinterstellaires:
+        for i in self.parent.objets_cliquables.values():
             if(isinstance(i, StationPlanetaire)):
                 i.rotation()
-            elif i.cible:
+            if isinstance(i, Unite) and i.cible:
                 rep=i.avancer()
                 if rep:
                     if rep.proprietaire=="inconnu":
@@ -130,7 +130,7 @@ class IA(Joueur):
                     c=self.parent.parent.cadre+5
                     if c not in self.parent.actionsafaire.keys(): 
                         self.parent.actionsafaire[c]=[] 
-                    self.parent.actionsafaire[c].append([self.nom,"creervaisseau", {"id_appelant":self.systemeorigine.id,"type_unite": "attaquegalaxie"}])
+                    self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":self.systemeorigine.id,"type_unite": "attaquegalaxie"}])
                 else:
                     for i in self.vaisseauxinterstellaires:
                         sanscible=[]
@@ -169,8 +169,7 @@ class Modele():
         self.systemes=[] #à suppr #io 11-04
         self.terrain=[]
         self.unites = [] #io 03-04
-        self.infrastructure = [] #io 03-04
-        self.objets_cliquables = {} #io 11-04
+        self.objets_cliquables = {} 
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
         
     def creersystemes(self,nbias):  # IA ajout du parametre du nombre d'ias a ajouter

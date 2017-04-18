@@ -203,19 +203,6 @@ class Vue():
         s=self.modes["planetes"]
         
         if maselection:
-            """
-            sysid=maselection[5]
-            planeid=maselection[2]
-            if planeid in self.modes["planetes"].keys():
-                s=self.modes["planetes"][planeid]
-            else:
-                print("passe par ici")
-                systeme = self.modele.objets_cliquables[sysid]
-                planete = self.modele.objets_cliquables[planeid]
-                self.action_joueur("decouvrirplanete", {"id_planete": planeid})
-                s=VuePlanete(self,systeme,planete)
-                self.modes["planetes"][planeid]=s
-            s.initier_affichage()"""
             id_systeme=maselection[5]
             id_planete=maselection[2]
             if id_planete in self.modes["planetes"].keys():
