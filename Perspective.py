@@ -20,7 +20,7 @@ class Perspective(Frame):
         
         self.scrollX=Scrollbar(self.cadrevue,orient=HORIZONTAL)
         self.scrollY=Scrollbar(self.cadrevue)
-        self.canevas=Canvas(self.cadrevue,width=300,height=200,bg="grey11",
+        self.canevas=Canvas(self.cadrevue,width=1000,height=600,bg="grey11",
                              xscrollcommand=self.scrollX.set,
                              yscrollcommand=self.scrollY.set)
         
@@ -58,7 +58,9 @@ class Perspective(Frame):
                 cible = cible[2]
                 mode = "id"
             else:
-                cible = {'x': evt.x, 'y': evt.y}
+                x = evt.x/100
+                y = evt.y/100
+                cible = {'x': x, 'y': y}
                 mode = "coord"
             self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": cible, "mode": mode})
             

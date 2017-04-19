@@ -15,7 +15,6 @@ class Unite:
         self.proprietaire = proprietaire
         
         self.action = None
-        
         self.lieu = parent.lieu
         self.x, self.y = self.initier_position(parent)
         self.angletrajet = 0
@@ -95,7 +94,6 @@ class Unite:
         infos_cases = dict()
         infos_cases[(x_init, y_init)] = InfosCase(0, None)
         cible = (x_cible, y_cible)
-        test = set()
         while len(cases_nontestees) != 0: 
             cases_par_distance = sorted([(infos_cases[case].distance, case)
                                          for case in cases_nontestees])
@@ -206,6 +204,8 @@ class StationPlanetaire(Unite):
         self.x=planete.x+10 
         self.y=planete.y-10
         
+        self.action = self.rotation
+        
     def avancer(self):
         pass
 
@@ -225,12 +225,16 @@ class StationGalactique(Unite):
     def __init__(self, proprietaire, systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
-                         vitesse = 4,
+                         vitesse = 0.02*5,
                          attaque = 0,
                          taille = 20,
                          capacite = 10
                          )
-
+        self.base = systeme
+        self.action = self.rotation
+    
+    def rotation(self):
+        pass
     def reparation(self):
         pass
     def troc(self):

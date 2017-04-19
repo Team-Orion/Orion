@@ -18,6 +18,7 @@ class Coord():
         self.x = x
         self.y = y
         self.lieu = lieu
+        self.proprietaire = None
         self.taille = 0
 
 class Joueur():
@@ -67,6 +68,7 @@ class Joueur():
             lacible = Coord(**cible)
         unite.cible = lacible
         unite.ciblerdestination(lacible)
+        unite.action = unite.avancer
         return 
                 
     def creerunite(self, id_appelant, type_unite):
@@ -92,16 +94,23 @@ class Joueur():
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
         global modeauto
         for i in self.parent.objets_cliquables.values():
-            if(isinstance(i, StationPlanetaire)):
-                i.rotation()
-            if isinstance(i, Unite) and i.cible:
+            try:
+                i.action()
+            except AttributeError:
+                pass #l'ojet n'a pas d'attibut "action". C'est normal s'il s'agit d'un astre.
+            except TypeError:
+                pass #l'objet n'a pas d'action assignee. C'est normal.
+            """
+            #if isinstance(i, Unite) and i.action is not None:
+            #    i.action()
+                
                 rep=i.avancer()
                 if rep:
                     if rep.proprietaire=="inconnu":
                         if rep not in self.systemesvisites:
                             self.systemesvisites.append(rep)
                             self.parent.changerproprietaire(self.nom,self.couleur,rep)
-                            
+            """    
     def visitersysteme(self, id_appelant):
         for i in self.parent.systemes:
             if i.id==id_appelant:

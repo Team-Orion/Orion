@@ -77,6 +77,7 @@ class Controleur():
             self.modele=Modele(self,rep[1][0][1],rep[1][0][2]) # on cree le modele
             self.vue.afficherinitpartie(self.modele)
             #print(self.monnom,"LANCE PROCHAINTOUR")
+            
             self.prochaintour()
         
     def prochaintour(self): # la boucle de jeu principale, qui sera appelle par la fonction bouclejeu du timer
@@ -115,7 +116,6 @@ class Controleur():
         self.actions.append((self.monnom, action, parametres))
         
     def envoiemessage(self,messageenvoye):
-        
         print("controleur print")
         self.actions.append((self.monnom, "envoimessage",{"message": messageenvoye}))
         
