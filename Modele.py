@@ -48,7 +48,6 @@ class Joueur():
         pass
     def gaintechnologique(self):
         pass
-    
                         
     def atterrirplanete(self, id_appelant, id_planete):
         for i in self.systemesvisites:
@@ -91,31 +90,18 @@ class Joueur():
         planete.sol = sol 
         print("Le SOL: ", planete.sol)
         
-    def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement
-        global modeauto
-        for i in self.parent.objets_cliquables.values():
-            try:
-                i.action()
-            except AttributeError:
-                pass #l'ojet n'a pas d'attibut "action". C'est normal s'il s'agit d'un astre.
-            except TypeError:
-                pass #l'objet n'a pas d'action assignee. C'est normal.
-            """
-            #if isinstance(i, Unite) and i.action is not None:
-            #    i.action()
-                
-                rep=i.avancer()
-                if rep:
-                    if rep.proprietaire=="inconnu":
-                        if rep not in self.systemesvisites:
-                            self.systemesvisites.append(rep)
-                            self.parent.changerproprietaire(self.nom,self.couleur,rep)
-            """    
     def visitersysteme(self, id_appelant):
         for i in self.parent.systemes:
             if i.id==id_appelant:
                 self.systemesvisites.append(i)
-   
+        
+    def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement        
+        """
+        
+        Le contenu de cette fonction a été déplacé dans Modele.prochaineaction.
+        
+        """
+
 #  DEBUT IA
 class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur):
@@ -230,14 +216,19 @@ class Modele():
                 self.joueurs[nom_joueur].actions[action](**parametres)
             del self.actionsafaire[cadre]
                 
-        for i in self.joueurscles:
+        for i in self.joueurscles: #il se pourrait que cette instruction ne servent plus #io 20-04
             self.joueurs[i].prochaineaction()
             
         for i in self.ias:
             i.analysesituation()
             
-        for i in self.pulsars:
-            i.evoluer()
+        for objet in self.objets_cliquables.values():
+            try:
+                objet.action()
+            except AttributeError:
+                pass #l'ojet n'a pas d'attibut "action". C'est normal s'il s'agit d'un système solaire ou une planete.
+            except TypeError:
+                pass #l'objet n'a pas d'action assignee. C'est normal.
             
     def changerproprietaire(self,nom,couleur,syst):
         self.parent.changerproprietaire(nom,couleur,syst)
