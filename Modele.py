@@ -65,6 +65,7 @@ class Joueur():
             lacible = self.parent.objets_cliquables[cible]
         elif mode == "coord":
             lacible = Coord(**cible)
+            lacible.lieu = unite.lieu
         unite.cible = lacible
         unite.ciblerdestination(lacible)
         unite.action = unite.avancer

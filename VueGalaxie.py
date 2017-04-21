@@ -162,7 +162,7 @@ class VueGalaxie(Perspective):
         self.canevas.itemconfig(lp[0],fill=couleur)
         t=(prop,"systeme",id,"systemevisite",str(len(systeme.planetes)),systeme.etoile.type)
         self.canevas.itemconfig(lp[0],tags=t)
-               
+            
     def afficherselection(self):
         self.canevas.delete("selecteur")
         if self.maselection!=None:

@@ -201,8 +201,8 @@ class StationPlanetaire(Unite):
                          taille = 20 
                          )
         self.base = planete
-        self.x=planete.x+10 
-        self.y=planete.y-10
+        self.x=planete.x 
+        self.y=planete.y-25
         
         self.action = self.rotation
         
@@ -211,7 +211,7 @@ class StationPlanetaire(Unite):
 
     def rotation(self):
         angleRotation = math.radians(2)
-        self.x,self.y=hlp.calcRotation(self.base.x-25, self.base.y-25, self.x, self.y, angleRotation)  
+        self.x,self.y=hlp.calcRotation(self.base.x, self.base.y, self.x, self.y, angleRotation)  
         
     def creercargogalactique(self):
         pass

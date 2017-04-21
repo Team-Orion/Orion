@@ -1,6 +1,8 @@
 from tkinter import *
 from PIL import *
 
+import Unite
+
 class Perspective(Frame):
     def __init__(self,parent):
         Frame.__init__(self,parent.cadrejeu)
@@ -47,7 +49,29 @@ class Perspective(Frame):
         self.minimap=Canvas(self.cadreminimap,width=200,height=200,bg="grey11")
         self.minimap.bind("<Button-1>",self.cliquerminimap)
         self.minimap.pack()
-    
+    """    
+    def afficherselection(self):
+        self.canevas.delete("selecteur")
+        if self.maselection!=None:
+            joueur=self.modele.joueurs[self.parent.nom]
+            for objet in self.modele.objets_cliquables.values():
+                if objet.id == self.maselection[2]:
+                    if isinstance(objet, Unite.Unite):
+                        x=objet.x
+                        y=objet.y
+                        t= objet.taille
+                        self.canevas.create_rectangle(x-t, y-t, x+t, y+t,dash=(2,2),
+                                                      outline= joueur.couleur,
+                                                      tags=("select","selecteur"))
+                    else:
+                        e=100
+                        x=objet.x
+                        y=objet.y
+                        t= objet.taille*e
+                        self.canevas.create_oval(x-t,y-t,x+t,y+t,dash=(2,2),
+                                                 outline=joueur.couleur,
+                                                 tags=("select","selecteur"))
+    """
     def selectionner(self,evt):
         pass
     

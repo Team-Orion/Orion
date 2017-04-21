@@ -143,6 +143,7 @@ class VueSysteme(Perspective):
         pass
                
     def afficherselection(self):
+        
         self.canevas.delete("selecteur")
         if self.maselection!=None:
             joueur=self.modele.joueurs[self.parent.nom]
@@ -169,6 +170,7 @@ class VueSysteme(Perspective):
         
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
+            print(t)
             if t[1]=="unite":
                 self.maselection=[self.parent.nom,t[1],t[2]]
                 self.montrevaisseauxselection()
