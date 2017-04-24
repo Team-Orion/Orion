@@ -38,7 +38,8 @@ class Joueur():
                       "ciblerdestination":self.ciblerdestination,
                       "creerunite":self.creerunite,
                       "envoimessage":self.envoiemessage,
-                      "visitersysteme":self.visitersysteme
+                      "visitersysteme":self.visitersysteme,
+                      "creerinfrastructure": self.creerinfrastructure
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom):
@@ -70,7 +71,20 @@ class Joueur():
         unite.ciblerdestination(lacible)
         unite.action = unite.avancer
         return 
-                
+    def creerinfrastructure(self,type_unite):
+        types = {
+            "mine": Mine,
+            "hotelville":HotelVille,
+            "ferme":Ferme,
+            "tourdefense":TourDefense,
+            "usinevaisseau":UsineVaisseau,
+            "universite":Universite,
+            "caserne":Caserne,
+            "scierie":Scierie,
+            "temple":Temple,
+            "ruine":Ruine,
+            
+            }           
     def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
