@@ -29,14 +29,38 @@ class VuePlanete(Perspective):
         self.btncreerstation.pack()
         """
         
-        self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systemf",command=self.voirsysteme)
+        self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
-        
-        self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=self.creermine)
+       
+        self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=lambda: self.action_joueur("creerinfrastructure", {"type_unite": "mine"}))
         self.btncreermine.pack(side=BOTTOM)
 
-        self.btncreerferme=Button(self.cadreetataction,text="Construire Ferme",command=self.creerferme)
+        self.btncreerferme=Button(self.cadreetataction,text="Construire Ferme",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "ferme"}))
         self.btncreerferme.pack(side=BOTTOM)
+        
+        self.btnhotelville=Button(self.cadreetataction,text="Construire Hotel ville",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "hotelville"}))
+        self.btnhotelville.pack()
+        
+        self.btntourdefense=Button(self.cadreetataction,text="Construire Tour",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "tourdefense"}))
+        self.btntourdefense.pack(side=BOTTOM)
+        
+        self.btnusinevaisseau=Button(self.cadreetataction,text="Construire Usine vaisseau",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "usinevaisseau"}))
+        self.btnusinevaisseau.pack(side=BOTTOM)
+        
+        self.btnuniversite=Button(self.cadreetataction,text="Construire Universite",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "universite"}))
+        self.btnuniversite.pack(side=BOTTOM)
+        
+        self.btncaserne=Button(self.cadreetataction,text="Construire Caserne",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "caserne"}))
+        self.btncaserne.pack(side=BOTTOM)
+        
+        self.btnscierie=Button(self.cadreetataction,text="Construire Scierie",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "scierie"}))
+        self.btnscierie.pack(side=BOTTOM)
+        
+        self.btntemple=Button(self.cadreetataction,text="Construire Temple",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "temple"}))
+        self.btntemple.pack(side=BOTTOM)
+        
+        self.btnruine=Button(self.cadreetataction,text="Construire Ruine",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "ruine"}))
+        self.btnruine.pack(side=BOTTOM)
         
         
         self.changecadreetat(self.cadreetataction)
