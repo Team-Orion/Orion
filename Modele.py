@@ -22,13 +22,14 @@ class Coord():
         self.taille = 0
 
 class Joueur():
-    def __init__(self,parent,nom,systemeorigine,couleur):
+    def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
         self.id=Id.prochainid()
         self.artificiel=0   # IA
         self.parent=parent
         self.nom=nom
         self.systemeorigine=systemeorigine
         self.couleur=couleur
+        self.codecouleur=codecouleur
         self.systemesvisites=[systemeorigine]
         self.vaisseauxinterstellaires=[] #à suppr #io 11-04
         self.vaisseauxinterplanetaires=[] #à suppr #io 11-04
@@ -119,8 +120,8 @@ class Joueur():
 
 #  DEBUT IA
 class IA(Joueur):
-    def __init__(self,parent,nom,systemeorigine,couleur):
-        Joueur.__init__(self,parent,nom,systemeorigine,couleur)
+    def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
+        Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
         self.contexte="galaxie"
          # le delai est calcule pour chaque prochaine action en seconde
         self.delaiaction=random.randrange(5,10)*20  # le 20 =nbr de boucle par sec.
@@ -211,19 +212,22 @@ class Modele():
                 planes.append(systeme)
                 systemetemp.remove(systeme)
                 np-=1
-        couleurs=["cyan","goldenrod","orangered","greenyellow",
-                  "dodgerblue","yellow2","maroon1","chartreuse3",
-                  "firebrick1","MediumOrchid2","DeepPink2","blue"]    # IA ajout de 3 couleurs
-
+        couleurs=["firebrick","saddlebrown","seagreen","chartreuse","darkturquoise",
+                  "dodgerblue3","purple4","maroon3"]    # IA ajout de 3 couleurs
+        
+        codecouleur=1
+        
         for i in self.joueurscles:
-            self.joueurs[i]=Joueur(self,i,planes.pop(0),couleurs.pop(0))
+            self.joueurs[i]=Joueur(self,i,planes.pop(0),couleurs.pop(0),codecouleur)
+            codecouleur+=1
             
         for i in range(nbias): # IA
             nomia="IA_"+str(i)
             self.joueurscles.append(nomia)
-            ia=IA(self,nomia,planes.pop(0),couleurs.pop(0))
+            ia=IA(self,nomia,planes.pop(0),couleurs.pop(0),codecouleur)
             self.joueurs[nomia]=ia  #IA
             self.ias.append(ia)  #IA
+            codecouleur+=1
         
     def prochaineaction(self,cadre):
         if cadre in self.actionsafaire:
