@@ -169,11 +169,14 @@ class VueSysteme(Perspective):
             i=mod.joueurs[i]
             for objet in mod.objets_cliquables.values():
                     if(isinstance(objet, VaisseauCargoSolaire)):
-                        self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        if(objet.proprietaire == i):
+                            self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
                     elif(isinstance(objet, VaisseauAttaqueSolaire)):
-                        self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        if(objet.proprietaire == i):
+                            self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
                     elif (isinstance(objet,StationPlanetaire)):
-                        self.canevas.create_image(int(objet.x),int(objet.y),image = self.parent.images["stationplanetaire"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        if(objet.proprietaire == i):
+                            self.canevas.create_image(int(objet.x),int(objet.y),image = self.parent.images["stationplanetaire"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
     
     def changerproprietaire(self):
         pass
