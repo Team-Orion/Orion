@@ -38,42 +38,78 @@ class VueSysteme(Perspective):
         self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
         self.population.pack(fill=X)
         
-        #imgBois = PhotoImage(file="images/ressources/bois.png")
         imgBois = self.parent.images["bois"]
         imgFoin = self.parent.images["foin"]
         imgArgent = self.parent.images["argent"]
         imgMinerai = self.parent.images["minerai"]
 
-        labelBois = Label(self.cadreinfo, image = imgBois)
-        labelFoin = Label(self.cadreinfo, image = imgFoin)
-        labelArgent = Label(self.cadreinfo, image = imgArgent)
-        labelMinerai = Label(self.cadreinfo, image = imgMinerai)
+        self.labelBois = Label(self.cadreinfo, image = imgBois)
+        self.labelFoin = Label(self.cadreinfo, image = imgFoin)
+        self.labelArgent = Label(self.cadreinfo, image = imgArgent)
+        self.labelMinerai = Label(self.cadreinfo, image = imgMinerai)
 
-        labelBoistxt = Label(self.cadreinfo, text = "qte Bois")
-        labelFointxt = Label(self.cadreinfo, text = "qte Foin")
-        labelArgenttxt = Label(self.cadreinfo, text = "qte Argent")
-        labelMineraitxt = Label(self.cadreinfo, text = "qte Minerai")
-
-
+        self.nbbois=0
+        self.nbfoin=0
+        self.nbargent=0
+        self.nbminerai=0
         
-        labelBois.pack(fill=X)
-        labelBoistxt.pack(fill=X)
-        labelFoin.pack(fill=X)
-        labelFointxt.pack(fill=X)
-        labelArgent.pack(fill=X)
-        labelArgenttxt.pack(fill=X)    
-        labelMinerai.pack(fill=X)
-        labelMineraitxt.pack(fill=X)
         
-        labelBois.image=imgBois
-        labelFoin.image=imgFoin
-        labelArgent=imgArgent
-        labelMinerai= imgMinerai
+        self.labelBoistxt = Label(self.cadreinfo, text = "Qte Bois: "+str(self.nbbois))
+        self.labelFointxt = Label(self.cadreinfo, text = "Qte Foin: "+str(self.nbfoin))
+        self.labelArgenttxt = Label(self.cadreinfo, text = "Qte Argent: "+str(self.nbargent))
+        self.labelMineraitxt = Label(self.cadreinfo, text = "Qte Minerai: "+str(self.nbminerai))
+        self.labelBois.pack(fill=X)
+        self.labelBoistxt.pack(fill=X)
+        self.labelFoin.pack(fill=X)
+        self.labelFointxt.pack(fill=X)
+        self.labelArgent.pack(fill=X)
+        self.labelArgenttxt.pack(fill=X)    
+        self.labelMinerai.pack(fill=X)
+        self.labelMineraitxt.pack(fill=X)
+         
+        self.labelBois.image=imgBois
+        self.labelFoin.image=imgFoin
+        self.labelArgent.image=imgArgent
+        self.labelMinerai.image= imgMinerai
+        
         
         self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey")
         self.lbselectecible.pack()
         self.changecadreetat(self.cadreetataction)
-    
+    def chercheqte(self):
+        for objet in self.modele.objets_cliquables.values():
+            if objet.id == self.maselection[2]:
+                print(objet.nbbois,"objet.nbbois")
+                print(objet.nbfoin,"objet.nbfoin")
+                print(objet.nbargent,"objet.nbargent")
+                self.nbbois=objet.nbbois
+                self.nbfoin=objet.nbfoin
+                self.nbargent=objet.nbargent
+                self.nbminerai=objet.nbminerai
+                
+                
+                self.labelBois.pack_forget()
+                self.labelBoistxt.pack_forget()
+                self.labelFoin.pack_forget()
+                self.labelFointxt.pack_forget()
+                self.labelArgent.pack_forget()
+                self.labelArgenttxt.pack_forget()   
+                self.labelMinerai.pack_forget()
+                self.labelMineraitxt.pack_forget()
+                
+                self.labelBoistxt = Label(self.cadreinfo, text = "Qte Bois: "+str(self.nbbois))
+        
+                self.labelFointxt = Label(self.cadreinfo, text = "Qte Foin: "+str(self.nbfoin))
+                self.labelArgenttxt = Label(self.cadreinfo, text = "Qte Argent: "+str(self.nbargent))
+                self.labelMineraitxt = Label(self.cadreinfo, text = "Qte Minerai: "+str(self.nbminerai))
+                self.labelBois.pack(fill=X)
+                self.labelBoistxt.pack(fill=X)
+                self.labelFoin.pack(fill=X)
+                self.labelFointxt.pack(fill=X)
+                self.labelArgent.pack(fill=X)
+                self.labelArgenttxt.pack(fill=X)    
+                self.labelMinerai.pack(fill=X)
+                self.labelMineraitxt.pack(fill=X)
     def voirplanete(self):
         self.parent.voirplanete(self.maselection)
 
@@ -164,6 +200,7 @@ class VueSysteme(Perspective):
                         self.canevas.create_rectangle(x-t, y-t, x+t, y+t,dash=(2,2),
                                                       outline= joueur.couleur,
                                                       tags=("select","selecteur"))
+                    self.chercheqte()
       
     def selectionner(self,evt):
         self.changecadreetat(None)
