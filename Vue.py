@@ -48,7 +48,7 @@ class Vue():
                 InfosImg("colline-O", "images/tuiles/colline-O.png"),
                 InfosImg("colline-S", "images/tuiles/colline-S.png"),
                 InfosImg("colline-E", "images/tuiles/colline-E.png"),
-                InfosImg("tortue", "images/unites/tortue.png"),
+                InfosImg("tortue", "images/unites/tortue_1.png"),
                 InfosImg("bois", "images/ressources/bois.png"),
                 InfosImg("foin", "images/ressources/foin.png"),
                 InfosImg("argent", "images/ressources/argent.png"),
