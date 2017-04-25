@@ -1,5 +1,20 @@
 from Id import *
-
+class Infrastructure:
+    def __init__(self,proprietaire,planete,positionx=0, positiony=0):
+        self.x=positionx
+        self.y=positiony
+        self.id=Id.prochainid()
+        self.proprietaire = proprietaire
+        self.planete=planete
+##a revoir super(). de toutes les infra
+class Ferme():
+    def __init__(proprietaire, planete):
+        super().__init__(self,proprietaire,planete,positionx, positiony)
+        self.capacite=100
+    def nourrirpopulation(self):
+        pass
+    def exploitationnouriture(self):
+        pass
 
 class TourDefense():
     def __init__(self):
@@ -28,13 +43,6 @@ class Caserne():
     def __init__(self):
         pass
     def creationtroupe(self):
-        pass
-class Ferme():
-    def __init__(self):
-        self.capacite=100
-    def nourrirpopulation(self):
-        pass
-    def exploitationnouriture(self):
         pass
     
 class Scierie():
