@@ -134,23 +134,26 @@ class VueGalaxie(Perspective):
 
         
         for i in mod.joueurscles: #a remplacer par dictionnaire # io 11-04
-            i=mod.joueurs[i]
-            
+            i=self.modele.joueurs[i]
+
             for objet in mod.objets_cliquables.values():
                 if(isinstance(objet, VaisseauAttaqueGalactique)):
-                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseauattaque"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
-                            
+                    if(objet.proprietaire == i):
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))            
                 elif isinstance(objet, Pulsar):
                     t=objet.taille
                     self.canevas.create_oval((objet.x*e)-t,(objet.y*e)-t,(objet.x*e)+t,(objet.y*e)+t,fill="orchid3",dash=(1,1),
                                                      outline="maroon1",width=2,
                                          tags=("inconnu","pulsar",objet.id))
                 elif (isinstance(objet, VaisseauCargoGalactique)):
-                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseaucargo"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
-                elif(isinstance(objet, Sonde)):  
-                     self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["sonde"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))        
+                    if(objet.proprietaire == i):
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                elif(isinstance(objet, Sonde)): 
+                    if(objet.proprietaire == i): 
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["sonde"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))        
                 elif (isinstance(objet,StationGalactique)):
-                    self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                    if(objet.proprietaire == i):
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
     
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
