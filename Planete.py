@@ -48,6 +48,10 @@ class Planete():
         self.sol = None
         self.x=x
         self.y=y
+        self.nbbois=1
+        self.nbfoin=1
+        self.nbargent=1
+        self.nbminerai=1
         
     def creationtourdefense(self):
         pass
