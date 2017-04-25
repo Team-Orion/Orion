@@ -72,20 +72,23 @@ class Joueur():
         unite.ciblerdestination(lacible)
         unite.action = unite.avancer
         return 
-    def creerinfrastructure(self,type_unite):
-        types = {
-            "mine": Mine,
-            "hotelville":HotelVille,
-            "ferme":Ferme,
-            "tourdefense":TourDefense,
-            "usinevaisseau":UsineVaisseau,
-            "universite":Universite,
-            "caserne":Caserne,
-            "scierie":Scierie,
-            "temple":Temple,
-            "ruine":Ruine,
-            
-            }           
+    def creerinfrastructure(self,type_unite,x=10,y=10):
+        
+        types ={
+                "mine": Mine,
+                "hotelville":HotelVille,
+                "ferme":Ferme,
+                "tourdefense":TourDefense,
+                "usinevaisseau":UsineVaisseau,
+                "universite":Universite,
+                "caserne":Caserne,
+                "scierie":Scierie,
+                "temple":Temple,
+                "ruine":Ruine
+                }
+        planete= "test"
+        infrastructure = types[type_unite](self,planete,x,y)
+        self.parent.objets_cliquables[infrastructure.id] = infrastructure          
     def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
