@@ -10,45 +10,67 @@ class Unite:
     def __init__(self, proprietaire, parent,
                  energie = 0, vitesse = 0 ,
                  attaque = 0, taille = 0,
-                 capacite = 0): #le parent est l'instance qui crée l'unite
+                 capacite = 0, portee = 0,
+                 vitesse_projectile = 0,
+                 delai_attaque = 0): #le parent est l'instance qui crée l'unite
         self.id=Id.prochainid()
         self.proprietaire = proprietaire
-        
         self.action = None
+        self.cible = None
+        
+        #caracteristiques de la position et du deplacement
         self.lieu = parent.lieu
+        self.base = parent
+        self.base2 = None #Les bases sont les instances entre lesquelles l'unite fait des alles-retours.
         self.x, self.y = self.initier_position(parent)
         self.angletrajet = 0
         self.angleinverse = 0
         self.vitesse = vitesse
         self.chemin = None
         self.indice_chemin = 0
-        self.cible = None
         
-        self.energie = energie
-        self.attaque = attaque
+        #caracteristiques de l'unite
         self.taille = taille
+        self.energie = energie
         
+        #caracteristiques de l'attaque
+        self.attaque = attaque
+        self.portee = portee
+        self.delai_attaque = delai_attaque
+        self.vitesse_projectile = vitesse_projectile
+        self.indice_delai_attaque = 0
+        
+        #Cargaison
+        self.nbbois=1
+        self.nbfoin=1
+        self.nbargent=1
+        self.nbminerai=1
+        
+    
+    #Methodes de deplacement
     def avancer(self):
-        rep=None
+        rep = None
         if self.cible and self.lieu == self.cible.lieu:
             if self.lieu is None: #Galaxie
+                self.ciblerdestination()
                 x=self.cible.x
                 y=self.cible.y
-                self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
-                if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
+                if hlp.calcDistance(self.x,self.y,x,y) >= self.vitesse:
+                    self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+                else:
                     rep=self.cible
                     self.base=self.cible
-                    self.cible=None
-                return rep
+                    return True #La cible est atteinte
             elif isinstance(self.lieu, Systeme.Systeme):
+                self.ciblerdestination()
                 x=self.cible.x
                 y=self.cible.y
-                self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
-                if hlp.calcDistance(self.x,self.y,x,y) <=self.vitesse:
-                    rep=self.cible
-                    self.base=self.cible
-                    self.cible=None
-                return rep
+                if hlp.calcDistance(self.x, self.y, x, y) >= self.vitesse:
+                    self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+                else:
+                    rep = self.cible
+                    self.base = self.cible
+                    return True #La cible est atteinte
             elif self.chemin and isinstance(self.lieu, Planete.Planete):
                 x_cible, y_cible = self.lieu.matrice_vers_iso(*self.chemin[self.indice_chemin])
                 diff_x = x_cible - self.x
@@ -61,11 +83,10 @@ class Unite:
                 elif self.indice_chemin<len(self.chemin)-1:
                     self.indice_chemin += 1
         
-    def ciblerdestination(self,p):
-        self.cible=p
-        self.angletrajet=hlp.calcAngle(self.x,self.y,p.x,p.y)
+    def ciblerdestination(self):
+        self.angletrajet=hlp.calcAngle(self.x, self.y, self.cible.x, self.cible.y)
         self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
-        dist=hlp.calcDistance(self.x,self.y,p.x,p.y)
+        dist=hlp.calcDistance(self.x, self.y, self.cible.x, self.cible.y)
 
     def assigner_cible(self, cible):
             self.cible = Coord(cible.x, cible.y)
@@ -123,22 +144,76 @@ class Unite:
                     infos_cases[voisin] = InfosCase(distance, case_courante)
         return None
     
+    def rotation(self):
+        angleRotation = math.radians(2)
+        self.x,self.y=hlp.calcRotation(self.base.x, self.base.y, self.x, self.y, angleRotation) 
+    
+    def collecter_decharger(self):
+        if self.cible == self.base:
+            self.collecter()
+        else:
+            self.decharger()
+            
+    def collecter(self):
+        self.cible = self.base
+    
+    def decharger(self):
+        self.cible = self.base2
+    
     def initier_position(self, parent):
         if self.lieu is None:
             return parent.x+20/100, parent.y
         elif isinstance(self.lieu, Systeme.Systeme):
-            return parent.x+20/100, parent.y
-
-    
+            return parent.x+(parent.taille)*100+15, parent.y
+        
+        
+     
+    #Methodes d'attaque
     def attaquer(self):
+        if self.indice_delai_attaque <= 0:
+            if self.cible.energie > 0:
+                projectile = Projectile(self.parent, self.cible, self.attaque, self.vitesse_projectile, self.portee_projectile)
+                self.proprietaire.parent.objets_cliquables[projectile.id] = projectile
+            else:
+                self.cible = None
+                self.indice_delai_attaque = self.vitesse_attaque
+
+class UniteCargo(Unite):
+    def __init__(self):
         pass
+    
+class UniteAttaque(Unite):
+    def __init__(self):
+        pass
+    
+class Station(Unite):
+    pass
+
+class Projectile(Unite):
+    def __init__(self, parent,
+                 attaque, vitesse, portee
+                 ):
+        super().__init__()
+        self.init_x = base.x #position de depart
+        self.init_y = base.y #position de depart
+        self.x = base.x
+        self.y = base.y
+        self.portee_carree = portee**2
+
+    def avancer(self): 
+        diff_x_caree = (self.init_x-self.x)**2
+        diff_y_caree = (self.init_y-self.y)**2
+        if (diff_x_caree+diff_y_caree <= self.portee_carree):
+            self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            return True
+        return False # Le projectile a atteint sa distance maximale
+    
     
 class Sonde(Unite):
     def __init__(self, proprietaire, systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         attaque = 0,
                          taille = 16
                          )
 
@@ -147,16 +222,26 @@ class VaisseauAttaqueGalactique(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         attaque = 0,
+                         attaque = 15,
+                         delai_attaque = 10,
+                         portee = 15,
+                         vitesse_projectile = 6,
                          taille = 16
                          )
+    def avancer(self):
+        if super().avancer():
+            if self.proprietaire is not self.cible.proprietaire:
+                self.attaquer()
 
 class VaisseauAttaqueSolaire(Unite):
     def __init__(self, proprietaire, planete):
         super().__init__(proprietaire, planete,
                          energie = 100,
-                         vitesse = 0.02*5,
-                         attaque = 0,
+                         vitesse = 5,
+                         attaque = 15,
+                         delai_attaque = 10,
+                         portee = 15,
+                         vitesse_projectile = 6,
                          taille = 16
                          )    
     
@@ -164,8 +249,7 @@ class VaisseauCargoSolaire(Unite):
     def __init__(self, proprietaire, planete):
         super().__init__(proprietaire, planete,
                          energie = 100,
-                         vitesse = 0.02*5,
-                         attaque = 0,
+                         vitesse = 5,
                          taille = 16
                          )
         
@@ -181,7 +265,6 @@ class VaisseauCargoGalactique(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         attaque = 0,
                          taille = 16
                          )    
     
@@ -196,22 +279,19 @@ class StationPlanetaire(Unite):
     def __init__(self, proprietaire, planete):
         super().__init__(proprietaire, planete,
                          energie = 100,
-                         vitesse = None,
-                         attaque = 0,
-                         taille = 20 
+                         vitesse = 5,
+                         taille = 20, 
+                         portee = 15
                          )
-        self.base = planete
-        self.x=planete.x 
-        self.y=planete.y-25
         
         self.action = self.rotation
         
+    def avancer():
+        pass #La station planetaire ne se deplace pas, je crois. #io 28-04
+    
     def avancer(self):
-        pass
-
-    def rotation(self):
-        angleRotation = math.radians(2)
-        self.x,self.y=hlp.calcRotation(self.base.x, self.base.y, self.x, self.y, angleRotation)  
+        if super().avancer():
+            self.rotation()
         
     def creercargogalactique(self):
         pass
@@ -226,15 +306,20 @@ class StationGalactique(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         attaque = 0,
+                         attaque = 10,
+                         delai_attaque = 10,
+                         vitesse_projectile = 6,
                          taille = 20,
+                         portee = 15,
                          capacite = 10
                          )
-        self.base = systeme
+        
         self.action = self.rotation
     
-    def rotation(self):
-        pass
+    def avancer(self):
+        if super().avancer():
+            self.rotation()
+            
     def reparation(self):
         pass
     def troc(self):
@@ -245,4 +330,5 @@ class StationGalactique(Unite):
 class Disciple(Unite):
     def __init__(self):
         Unite.__init__(proprietaire, parent)
-        self.experience=None  # C'est ici qu'on met les attributs propres Ã  chaque unitÃ©
+        self.experience=None
+        

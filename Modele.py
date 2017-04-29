@@ -69,9 +69,10 @@ class Joueur():
             lacible = Coord(**cible)
             lacible.lieu = unite.lieu
         unite.cible = lacible
-        unite.ciblerdestination(lacible)
+        #unite.ciblerdestination(lacible)
         unite.action = unite.avancer
         return 
+    
     def creerinfrastructure(self,type_unite,x=10,y=10):
         
         types ={
@@ -159,8 +160,8 @@ class IA(Joueur):
                                 if d<systdist and j not in self.systemesvisites:
                                     systdist=d
                                     systtemp=j
-                            if systtemp:
-                                vi.ciblerdestination(systtemp)
+                            #if systtemp:
+                            #   vi.ciblerdestination()
                             else:
                                 print("JE NE TROUVE PLUS DE CIBLE")
                 self.delaiaction=random.randrange(5,10)*20
