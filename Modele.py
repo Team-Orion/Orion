@@ -74,7 +74,7 @@ class Joueur():
         return 
     
     def creerinfrastructure(self,type_unite,x=10,y=10):
-        
+        print("creer infrastructure! ici x: ", x, " y: ", y)
         types ={
                 "mine": Mine,
                 "hotelville":HotelVille,
@@ -87,7 +87,7 @@ class Joueur():
                 "temple":Temple,
                 "ruine":Ruine
                 }
-        planete= "test"
+        self.parent.parent.vue.modecourant.afficher_infrastructure(x, y, type_unite)
         infrastructure = types[type_unite](self,planete,x,y)
         self.parent.objets_cliquables[infrastructure.id] = infrastructure          
     def creerunite(self, id_appelant, type_unite):
