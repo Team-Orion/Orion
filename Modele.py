@@ -30,7 +30,7 @@ class Joueur():
         self.systemeorigine=systemeorigine
         self.couleur=couleur
         self.codecouleur=codecouleur
-        self.systemesvisites=[systemeorigine]
+        self.systemesvisites= set([systemeorigine])
         self.vaisseauxinterstellaires=[] #à suppr #io 11-04
         self.vaisseauxinterplanetaires=[] #à suppr #io 11-04
         self.messageenvoie=None
@@ -252,6 +252,11 @@ class Modele():
                 pass #l'ojet n'a pas d'attibut "action". C'est normal s'il s'agit d'un système solaire ou une planete.
             except TypeError:
                 pass #l'objet n'a pas d'action assignee. C'est normal.
+            
+        for projectile in self.projectiles:
+            if not projectile.action():
+                print(self.projectiles)
+                self.projectiles.remove(projectile)
             
     def changerproprietaire(self,nom,couleur,syst):
         self.parent.changerproprietaire(nom,couleur,syst)
