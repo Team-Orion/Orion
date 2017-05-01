@@ -134,19 +134,29 @@ class VuePlanete(Perspective):
         pass
       
     def selectionner(self,evt):
-        t=self.canevas.gettags("current")
-        print(t)
-        if t and t[0]!="current":
-            if t[0]==self.parent.nom:
-                pass
-            elif t[1]=="systeme":
-                pass
+        
+        x, y=self.sol.iso_vers_matrice(evt)
+        print(self.sol.terrain[y][x])
+        print("action_attente: ", str(self.action_attente))
+        if not self.action_attente:
+            t=self.canevas.gettags("current")
+            print("t: ", t)
+            if t and t[0]!="current":
+                if t[0]==self.parent.nom:
+                    pass
+                elif t[1]=="systeme":
+                    pass
+            else:
+                if self.macommande:
+                    x=self.canevas.canvasx(evt.x)
+                    y=self.canevas.canvasy(evt.y)
+                    self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
+                    self.macommande=None
         else:
-            if self.macommande:
-                x=self.canevas.canvasx(evt.x)
-                y=self.canevas.canvasy(evt.y)
-                self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
-                self.macommande=None
+            #self.action_attente["parametres"]["coords"] = evt 
+            #print("action attente: ", self.action_attente["parametres"]["coords"])  
+            self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+            self.action_attente = None
             
     def montresystemeselection(self):
         self.changecadreetat(self.cadreetataction)
