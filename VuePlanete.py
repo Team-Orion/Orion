@@ -200,6 +200,11 @@ class VuePlanete(Perspective):
         self.canevas.create_image(vue_x, vue_y,
                                       image = image, tags=(type_tuile))
 
+    def afficher_infrastructure(self, x, y, type_infrastructure):
+        image = self.parent.images[type_infrastructure]
+        self.canevas.create_image(x, y,
+                                      image = image, tags=(type_infrastructure))
+        
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"
         i = (x+1)%self.sol.matrice_largeur #pour aller de l'autre cote si l'on depasse la matrice
