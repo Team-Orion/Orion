@@ -28,7 +28,7 @@ class VuePlanete(Perspective):
         self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
         self.btncreerstation.pack()
         """
-        
+        self.action_attente=None
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
        
