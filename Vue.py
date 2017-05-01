@@ -260,7 +260,12 @@ class Vue():
                 InfosImg("stationplanetaire5", "images/unites/stationplanete_5.png"),
                 InfosImg("stationplanetaire6", "images/unites/stationplanete_6.png"),
                 InfosImg("stationplanetaire7", "images/unites/stationplanete_7.png"),
-                InfosImg("stationplanetaire8", "images/unites/stationplanete_8.png")
+                InfosImg("stationplanetaire8", "images/unites/stationplanete_8.png"),
+                InfosImg("usine", "images/infrastructures/usine.png"),
+                InfosImg("universite", "images/infrastructures/universite.png"),
+                InfosImg("ferme", "images/infrastructures/ferme.png"),
+                InfosImg("hotel", "images/infrastructures/hotel.png"),
+                InfosImg("mine", "images/infrastructures/mine.png")
                 ]
 
     
