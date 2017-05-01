@@ -62,6 +62,37 @@ class VuePlanete(Perspective):
         self.btnruine=Button(self.cadreetataction,text="Construire Ruine",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "ruine"}))
         self.btnruine.pack(side=BOTTOM)
         
+        self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
+        self.population.pack(fill=X)
+        
+        imgBois = self.parent.images["bois"]
+        imgFoin = self.parent.images["foin"]
+        imgArgent = self.parent.images["argent"]
+        imgMinerai = self.parent.images["minerai"]
+
+        labelBois = Label(self.cadreinfo, image = imgBois)
+        labelFoin = Label(self.cadreinfo, image = imgFoin)
+        labelArgent = Label(self.cadreinfo, image = imgArgent)
+        labelMinerai = Label(self.cadreinfo, image = imgMinerai)
+
+        labelBoistxt = Label(self.cadreinfo, text = "qte Bois")
+        labelFointxt = Label(self.cadreinfo, text = "qte Foin")
+        labelArgenttxt = Label(self.cadreinfo, text = "qte Argent")
+        labelMineraitxt = Label(self.cadreinfo, text = "qte Minerai")
+
+        labelBois.pack(fill=X)
+        labelBoistxt.pack(fill=X)
+        labelFoin.pack(fill=X)
+        labelFointxt.pack(fill=X)
+        labelArgent.pack(fill=X)
+        labelArgenttxt.pack(fill=X)    
+        labelMinerai.pack(fill=X)
+        labelMineraitxt.pack(fill=X)
+        
+        labelBois.image = imgBois
+        labelFoin.image = imgFoin
+        labelArgent.image = imgArgent
+        labelMinerai.image = imgMinerai
         
         self.changecadreetat(self.cadreetataction)
     
