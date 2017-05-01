@@ -170,10 +170,44 @@ class VueSysteme(Perspective):
             for objet in mod.objets_cliquables.values():
                     if(isinstance(objet, VaisseauCargoSolaire)):
                         if(objet.proprietaire == i):
-                            self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            angle = math.degrees(objet.angletrajet)
+                            if( angle >= -22 and angle <0 or angle <= 23 and angle >=0):
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["0vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle < -22 and angle >= -68) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["45vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle < -68 and angle >= -113) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["90vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle < -113 and angle >= -158) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["135vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >158 or angle < -158) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["180vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >113 and angle <= 158) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["225vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >68 and angle <= 113) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["270vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >23 and angle <= 68) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["315vaisseaucargo"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                    
                     elif(isinstance(objet, VaisseauAttaqueSolaire)):
                         if(objet.proprietaire == i):
-                            self.canevas.create_image(int(objet.x), int(objet.y), image = self.parent.images["vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            angle = math.degrees(objet.angletrajet)
+                            if( angle >= -22 and angle <0 or angle <= 23 and angle >=0):
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["0vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle < -22 and angle >= -68) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["45vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle < -68 and angle >= -113) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["90vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle < -113 and angle >= -158) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["135vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >158 or angle < -158) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["180vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >113 and angle <= 158) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["225vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >68 and angle <= 113) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["270vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            elif (angle >23 and angle <= 68) :
+                                self.canevas.create_image(objet.x, objet.y, image = self.parent.images["315vaisseauattaque"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                    
                     elif (isinstance(objet,StationPlanetaire)):
                         if(objet.proprietaire == i):
                             self.canevas.create_image(int(objet.x),int(objet.y),image = self.parent.images["stationplanetaire"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
