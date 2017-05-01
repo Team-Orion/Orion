@@ -1,6 +1,7 @@
 from Id import *
 from Infrastructure import *
 import random
+import math
 
 DEMIELARGEUR_TUILES = 32 #à suppr #io 11-04
 DEMIEHAUTEUR_TUILES = 16 #à suppr #io 11-04
