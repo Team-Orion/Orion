@@ -8,6 +8,7 @@ class VuePlanete(Perspective):
         Perspective.__init__(self,parent)
         self.modele=self.parent.modele
         self.planete = planete
+        self.lieu = planete
         self.sol = planete.sol
         self.systeme=systeme
         self.infrastructures={}

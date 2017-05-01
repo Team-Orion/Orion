@@ -65,7 +65,6 @@ class Unite:
                 else:
                     if isinstance(self.cible, Systeme.Systeme):
                         self.proprietaire.systemesvisites.add(self.cible)
-                        print(self.proprietaire.systemesvisites)
                     self.base=self.cible
                     return True #La cible est atteinte
             elif isinstance(self.lieu, Systeme.Systeme):
@@ -180,8 +179,10 @@ class Unite:
         if self.indice_delai_attaque >= self.delai_attaque:
             self.indice_delai_attaque = 0
             if self.cible.energie > 0:
+                print("att pro")
                 projectile = Projectile(self, self.cible, self.attaque, self.vitesse_projectile, self.portee_projectile)
                 self.proprietaire.parent.projectiles.append(projectile)
+                print("att pro2")
             else:
                 self.cible = None
                 

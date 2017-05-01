@@ -113,7 +113,7 @@ class Joueur():
     def visitersysteme(self, id_appelant):
         for i in self.parent.systemes:
             if i.id==id_appelant:
-                self.systemesvisites.append(i)
+                self.systemesvisites.add(i)
         
     def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement        
         """
@@ -185,6 +185,7 @@ class Modele():
         self.terrain=[]
         self.unites = [] #io 03-04
         self.objets_cliquables = {} 
+        self.projectiles = list()
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
         
     def creersystemes(self,nbias):  # IA ajout du parametre du nombre d'ias a ajouter
@@ -255,7 +256,6 @@ class Modele():
             
         for projectile in self.projectiles:
             if not projectile.action():
-                print(self.projectiles)
                 self.projectiles.remove(projectile)
             
     def changerproprietaire(self,nom,couleur,syst):
