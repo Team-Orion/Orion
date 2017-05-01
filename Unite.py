@@ -6,11 +6,14 @@ import math
 import Systeme
 import Planete
 
+echelle = 100
+
 class Unite:
     def __init__(self, proprietaire, parent,
                  energie = 0, vitesse = 0 ,
                  attaque = 0, taille = 0,
                  capacite = 0, portee = 0,
+                 portee_projectile = 0,
                  vitesse_projectile = 0,
                  delai_attaque = 0): #le parent est l'instance qui crée l'unite
         self.id=Id.prochainid()
@@ -36,6 +39,7 @@ class Unite:
         #caracteristiques de l'attaque
         self.attaque = attaque
         self.portee = portee
+        self.portee_projectile = portee_projectile
         self.delai_attaque = delai_attaque
         self.vitesse_projectile = vitesse_projectile
         self.indice_delai_attaque = 0
@@ -50,15 +54,18 @@ class Unite:
     #Methodes de deplacement
     def avancer(self):
         rep = None
+        portee = 0 if (self.proprietaire is self.cible.proprietaire) else self.portee
         if self.cible and self.lieu == self.cible.lieu:
             if self.lieu is None: #Galaxie
                 self.ciblerdestination()
                 x=self.cible.x
                 y=self.cible.y
-                if hlp.calcDistance(self.x,self.y,x,y) >= self.vitesse:
+                if hlp.calcDistance(self.x,self.y,x,y) >= self.vitesse+portee:
                     self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
                 else:
-                    rep=self.cible
+                    if isinstance(self.cible, Systeme.Systeme):
+                        self.proprietaire.systemesvisites.add(self.cible)
+                        print(self.proprietaire.systemesvisites)
                     self.base=self.cible
                     return True #La cible est atteinte
             elif isinstance(self.lieu, Systeme.Systeme):
@@ -75,7 +82,6 @@ class Unite:
                 x_cible, y_cible = self.lieu.matrice_vers_iso(*self.chemin[self.indice_chemin])
                 diff_x = x_cible - self.x
                 diff_y = y_cible - self.y
-                print(diff_x, diff_y)
                 if abs(diff_x) >5 or abs(diff_y) >5:
                     hypot = math.hypot(diff_x, diff_y)
                     self.x += diff_x/hypot
@@ -162,21 +168,24 @@ class Unite:
     
     def initier_position(self, parent):
         if self.lieu is None:
-            return parent.x+20/100, parent.y
+            return parent.x+20/echelle, parent.y
         elif isinstance(self.lieu, Systeme.Systeme):
-            return parent.x+(parent.taille)*100+15, parent.y
+            return parent.x+(parent.taille)*echelle+15, parent.y
         
         
      
     #Methodes d'attaque
     def attaquer(self):
-        if self.indice_delai_attaque <= 0:
+        self.indice_delai_attaque += 1
+        if self.indice_delai_attaque >= self.delai_attaque:
+            self.indice_delai_attaque = 0
             if self.cible.energie > 0:
-                projectile = Projectile(self.parent, self.cible, self.attaque, self.vitesse_projectile, self.portee_projectile)
-                self.proprietaire.parent.objets_cliquables[projectile.id] = projectile
+                projectile = Projectile(self, self.cible, self.attaque, self.vitesse_projectile, self.portee_projectile)
+                self.proprietaire.parent.projectiles.append(projectile)
             else:
                 self.cible = None
-                self.indice_delai_attaque = self.vitesse_attaque
+                
+            
 
 class UniteCargo(Unite):
     def __init__(self):
@@ -189,18 +198,29 @@ class UniteAttaque(Unite):
 class Station(Unite):
     pass
 
-class Projectile(Unite):
-    def __init__(self, parent,
+class Projectile():
+    def __init__(self, parent, cible,
                  attaque, vitesse, portee
                  ):
-        super().__init__()
-        self.init_x = base.x #position de depart
-        self.init_y = base.y #position de depart
-        self.x = base.x
-        self.y = base.y
+        
+        self.lieu = parent.lieu
+        self.init_x = parent.x #position de depart
+        self.init_y = parent.y #position de depart
+        self.x = parent.x
+        self.y = parent.y
         self.portee_carree = portee**2
-
-    def avancer(self): 
+        #self.cible= cible
+        self.angletrajet = 0
+        self.angleinverse = 0
+        self.angletrajet = hlp.calcAngle(parent.x, parent.y, cible.x, cible.y)
+        self.angleinverse = math.radians(math.degrees(self.angletrajet)+180)
+        #self.ciblerdestination()
+        
+        self.action = self.avancer
+        self.vitesse = vitesse
+        self.attaque = attaque
+    
+    def avancer(self):
         diff_x_caree = (self.init_x-self.x)**2
         diff_y_caree = (self.init_y-self.y)**2
         if (diff_x_caree+diff_y_caree <= self.portee_carree):
@@ -208,6 +228,10 @@ class Projectile(Unite):
             return True
         return False # Le projectile a atteint sa distance maximale
     
+    def ciblerdestination(self):
+        self.angletrajet=hlp.calcAngle(self.x, self.y, self.cible.x, self.cible.y)
+        self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
+        dist=hlp.calcDistance(self.x, self.y, self.cible.x, self.cible.y)
     
 class Sonde(Unite):
     def __init__(self, proprietaire, systeme):
@@ -223,9 +247,10 @@ class VaisseauAttaqueGalactique(Unite):
                          energie = 100,
                          vitesse = 0.02*5,
                          attaque = 15,
-                         delai_attaque = 10,
-                         portee = 15,
-                         vitesse_projectile = 6,
+                         delai_attaque = 2,
+                         portee = 50/echelle,
+                         portee_projectile = 60/echelle,
+                         vitesse_projectile = 6/echelle,
                          taille = 16
                          )
     def avancer(self):
@@ -239,8 +264,9 @@ class VaisseauAttaqueSolaire(Unite):
                          energie = 100,
                          vitesse = 5,
                          attaque = 15,
-                         delai_attaque = 10,
+                         delai_attaque = 3,
                          portee = 15,
+                         portee_projectile = 7,
                          vitesse_projectile = 6,
                          taille = 16
                          )    
@@ -311,6 +337,7 @@ class StationGalactique(Unite):
                          vitesse_projectile = 6,
                          taille = 20,
                          portee = 15,
+                         portee_projectile = 10,
                          capacite = 10
                          )
         
