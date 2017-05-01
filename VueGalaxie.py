@@ -128,6 +128,7 @@ class VueGalaxie(Perspective):
     def afficherpartie(self,mod):
         self.canevas.delete("artefact")
         self.canevas.delete("pulsar")
+        self.canevas.delete("projectile")
         self.afficherselection()
         
         e=self.AL2pixel
@@ -204,7 +205,9 @@ class VueGalaxie(Perspective):
                 elif (isinstance(objet,StationGalactique)):
                     if(objet.proprietaire == i):
                         self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"+str(i.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
-    
+        for proj in mod.projectiles:
+            self.canevas.create_rectangle(proj.x*e-2, proj.y*e-2, proj.x*e+2, proj.y*e+2, fill = "red", tag=("projectile",))
+            
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
         self.canevas.addtag_withtag(prop,systeme.id)
@@ -245,20 +248,21 @@ class VueGalaxie(Perspective):
         self.changecadreetat(None)
         t=self.canevas.gettags("current")
         if t and t[0]!="current":
-            
+
             if t[1]=="unite":
                 self.maselection=[self.parent.nom,t[1],t[2]]
                 self.montrevaisseauxselection()
             
             elif t[1]=="systeme":
-                if self.parent.nom in t:
-                    self.maselection=[self.parent.nom,t[1],t[2]]
-                    self.montresystemeselection()
-                else:    
-                    print("IN systeme + RIEN")
-                    self.maselection=None
-                    self.lbselectecible.pack_forget()
-                    self.canevas.delete("selecteur")
+                #if self.parent.nom in t:
+                self.maselection=[self.parent.nom,t[1],t[2]]
+                self.montresystemeselection()
+                #else:    
+                #    print("IN systeme + RIEN")
+                #    self.maselection=None
+                #    self.maselection=[self.parent.nom,t[1],t[2]]
+                #    self.lbselectecible.pack_forget()
+                #    self.canevas.delete("selecteur")
             else:
                 print("Objet inconnu")
         else:
