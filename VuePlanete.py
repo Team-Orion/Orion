@@ -1,7 +1,10 @@
+# continuer les infrastructures
+
 from PIL import *
 from Perspective import *
 import random
 from helper import Helper as hlp
+import tkinter
 from Infrastructure import *
 
 class VuePlanete(Perspective):
@@ -9,7 +12,6 @@ class VuePlanete(Perspective):
         Perspective.__init__(self,parent)
         self.modele=self.parent.modele
         self.planete = planete
-        self.lieu = planete
         self.sol = planete.sol
         self.systeme=systeme
         self.infrastructures={}
@@ -20,11 +22,22 @@ class VuePlanete(Perspective):
         self.largeur=self.modele.diametre*self.KM2pixel
         self.hauteur=self.largeur
         
-     
-        self.action_attente=None
+        self.action_attente = None  #fp 25 avril
+        
+        """
+        self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
+        self.canevas.config(bg="sandy brown")
+        
+        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Mine",command=self.creermine)
+        self.btncreervaisseau.pack()
+        
+        self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
+        self.btncreerstation.pack()
+        """
+        
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
-       
+        
         self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=self.creermine)
         self.btncreermine.pack(side=BOTTOM)
 
@@ -34,7 +47,7 @@ class VuePlanete(Perspective):
         self.btnhotelville=Button(self.cadreetataction,text="Construire Hotel ville", command=self.creerhotelville)
         self.btnhotelville.pack()
         
-        self.btntourdefense=Button(self.cadreetataction,text="Construire Tour",command=self.creertourdefense)
+        self.btntourdefense=Button(self.cadreetataction,text="Construire Tour de defense",command=self.creertourdefense)
         self.btntourdefense.pack(side=BOTTOM)
         
         self.btnusine=Button(self.cadreetataction,text="Construire Usine",command=self.creerusine)
@@ -54,7 +67,7 @@ class VuePlanete(Perspective):
         
         self.btnruine=Button(self.cadreetataction,text="Construire Ruine",command=self.creerruine)
         self.btnruine.pack(side=BOTTOM)
-        
+
         self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
         self.population.pack(fill=X)
         
@@ -86,8 +99,9 @@ class VuePlanete(Perspective):
         labelFoin.image = imgFoin
         labelArgent.image = imgArgent
         labelMinerai.image = imgMinerai
-        
+
         self.changecadreetat(self.cadreetataction)
+    
     
     def creermine(self):
         #img = Label("images/ressources/bois.png")
@@ -130,6 +144,9 @@ class VuePlanete(Perspective):
     def creerruine(self):
         self.action_attente = "ruine"
         self.macommande="ruine"
+    
+    def creermanufacture(self):
+        pass
     
     def voirsysteme(self):
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
@@ -215,7 +232,8 @@ class VuePlanete(Perspective):
                 else:
                     print("on ne peut pas construire ici!")
                 self.action_attente = None
-            
+
+                            
     def montresystemeselection(self):
         self.changecadreetat(self.cadreetataction)
         
@@ -230,7 +248,6 @@ class VuePlanete(Perspective):
         if self.sol is None:
             self.sol = self.planete.initier_sol()
             self.action_joueur("decouvrirplanete", {"id_planete": self.planete.id, "sol": self.sol})
-        self.afficher_base()
         self.afficher_sol()
         self.afficher_infrastructures()
     
@@ -288,22 +305,27 @@ class VuePlanete(Perspective):
                     image = self.parent.images["hotelville"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("hotelville",))
+       
                 if(isinstance(objet, Ruine)):
                     image = self.parent.images["ruine"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("ruine",))
+    
                 if(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("universite",))
+    
                 if(isinstance(objet, Usine)):
                     image = self.parent.images["usine"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("usine",))
+
                 if(isinstance(objet, Scierie)):
                     image = self.parent.images["scierie"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("scierie",)) 
+                                            image = image, tags=("scierie",))
+                    
                 if(isinstance(objet, Caserne)):
                     image = self.parent.images["caserne"]
                     self.canevas.create_image(objet.x, objet.y,
@@ -313,7 +335,6 @@ class VuePlanete(Perspective):
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("universite",))
     
-        
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"
         i = (x+1)%self.sol.matrice_largeur #pour aller de l'autre cote si l'on depasse la matrice
