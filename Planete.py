@@ -51,11 +51,11 @@ class Planete():
         self.sol = None
         self.x=x
         self.y=y
-        self.nbbois=1
-        self.nbfoin=1
-        self.nbargent=1
-        self.nbminerai=1
-        self.nbpopulation=0
+        self.nbbois=random.randrange(1,1000)
+        self.nbfoin=random.randrange(1,1000)
+        self.nbargent=random.randrange(1,1000)
+        self.nbminerai=random.randrange(1,1000)
+        self.nbpopulation=100
         self.infrastructures = [] 
         
     def creationtourdefense(self):
