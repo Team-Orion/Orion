@@ -13,6 +13,10 @@ class VueGalaxie(Perspective):
         self.modele=self.parent.modele
         self.maselection=None
         self.AL2pixel=100
+        self.nbbois=0
+        self.nbfoin=0
+        self.nbargent=0
+        self.nbminerai=0
         
         self.lieu = None
         
@@ -34,7 +38,38 @@ class VueGalaxie(Perspective):
         self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerunite",{"type_unite": "stationgalaxie"}))
         self.btncreerstation.pack()
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir systeme",command=self.voirsysteme)
-        self.btnvuesysteme.pack(side=BOTTOM)
+        self.btnvuesysteme.pack()
+        
+        imgBois = self.parent.images["bois"]
+        imgFoin = self.parent.images["foin"]
+        imgArgent = self.parent.images["argent"]
+        imgMinerai = self.parent.images["minerai"]
+
+        self.labelBois = Label(self.cadreetataction, image = imgBois)
+        self.labelFoin = Label(self.cadreetataction, image = imgFoin)
+        self.labelArgent = Label(self.cadreetataction, image = imgArgent)
+        self.labelMinerai = Label(self.cadreetataction, image = imgMinerai)
+        
+        self.labelBoistxt = Label(self.cadreetataction, text = "Qte Bois: "+str(self.nbbois))
+        self.labelFointxt = Label(self.cadreetataction, text = "Qte Foin: "+str(self.nbfoin))
+        self.labelArgenttxt = Label(self.cadreetataction, text = "Qte Argent: "+str(self.nbargent))
+        self.labelMineraitxt = Label(self.cadreetataction, text = "Qte Minerai: "+str(self.nbminerai))
+        
+        
+        self.labelMinerai.pack(fill=X,side=BOTTOM)
+        self.labelMineraitxt.pack(fill=X,side=BOTTOM)
+        self.labelArgent.pack(fill=X,side = BOTTOM)
+        self.labelArgenttxt.pack(fill=X,side=BOTTOM)
+        self.labelFoin.pack(fill=X,side = BOTTOM)
+        self.labelFointxt.pack(fill=X,side = BOTTOM)
+        self.labelBois.pack(fill=X,side=BOTTOM)
+        self.labelBoistxt.pack(fill=X,side = BOTTOM)
+         
+        self.labelBois.image=imgBois
+        self.labelFoin.image=imgFoin
+        self.labelArgent.image=imgArgent
+        self.labelMinerai.image= imgMinerai
+        
         
         self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey")
         self.lbselectecible.pack()
@@ -63,6 +98,43 @@ class VueGalaxie(Perspective):
     def afficherdecor(self):
         self.creerimagefond()
         self.affichermodelestatique()
+        
+    def chercheqte(self):
+        for objet in self.modele.objets_cliquables.values():
+            if objet.id == self.maselection[2]:
+                objet.ajusterRessources()
+                
+                self.nbbois=objet.nbbois
+                self.nbfoin=objet.nbfoin
+                self.nbargent=objet.nbargent
+                self.nbminerai=objet.nbminerai
+                
+                
+                self.labelBois.pack_forget()
+                self.labelBoistxt.pack_forget()
+                self.labelFoin.pack_forget()
+                self.labelFointxt.pack_forget()
+                self.labelArgent.pack_forget()
+                self.labelArgenttxt.pack_forget()   
+                self.labelMinerai.pack_forget()
+                self.labelMineraitxt.pack_forget()
+                
+                self.labelBoistxt = Label(self.cadreetataction, text = "Qte Bois: "+str(self.nbbois))
+        
+                self.labelFointxt = Label(self.cadreetataction, text = "Qte Foin: "+str(self.nbfoin))
+                self.labelArgenttxt = Label(self.cadreetataction, text = "Qte Argent: "+str(self.nbargent))
+                self.labelMineraitxt = Label(self.cadreetataction, text = "Qte Minerai: "+str(self.nbminerai))
+                self.labelBois.pack(fill=X)
+                self.labelBoistxt.pack(fill=X)
+                self.labelFoin.pack(fill=X)
+                self.labelFointxt.pack(fill=X)
+                self.labelArgent.pack(fill=X)
+                self.labelArgenttxt.pack(fill=X)    
+                self.labelMinerai.pack(fill=X)
+                self.labelMineraitxt.pack(fill=X)
+                
+                
+    
 
     def creerimagefond(self): #NOTE - au lieu de la creer a chaque fois on aurait pu utiliser une meme image de fond cree avec PIL
         imgfondpil = Image.new("RGBA", (self.largeur,self.hauteur),"black")
@@ -233,6 +305,7 @@ class VueGalaxie(Perspective):
                         self.canevas.create_oval((x*e)-t,(y*e)-t,(x*e)+t,(y*e)+t,dash=(2,2),
                                                  outline=joueur.couleur,
                                                  tags=("select","selecteur"))
+                        self.chercheqte()
             elif self.maselection[1]=="unite":
                 for i in joueur.vaisseauxinterstellaires:
                     if i.id == self.maselection[2]:
