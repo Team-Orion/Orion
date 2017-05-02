@@ -2,8 +2,6 @@ from Id import *
 import random
 from Planete import *
 
-echelle = 100
-
 class Systeme():
     def __init__(self, x, y, modele):
         self.id=Id.prochainid()
@@ -15,10 +13,14 @@ class Systeme():
         self.x=x
         self.y=y
         self.etoile=Etoile(self,x,y)
-        self.taille = self.etoile.taille*3/echelle #io 02-05
         self.planetes=[] #à questionner #io 11-04
         self.planetesvisites=[]
         self.creerplanetes()
+        self.nbfoin=0
+        self.nbbois=0
+        self.nbargent=0
+        self.nbminerai=0
+        self.nbpopulation=0
         
     def creerplanetes(self):
             nbplanetes=random.randrange(12)+1
@@ -36,3 +38,21 @@ class Systeme():
                 planete = Planete(self, type, distsol, taille, angle, x, y)
                 self.modele.objets_cliquables[planete.id] = planete   
                 self.planetes.append(planete) #à suppr #io 11-04
+            
+            self.ajusterRessources()
+                
+                
+    def ajusterRessources(self):
+        self.nbfoin=0
+        self.nbargent=0
+        self.nbminerai=0
+        self.nbbois=0
+        self.nbpopulation=0
+                
+                
+        for i in self.planetes:
+            self.nbfoin+= i.nbfoin
+            self.nbbois+= i.nbbois
+            self.nbargent+= i.nbargent
+            self.nbminerai+=i.nbminerai
+            self.nbpopulation+=i.nbpopulation
