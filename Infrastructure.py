@@ -18,12 +18,12 @@ class Ferme(Infrastructure):
         pass
 
 
-class TourDefense(Infrastructure):
+class Tourdefense(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
     def attaquer(self):
         pass
-class UsineVaisseau(Infrastructure): 
+class Usine(Infrastructure): 
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
         self.capacitechargement=0
@@ -41,12 +41,14 @@ class HotelVille(Infrastructure):
 class Universite(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
+        print("universite creee! x: ", positionx, " y: ", positiony)
         
     def recherche(self):
         pass
 class Caserne(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
+        print("caserne creee! x: ", positionx, " y: ", positiony)
     def creationtroupe(self):
         pass
 
@@ -55,6 +57,7 @@ class Scierie(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
         self.bois=0
+        print("scierie creee! x: ", positionx, " y: ", positiony)
     def exploitationbois(self):
         pass
 class Temple(Infrastructure):
@@ -90,5 +93,16 @@ class Mine(Infrastructure):
         super().__init__(proprietaire,planete,positionx, positiony)
         self.entrepot=0
         self.capacite=100
+        print("mine creee! x: ", positionx, " y: ", positiony)
     def exploitationminerai(self):
         pass
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
