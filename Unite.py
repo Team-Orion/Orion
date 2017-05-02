@@ -14,9 +14,10 @@ class Unite:
                  attaque = 0, taille = 0,
                  capacite = 0, portee = 0,
                  portee_projectile = 0,
+                 taille_projectile = 0,
                  vitesse_projectile = 0,
-                 delai_attaque = 0,
-                 cout = 0): #le parent est l'instance qui crÃ©e l'unite
+                 delai_attaque = 0, cout = 5
+                 ): #le parent est l'instance qui crée l'unite
         self.id=Id.prochainid()
         self.proprietaire = proprietaire
         self.action = None
@@ -41,6 +42,7 @@ class Unite:
         #caracteristiques de l'attaque
         self.attaque = attaque
         self.portee = portee
+        self.taille_projectile = taille_projectile
         self.portee_projectile = portee_projectile
         self.delai_attaque = delai_attaque
         self.vitesse_projectile = vitesse_projectile
@@ -57,13 +59,11 @@ class Unite:
     def avancer(self):
         if self.cible.proprietaire is None:
             distance_avec_cible = self.vitesse
-        elif self.cible.proprietaire is self.proprietaire:
+        elif self.cible.proprietaire in (self.proprietaire, "inconnu"):
             distance_avec_cible = self.cible.taille+self.taille
         else:
             distance_avec_cible = self.vitesse+self.portee
-        
-        print("cible",self.vitesse+self.cible.taille)
-        print("soi",self.taille)
+            
         if self.cible and self.lieu == self.cible.lieu:
             if self.lieu is None: #Galaxie
                 self.ciblerdestination()
@@ -80,12 +80,24 @@ class Unite:
                 self.ciblerdestination()
                 x=self.cible.x
                 y=self.cible.y
+                if hlp.calcDistance(self.x,self.y,x,y) >= distance_avec_cible: #self.vitesse+self.cible.taille+self.taille+portee:
+                    self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+                else:
+                    if isinstance(self.cible, Systeme.Systeme):
+                        self.proprietaire.systemesvisites.add(self.cible)
+                    self.base=self.cible
+                    return True #La cible est atteinte
+                """
+                self.ciblerdestination()
+                x=self.cible.x
+                y=self.cible.y
                 if hlp.calcDistance(self.x, self.y, x, y) >= self.vitesse:
                     self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
                 else:
                     rep = self.cible
                     self.base = self.cible
                     return True #La cible est atteinte
+                """
             elif self.chemin and isinstance(self.lieu, Planete.Planete):
                 x_cible, y_cible = self.lieu.matrice_vers_iso(*self.chemin[self.indice_chemin])
                 diff_x = x_cible - self.x
@@ -188,10 +200,10 @@ class Unite:
         if self.indice_delai_attaque >= self.delai_attaque:
             self.indice_delai_attaque = 0
             if self.cible.energie > 0:
-                print("att pro")
-                projectile = Projectile(self, self.cible, self.attaque, self.vitesse_projectile, self.portee_projectile)
+                projectile = Projectile(self, self.cible, self.attaque,
+                                        self.vitesse_projectile, self.portee_projectile,
+                                        self.taille_projectile, self.proprietaire.parent.objets_cliquables)
                 self.proprietaire.parent.projectiles.append(projectile)
-                print("att pro2")
             else:
                 self.cible = None
                 
@@ -210,31 +222,31 @@ class Station(Unite):
 
 class Projectile():
     def __init__(self, parent, cible,
-                 attaque, vitesse, portee
+                 attaque, vitesse, portee,
+                 taille, objets_cliquables
                  ):
         
         self.lieu = parent.lieu
         self.init_x = parent.x #position de depart
         self.init_y = parent.y #position de depart
-        self.x = parent.x
-        self.y = parent.y
+        self.taille = taille
+        self.x, self.y = hlp.getAngledPoint(parent.angletrajet, parent.taille, parent.x, parent.y)
         self.portee_carree = portee**2
-        #self.cible= cible
-        self.angletrajet = 0
-        self.angleinverse = 0
         self.angletrajet = hlp.calcAngle(parent.x, parent.y, cible.x, cible.y)
         self.angleinverse = math.radians(math.degrees(self.angletrajet)+180)
-        #self.ciblerdestination()
         
         self.action = self.avancer
         self.vitesse = vitesse
         self.attaque = attaque
+        
+        self.objets_cliquables = objets_cliquables
     
     def avancer(self):
         diff_x_caree = (self.init_x-self.x)**2
         diff_y_caree = (self.init_y-self.y)**2
         if (diff_x_caree+diff_y_caree <= self.portee_carree):
             self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            self.toucher_unite()
             return True
         return False # Le projectile a atteint sa distance maximale
     
@@ -242,6 +254,31 @@ class Projectile():
         self.angletrajet=hlp.calcAngle(self.x, self.y, self.cible.x, self.cible.y)
         self.angleinverse=math.radians(math.degrees(self.angletrajet)+180)
         dist=hlp.calcDistance(self.x, self.y, self.cible.x, self.cible.y)
+    
+    def toucher_unite(self):
+        unites_mortes = set()
+        for objet in self.objets_cliquables.values():
+            if self.lieu == objet.lieu:
+                if self.intersection(objet):
+                    try:
+                        objet.energie -= self.attaque
+                        if objet.energie <= 0:
+                            unites_mortes.add(objet)
+                    except AttributeError: #Les systemes n'ont pas d'attribut energie
+                        pass
+        
+        for unite in unites_mortes:
+            self.objets_cliquables.pop(unite.id)
+                    
+    
+    def intersection(self, unite):
+        diff_x = abs(self.x - unite.x)
+        diff_y = abs(self.y - unite.y)
+        if (diff_x < (self.taille + unite.taille)/2 and
+            diff_y < (self.taille + unite.taille)/2):
+            return True
+        else:
+            return False
     
 class Sonde(Unite):
     def __init__(self, proprietaire, systeme):
@@ -257,11 +294,13 @@ class VaisseauAttaqueGalactique(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
+                         #vitesse = 0.50,
                          attaque = 15,
                          delai_attaque = 2,
                          portee = 50/echelle,
                          portee_projectile = 60/echelle,
                          vitesse_projectile = 6/echelle,
+                         taille_projectile = 10/echelle,
                          taille = 16/echelle,
                          cout = 5
                          )
@@ -279,6 +318,7 @@ class VaisseauAttaqueSolaire(Unite):
                          delai_attaque = 3,
                          portee = 15,
                          portee_projectile = 7,
+                         taille_projectile = 10,
                          vitesse_projectile = 6,
                          taille = 16/echelle,
                          cout = 5
@@ -352,8 +392,8 @@ class StationGalactique(Unite):
                          delai_attaque = 10,
                          vitesse_projectile = 6,
                          taille = 20/echelle,
-                         portee = 15,
-                         portee_projectile = 10,
+                         portee = 40/echelle,
+                         portee_projectile = 10/echelle,
                          capacite = 10,
                          cout = 5
                          )

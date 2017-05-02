@@ -117,7 +117,7 @@ class Controleur():
         self.actions.append((self.monnom, action, parametres))
         
     def envoiemessage(self,messageenvoye):
-        print("controleur print")
+        #print("controleur print")
         self.actions.append((self.monnom, "envoimessage",{"message": messageenvoye}))
         
         

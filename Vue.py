@@ -284,7 +284,7 @@ class Vue():
                 InfosImg("epee", "images/menu/militaire/epee.png"),
                 InfosImg("missile", "images/menu/militaire/missile.png"),
                 InfosImg("char", "images/menu/militaire/char.png"),
-                InfosImg("mine", "images/menu/ressources/mine1.png")
+                InfosImg("mine1", "images/menu/ressources/mine1.png")
                 ]
 
     
@@ -573,7 +573,7 @@ class Vue():
         
         self.FrameTechRess=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
         
-        self.ButtonR1=Button(self.FrameTechRess,image=self.images["mine"],state=DISABLED)
+        self.ButtonR1=Button(self.FrameTechRess,image=self.images["mine1"],state=DISABLED)
         self.ButtonR1.pack()
         
         self.FrameTechRess.pack()

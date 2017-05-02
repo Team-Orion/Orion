@@ -7,6 +7,7 @@ class Infrastructure():
         self.id=Id.prochainid()
         self.proprietaire = proprietaire
         self.planete=planete
+        self.lieu = planete
 
 class Ferme(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):

@@ -108,14 +108,17 @@ class Joueur():
                  "stationplanetaire": StationPlanetaire
                 }
         unite = types[type_unite](self, appelant)
-        if(unite.cout>appelant.nbargent):
+        
+        if False:
+        #if(unite.cout>appelant.nbargent):
             print("vous n'avez pas assez d'argent")
         else:
-            print(appelant.nbargent)
+            #print(appelant.nbargent)
             appelant.nbargent-=unite.cout
-            print (appelant.nbargent) # ON VA DEVOIR METTRE A JOUR CETTE LIGNE AVEC LA FONCTION CAR ON DOIT DÉDUIRE D'UNE PLANETE LES RESSOURCES NORMALEMENT
+            #print (appelant.nbargent) # ON VA DEVOIR METTRE A JOUR CETTE LIGNE AVEC LA FONCTION CAR ON DOIT DÉDUIRE D'UNE PLANETE LES RESSOURCES NORMALEMENT
             self.vaisseauxinterstellaires.append(unite) #a supprimer #io 18-04
             self.parent.objets_cliquables[unite.id] = unite
+        
         
     def decouvrirplanete(self, id_planete, sol):
         planete = self.parent.objets_cliquables[id_planete]
@@ -135,6 +138,7 @@ class Joueur():
         """
 
 #  DEBUT IA
+"""
 class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
         Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
@@ -178,6 +182,54 @@ class IA(Joueur):
                                 print("JE NE TROUVE PLUS DE CIBLE")
                 self.delaiaction=random.randrange(5,10)*20
 
+        else:
+            self.delaiaction-=1
+"""
+        
+# FIN IA
+
+
+#  DEBUT IA
+class IA(Joueur):
+    def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
+        Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
+        self.contexte="galaxie"
+         # le delai est calcule pour chaque prochaine action en seconde
+        self.delaiaction=random.randrange(5,10)*20  # le 20 =nbr de boucle par sec.
+        
+        #self.derniereaction=time.time()
+        
+    # NOTE sur l'analyse de la situation   
+    #          on utilise le temps (time.time() retourne le nombre de secondes depuis 1970) pour le delai de 'cool down'
+    #          la decision dependra du contexte (modes de la vue)
+    #          aussi presentement - on s'occupe uniquement d'avoir un vaisseau et de deplacer ce vaisseau vers 
+    #          le systeme le plus proche non prealablement visite.
+    def analysesituation(self):
+        #t=time.time()
+        if self.delaiaction==0:#self.derniereaction and t-self.derniereaction>self.delaiaction:
+            if self.contexte=="galaxie":
+                unites_IA = list()
+                unites_enemies = list()
+                for x in self.parent.objets_cliquables.values():
+                    if x.proprietaire == self:
+                        unites_IA.append(x)
+                    else:
+                        unites_enemies.append(x)
+                        
+                for unite in unites_IA:
+                    if isinstance(unite, Unite):
+                        cible = random.choice(unites_enemies)
+                        if unite.lieu == cible.lieu:
+                            unite.cible = random.choice(unites_enemies)
+                            unite.action = unite.avancer
+                        
+                c=self.parent.parent.cadre+5
+                if c not in self.parent.actionsafaire.keys(): 
+                    self.parent.actionsafaire[c]=[]
+                appelant = random.sample(self.systemesvisites, 1)[0]
+                type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
+                self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":appelant.id,"type_unite": type_unite}])
+            self.delaiaction=random.randrange(5,10)*5
         else:
             self.delaiaction-=1
         
