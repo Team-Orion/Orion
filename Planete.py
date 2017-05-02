@@ -53,6 +53,8 @@ class Planete():
         self.nbfoin=1
         self.nbargent=1
         self.nbminerai=1
+        self.nbpopulation=0
+        self.infrastructures = [] 
         
     def creationtourdefense(self):
         pass
