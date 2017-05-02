@@ -12,7 +12,6 @@ import math
 import time # IA
 from Vue import *
 from Modele import *
-from test.test_finalization import SelfCycleBase
 
 
 
@@ -76,6 +75,8 @@ class Controleur():
             #print("REP",rep)
             self.modele=Modele(self,rep[1][0][1],rep[1][0][2]) # on cree le modele
             self.vue.afficherinitpartie(self.modele)
+            self.vue.nomjoueur=self.modele.joueurscles 
+            self.vue.updatelistejoueur()
             #print(self.monnom,"LANCE PROCHAINTOUR")
             
             self.prochaintour()
