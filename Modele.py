@@ -103,8 +103,14 @@ class Joueur():
                  "stationplanetaire": StationPlanetaire
                 }
         unite = types[type_unite](self, appelant)
-        self.vaisseauxinterstellaires.append(unite) #a supprimer #io 18-04
-        self.parent.objets_cliquables[unite.id] = unite
+        if(unite.cout>appelant.nbargent):
+            print("vous n'avez pas assez d'argent")
+        else:
+            print(appelant.nbargent)
+            appelant.nbargent-=unite.cout
+            print (appelant.nbargent) # ON VA DEVOIR METTRE A JOUR CETTE LIGNE AVEC LA FONCTION CAR ON DOIT DÉDUIRE D'UNE PLANETE LES RESSOURCES NORMALEMENT
+            self.vaisseauxinterstellaires.append(unite) #a supprimer #io 18-04
+            self.parent.objets_cliquables[unite.id] = unite
         
     def decouvrirplanete(self, id_planete, sol):
         planete = self.parent.objets_cliquables[id_planete]
