@@ -261,10 +261,17 @@ class Vue():
                 InfosImg("stationplanetaire6", "images/unites/stationplanete_6.png"),
                 InfosImg("stationplanetaire7", "images/unites/stationplanete_7.png"),
                 InfosImg("stationplanetaire8", "images/unites/stationplanete_8.png"),
-                InfosImg("usine", "images/infrastructures/usine.png"),
-                InfosImg("universite", "images/infrastructures/universite.png"),
                 InfosImg("ferme", "images/infrastructures/ferme.png"),
+                InfosImg("ferme2", "images/infrastructures/ferme2.png"),
+                InfosImg("temple", "images/infrastructures/temple.png"),
+                InfosImg("tourdefense", "images/infrastructures/tourdefense.png"),
+                InfosImg("scierie", "images/infrastructures/scierie.png"),
                 InfosImg("hotel", "images/infrastructures/hotel.png"),
+                InfosImg("caserne", "images/infrastructures/caserne.png"),
+                InfosImg("hotelville", "images/infrastructures/hotelville.png"),
+                InfosImg("ruine", "images/infrastructures/ruine.png"),
+                InfosImg("universite", "images/infrastructures/universite.png"),
+                InfosImg("usine", "images/infrastructures/usine.png"),
                 InfosImg("mine", "images/infrastructures/mine.png")
                 ]
 
