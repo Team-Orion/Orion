@@ -6,8 +6,6 @@ import math
 DEMIELARGEUR_TUILES = 32 #à suppr #io 11-04
 DEMIEHAUTEUR_TUILES = 16 #à suppr #io 11-04
 
-echelle = 100 #io 02-05
-
 class Pulsar():
     def __init__(self,x,y):
         self.id=Id.prochainid()
@@ -51,11 +49,11 @@ class Planete():
         self.sol = None
         self.x=x
         self.y=y
-        self.nbbois=1
-        self.nbfoin=1
-        self.nbargent=1
-        self.nbminerai=1
-        self.nbpopulation=0
+        self.nbbois=random.randrange(1,1000)
+        self.nbfoin=random.randrange(1,1000)
+        self.nbargent=random.randrange(1,1000)
+        self.nbminerai=random.randrange(1,1000)
+        self.nbpopulation=100
         self.infrastructures = [] 
         
     def creationtourdefense(self):
