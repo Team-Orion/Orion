@@ -73,7 +73,7 @@ class Joueur():
         unite.action = unite.avancer
         return 
     
-    def creerinfrastructure(self,type_unite,x=10,y=10):
+    def creerinfrastructure(self,id_planete,type_unite,x,y):
         print("creer infrastructure! ici x: ", x, " y: ", y)
         types ={
                 "mine": Mine,
@@ -87,9 +87,10 @@ class Joueur():
                 "temple":Temple,
                 "ruine":Ruine
                 }
-        self.parent.parent.vue.modecourant.afficher_infrastructure(x, y, type_unite)
-        infrastructure = types[type_unite](self,planete,x,y)
-        self.parent.objets_cliquables[infrastructure.id] = infrastructure          
+        infrastructure = types[type_unite](self,id_planete,x,y)
+        self.parent.objets_cliquables[infrastructure.id] = infrastructure
+        self.parent.objets_cliquables[id_planete].infrastructures.append(infrastructure) 
+        self.parent.parent.vue.modecourant.afficher_infrastructures()         
     def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
