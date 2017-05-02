@@ -303,8 +303,9 @@ class Vue():
         self.creercadremessage()
         self.tabmessage=[]
         self.listejoueur=None
+        self.nomjoueur=[]
         
-    def setmessagerecu(self, messsage,nom): 
+    def setmessagerecutous(self, messsage,nom,nomquirecoit): 
         self.messagerecu=nom+': '+messsage+"\n"
         if len(self.tabmessage)==6:
             self.tabmessage=[]
@@ -312,19 +313,42 @@ class Vue():
         if self.labelrecu:
             self.labelrecu.pack_forget()
         self.labelrecu=Label(self.canevasmessage, text=self.tabmessage,bg="azure")
-        self.labelrecu.pack(side=BOTTOM)  
-        print("message final recu:", self.messagerecu)
+        self.labelrecu.pack(side=BOTTOM)   
+        
+    def setmessagerecu(self, messsage,nom,nomquirecoit): 
+        if(nomquirecoit==self.nom):
+            self.messagerecu=nom+': '+messsage+"\n"
+        if len(self.tabmessage)==6:
+            self.tabmessage=[]
+        if(nomquirecoit==self.nom):
+            self.tabmessage.append(self.messagerecu)
+        if self.labelrecu:
+            self.labelrecu.pack_forget()
+        self.labelrecu=Label(self.canevasmessage, text=self.tabmessage,bg="azure")
+        self.labelrecu.pack(side=BOTTOM) 
         
     def creercadremessage(self): 
         self.cadremessage=Frame(self.root,width=self.largeur)
         self.canevasmessage=Canvas(self.cadrejeu,width=self.largeur,height=self.cadremessage.winfo_height(),bg="azure")
         self.entreemessage = Entry(self.canevasmessage)  
         self.labelrecu=None
-        self.buttonmessage=Button(self.canevasmessage,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get(),"nom":self.parent.monnom}))
+        self.buttonmessage=Button(self.canevasmessage,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":self.listejoueur.get(ACTIVE)}))
+        self.buttonmessagetous=Button(self.canevasmessage,text="Envoyer a tous", command=lambda: self.action_joueur("envoimessagetous", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":""}))
         self.canevasmessage.pack() 
         self.entreemessage.pack(side=TOP) 
         self.buttonmessage.pack(side=TOP)
-
+        self.buttonmessagetous.pack(side=TOP)
+        self.listejoueur = Listbox(self.canevasmessage)
+        
+    def updatelistejoueur(self):  
+        self.listejoueur = Listbox(self.canevasmessage)
+        print(self.nomjoueur, "self.nomjoueur")
+        compteur=0
+        for i in self.nomjoueur:
+            self.listejoueur.insert(compteur,i )
+            compteur=compteur+1
+        self.listejoueur.pack(side=LEFT,padx=10, pady=10)
+        
     def changemode(self,cadre):
         if self.modecourant:
             self.modecourant.pack_forget()
