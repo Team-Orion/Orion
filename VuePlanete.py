@@ -19,48 +19,39 @@ class VuePlanete(Perspective):
         self.largeur=self.modele.diametre*self.KM2pixel
         self.hauteur=self.largeur
         
-        """
-        self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
-        self.canevas.config(bg="sandy brown")
-        
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Mine",command=self.creermine)
-        self.btncreervaisseau.pack()
-        
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
-        self.btncreerstation.pack()
-        """
+     
         self.action_attente=None
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
        
-        self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=lambda: self.action_joueur("creerinfrastructure", {"type_unite": "mine"}))
+        self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=self.creermine)
         self.btncreermine.pack(side=BOTTOM)
 
-        self.btncreerferme=Button(self.cadreetataction,text="Construire Ferme",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "ferme"}))
+        self.btncreerferme=Button(self.cadreetataction,text="Construire Ferme",command=self.creerferme)
         self.btncreerferme.pack(side=BOTTOM)
         
-        self.btnhotelville=Button(self.cadreetataction,text="Construire Hotel ville",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "hotelville"}))
+        self.btnhotelville=Button(self.cadreetataction,text="Construire Hotel ville", command=self.creerhotelville)
         self.btnhotelville.pack()
         
-        self.btntourdefense=Button(self.cadreetataction,text="Construire Tour",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "tourdefense"}))
+        self.btntourdefense=Button(self.cadreetataction,text="Construire Tour",command=self.creertourdefense)
         self.btntourdefense.pack(side=BOTTOM)
         
-        self.btnusinevaisseau=Button(self.cadreetataction,text="Construire Usine vaisseau",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "usinevaisseau"}))
+        self.btnusinevaisseau=Button(self.cadreetataction,text="Construire Usine vaisseau",command=self.creerusinevaisseau)
         self.btnusinevaisseau.pack(side=BOTTOM)
         
-        self.btnuniversite=Button(self.cadreetataction,text="Construire Universite",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "universite"}))
+        self.btnuniversite=Button(self.cadreetataction,text="Construire Universite",command=self.creeruniversite)
         self.btnuniversite.pack(side=BOTTOM)
         
-        self.btncaserne=Button(self.cadreetataction,text="Construire Caserne",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "caserne"}))
+        self.btncaserne=Button(self.cadreetataction,text="Construire Caserne",command=self.creercaserne)
         self.btncaserne.pack(side=BOTTOM)
         
-        self.btnscierie=Button(self.cadreetataction,text="Construire Scierie",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "scierie"}))
+        self.btnscierie=Button(self.cadreetataction,text="Construire Scierie",command=self.creerscierie)
         self.btnscierie.pack(side=BOTTOM)
         
-        self.btntemple=Button(self.cadreetataction,text="Construire Temple",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "temple"}))
+        self.btntemple=Button(self.cadreetataction,text="Construire Temple",command=self.creertemple)
         self.btntemple.pack(side=BOTTOM)
         
-        self.btnruine=Button(self.cadreetataction,text="Construire Ruine",command=lambda:self.action_joueur("creerinfrastructure", {"type_unite": "ruine"}))
+        self.btnruine=Button(self.cadreetataction,text="Construire Ruine",command=self.creerruine)
         self.btnruine.pack(side=BOTTOM)
         
         self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
@@ -97,21 +88,57 @@ class VuePlanete(Perspective):
         
         self.changecadreetat(self.cadreetataction)
     
-    def creermine(self):
-        print("creer mine")
+   def creermine(self):
+        #img = Label("images/ressources/bois.png")
+        self.action_attente = "mine"
+        #self.parent.root.config(cursor='clock red red')
         self.macommande="mine"
     
     def creerferme(self):
-        print("creer ferme")
-        pass
-    
-    def creermanufacture(self):
-        pass
+        self.action_attente = "ferme"
+        self.macommande="ferme"
+        
+    def creerhotelville(self):
+        self.action_attente = "hotelville"
+        self.macommande="hotelville"
+        
+    def creertourdefense(self):
+        self.action_attente = "tourdefense"
+        self.macommande="tourdefense"
+        
+    def creerusinevaisseau(self):
+        self.action_attente = "usinevaisseau"
+        self.macommande="usinevaisseau"
+        
+    def creeruniversite(self):
+        self.action_attente = "universite"
+        self.macommande="universite"
+        
+    def creercaserne(self):
+        self.action_attente = "caserne"
+        self.macommande="caserne"
+        
+    def creerscierie(self):
+        self.action_attente = "scierie"
+        self.macommande="scierie"
+        
+    def creertemple(self):
+        self.action_attente = "temple"
+        self.macommande="temple"
+        
+    def creerruine(self):
+        self.action_attente = "ruine"
+        self.macommande="ruine"
     
     def voirsysteme(self):
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
             if i.id==self.systeme.id:
                 self.parent.voirsysteme(i)
+    def afficher_infrastructures(self):
+        for i in self.infrastructures:
+            image = self.parent.images[i.getclass()]
+            self.canevas.create_image(i.x, i.y,
+                                        image = image, tags=(i.getclass()))
     
     """        
     def initplanete(self,sys,plane):
@@ -182,7 +209,7 @@ class VuePlanete(Perspective):
                 if self.macommande:
                     x=self.canevas.canvasx(evt.x)
                     y=self.canevas.canvasy(evt.y)
-                    self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
+                    self.parent.parent.modele.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)####################
                     self.macommande=None
         else:
             #self.action_attente["parametres"]["coords"] = evt 
