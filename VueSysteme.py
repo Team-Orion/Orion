@@ -268,3 +268,16 @@ class VueSysteme(Perspective):
     
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
+    
+    def cibler(self, evt): #io 02-05
+        if self.maselection and self.maselection[1]=="unite":
+            cible=self.canevas.gettags("current")
+            if cible and cible[0] !="current":
+                cible = cible[2]
+                mode = "id"
+            else:
+                x = self.canevas.canvasx(evt.x)#/100
+                y = self.canevas.canvasy(evt.y)#/100
+                cible = {'x': x, 'y': y}
+                mode = "coord"
+            self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": cible, "mode": mode})

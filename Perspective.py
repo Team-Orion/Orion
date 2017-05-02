@@ -51,7 +51,7 @@ class Perspective(Frame):
         self.minimap.pack()
     def selectionner(self,evt):
         pass
-    
+    """
     def cibler(self, evt):
         if self.maselection and self.maselection[1]=="unite":
             cible=self.canevas.gettags("current")
@@ -64,7 +64,7 @@ class Perspective(Frame):
                 cible = {'x': x, 'y': y}
                 mode = "coord"
             self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": cible, "mode": mode})
-            
+    """        
         
     
     def cliquerminimap(self,evt):
@@ -101,3 +101,6 @@ class Perspective(Frame):
             except TypeError:
                 pass
             self.parent.parent.action_joueur(action, parametres)
+            
+            
+    

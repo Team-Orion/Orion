@@ -88,7 +88,7 @@ class VuePlanete(Perspective):
         
         self.changecadreetat(self.cadreetataction)
     
-     def creermine(self):
+    def creermine(self):
         #img = Label("images/ressources/bois.png")
         self.action_attente = "mine"
         #self.parent.root.config(cursor='clock red red')

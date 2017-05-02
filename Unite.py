@@ -54,7 +54,7 @@ class Unite:
     #Methodes de deplacement
     def avancer(self):
         rep = None
-        portee = 0 if (self.proprietaire is self.cible.proprietaire) else self.portee
+        portee = 0 if (self.cible.proprietaire is None) else self.portee#(self.proprietaire is self.cible.proprietaire) else self.portee
         if self.cible and self.lieu == self.cible.lieu:
             if self.lieu is None: #Galaxie
                 self.ciblerdestination()
