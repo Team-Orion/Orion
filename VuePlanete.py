@@ -106,9 +106,9 @@ class VuePlanete(Perspective):
         self.action_attente = "tourdefense"
         self.macommande="tourdefense"
         
-    def creerusinevaisseau(self):
-        self.action_attente = "usinevaisseau"
-        self.macommande="usinevaisseau"
+    def creerusine(self):
+        self.action_attente = "usine"
+        self.macommande="usine"
         
     def creeruniversite(self):
         self.action_attente = "universite"
@@ -134,11 +134,6 @@ class VuePlanete(Perspective):
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
             if i.id==self.systeme.id:
                 self.parent.voirsysteme(i)
-    def afficher_infrastructures(self):
-        for i in self.infrastructures:
-            image = self.parent.images[i.getclass()]
-            self.canevas.create_image(i.x, i.y,
-                                        image = image, tags=(i.getclass()))
     
     """        
     def initplanete(self,sys,plane):
@@ -193,29 +188,32 @@ class VuePlanete(Perspective):
         pass
       
     def selectionner(self,evt):
-        
         x, y=self.sol.iso_vers_matrice(evt)
-        print(self.sol.terrain[y][x])
         print("action_attente: ", str(self.action_attente))
-        if not self.action_attente:
-            t=self.canevas.gettags("current")
-            print("t: ", t)
-            if t and t[0]!="current":
-                if t[0]==self.parent.nom:
-                    pass
-                elif t[1]=="systeme":
-                    pass
+        t=self.canevas.gettags("current")
+        print("t: ", t)
+        if(t):          #fp 2 mai  if (t) parce que si on clique dans l'espace, on veut que rien se passe (versus toute plante)
+            #print("t[0]: ", t[0])
+            #print(self.sol.terrain[y][x])
+            #print("t typeof: ", type(t))
+            if not self.action_attente:
+                if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
+                    if t[0]==self.parent.nom:
+                        pass
+                    elif t[1]=="systeme":
+                        pass
+                else:
+                    if self.macommande:
+                        x=self.canevas.canvasx(evt.x)
+                        y=self.canevas.canvasy(evt.y)
+                        self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
+                        self.macommande=None
             else:
-                if self.macommande:
-                    x=self.canevas.canvasx(evt.x)
-                    y=self.canevas.canvasy(evt.y)
-                    self.parent.parent.modele.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)####################
-                    self.macommande=None
-        else:
-            #self.action_attente["parametres"]["coords"] = evt 
-            #print("action attente: ", self.action_attente["parametres"]["coords"])  
-            self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
-            self.action_attente = None
+                if(t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline') :     # fp 2 mai.  pour empecher qu'on construise dans l'eau
+                    self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+                else:
+                    print("on ne peut pas construire ici!")
+                self.action_attente = None
             
     def montresystemeselection(self):
         self.changecadreetat(self.cadreetataction)
@@ -259,10 +257,60 @@ class VuePlanete(Perspective):
         self.canevas.create_image(vue_x, vue_y,
                                       image = image, tags=(type_tuile))
 
-    def afficher_infrastructure(self, x, y, type_infrastructure):
-        image = self.parent.images[type_infrastructure]
-        self.canevas.create_image(x, y,
-                                      image = image, tags=(type_infrastructure))
+    def afficher_infrastructures(self):
+        for objet in self.parent.parent.modele.objets_cliquables.values():
+            if(isinstance(objet, Infrastructure)):
+                if(isinstance(objet, Mine)):
+                    print(objet.x, objet.y)
+                    print("type objet ",type(objet))
+                    image = self.parent.images["mine"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("mine",))
+                if(isinstance(objet, Ferme)):
+                    print(objet.x, objet.y)
+                    print("type objet ",type(objet))
+                    image = self.parent.images["ferme"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("ferme",))
+                if(isinstance(objet, Tourdefense)):
+                    print(objet.x, objet.y)
+                    print("type objet ",type(objet))
+                    image = self.parent.images["tourdefense"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("tourdefense",))
+                if(isinstance(objet, Temple)):
+                    image = self.parent.images["temple"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("temple",))
+                if(isinstance(objet, HotelVille)):
+                    image = self.parent.images["hotelville"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("hotelville",))
+                if(isinstance(objet, Ruine)):
+                    image = self.parent.images["ruine"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("ruine",))
+                if(isinstance(objet, Universite)):
+                    image = self.parent.images["universite"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("universite",))
+                if(isinstance(objet, Usine)):
+                    image = self.parent.images["usine"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("usine",))
+                if(isinstance(objet, Scierie)):
+                    image = self.parent.images["scierie"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("scierie",)) 
+                if(isinstance(objet, Caserne)):
+                    image = self.parent.images["caserne"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("caserne",))                    
+                if(isinstance(objet, Universite)):
+                    image = self.parent.images["universite"]
+                    self.canevas.create_image(objet.x, objet.y,
+                                            image = image, tags=("universite",))
+    
         
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"
