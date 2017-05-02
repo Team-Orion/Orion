@@ -2,6 +2,8 @@ from Id import *
 import random
 from Planete import *
 
+echelle = 100
+
 class Systeme():
     def __init__(self, x, y, modele):
         self.id=Id.prochainid()
@@ -13,6 +15,7 @@ class Systeme():
         self.x=x
         self.y=y
         self.etoile=Etoile(self,x,y)
+        self.taille = self.etoile.taille*3/echelle #io 02-05
         self.planetes=[] #à questionner #io 11-04
         self.planetesvisites=[]
         self.creerplanetes()

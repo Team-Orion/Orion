@@ -6,6 +6,8 @@ import math
 DEMIELARGEUR_TUILES = 32 #à suppr #io 11-04
 DEMIEHAUTEUR_TUILES = 16 #à suppr #io 11-04
 
+echelle = 100 #io 02-05
+
 class Pulsar():
     def __init__(self,x,y):
         self.id=Id.prochainid()

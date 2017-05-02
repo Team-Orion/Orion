@@ -212,14 +212,14 @@ class VueSysteme(Perspective):
         pass
                
     def afficherselection(self):
-        
+        e=self.UA2pixel
         self.canevas.delete("selecteur")
         if self.maselection!=None:
             joueur=self.modele.joueurs[self.parent.nom]
             for objet in self.modele.objets_cliquables.values():
                 if objet.id == self.maselection[2]:
                     if isinstance(objet, Planete):
-                        e=self.UA2pixel
+                        
                         x=int(self.maselection[3])
                         y=int(self.maselection[4])
                         t= objet.taille*e
@@ -229,7 +229,7 @@ class VueSysteme(Perspective):
                     elif isinstance(objet, Unite):
                         x=objet.x
                         y=objet.y
-                        t= objet.taille
+                        t= objet.taille*e
                         self.canevas.create_rectangle(x-t, y-t, x+t, y+t,dash=(2,2),
                                                       outline= joueur.couleur,
                                                       tags=("select","selecteur"))

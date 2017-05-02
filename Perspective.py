@@ -51,6 +51,10 @@ class Perspective(Frame):
         self.minimap.pack()
     def selectionner(self,evt):
         pass
+    
+    def cibler(self, evt):
+        pass
+    
     """
     def cibler(self, evt):
         if self.maselection and self.maselection[1]=="unite":

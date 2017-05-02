@@ -53,14 +53,21 @@ class Unite:
     
     #Methodes de deplacement
     def avancer(self):
-        rep = None
-        portee = 0 if (self.cible.proprietaire is None) else self.portee#(self.proprietaire is self.cible.proprietaire) else self.portee
+        if self.cible.proprietaire is None:
+            distance_avec_cible = self.vitesse
+        elif self.cible.proprietaire is self.proprietaire:
+            distance_avec_cible = self.cible.taille+self.taille
+        else:
+            distance_avec_cible = self.vitesse+self.portee
+        
+        print("cible",self.vitesse+self.cible.taille)
+        print("soi",self.taille)
         if self.cible and self.lieu == self.cible.lieu:
             if self.lieu is None: #Galaxie
                 self.ciblerdestination()
                 x=self.cible.x
                 y=self.cible.y
-                if hlp.calcDistance(self.x,self.y,x,y) >= self.vitesse+portee:
+                if hlp.calcDistance(self.x,self.y,x,y) >= distance_avec_cible: #self.vitesse+self.cible.taille+self.taille+portee:
                     self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
                 else:
                     if isinstance(self.cible, Systeme.Systeme):
@@ -239,7 +246,7 @@ class Sonde(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         taille = 16
+                         taille = 16/echelle
                          )
 
 class VaisseauAttaqueGalactique(Unite):
@@ -252,7 +259,7 @@ class VaisseauAttaqueGalactique(Unite):
                          portee = 50/echelle,
                          portee_projectile = 60/echelle,
                          vitesse_projectile = 6/echelle,
-                         taille = 16
+                         taille = 16/echelle
                          )
     def avancer(self):
         if super().avancer():
@@ -269,7 +276,7 @@ class VaisseauAttaqueSolaire(Unite):
                          portee = 15,
                          portee_projectile = 7,
                          vitesse_projectile = 6,
-                         taille = 16
+                         taille = 16/echelle
                          )    
     
 class VaisseauCargoSolaire(Unite):
@@ -277,7 +284,7 @@ class VaisseauCargoSolaire(Unite):
         super().__init__(proprietaire, planete,
                          energie = 100,
                          vitesse = 5,
-                         taille = 16
+                         taille = 16/echelle
                          )
         
     def charger(self):
@@ -292,7 +299,7 @@ class VaisseauCargoGalactique(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         taille = 16
+                         taille = 16/echelle
                          )    
     
     def charger(self):
@@ -307,7 +314,7 @@ class StationPlanetaire(Unite):
         super().__init__(proprietaire, planete,
                          energie = 100,
                          vitesse = 5,
-                         taille = 20, 
+                         taille = 20/echelle, 
                          portee = 15
                          )
         
@@ -336,7 +343,7 @@ class StationGalactique(Unite):
                          attaque = 10,
                          delai_attaque = 10,
                          vitesse_projectile = 6,
-                         taille = 20,
+                         taille = 20/echelle,
                          portee = 15,
                          portee_projectile = 10,
                          capacite = 10
