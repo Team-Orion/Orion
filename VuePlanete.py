@@ -2,6 +2,7 @@ from PIL import *
 from Perspective import *
 import random
 from helper import Helper as hlp
+from Infrastructure import *
 
 class VuePlanete(Perspective):
     def __init__(self,parent,systeme,planete):
@@ -231,6 +232,7 @@ class VuePlanete(Perspective):
             self.action_joueur("decouvrirplanete", {"id_planete": self.planete.id, "sol": self.sol})
         self.afficher_base()
         self.afficher_sol()
+        self.afficher_infrastructures()
     
     def afficher_base(self):
         for y in range(self.sol.matrice_hauteur):
