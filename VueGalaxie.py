@@ -40,6 +40,9 @@ class VueGalaxie(Perspective):
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack()
         
+        self.btnmenuavancer= Button(self.cadreetataction,text="Menu Avance", command= self.parent.creermenuavancer)
+        self.btnmenuavancer.pack()
+        
         imgBois = self.parent.images["bois"]
         imgFoin = self.parent.images["foin"]
         imgArgent = self.parent.images["argent"]
