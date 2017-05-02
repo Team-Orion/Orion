@@ -15,7 +15,8 @@ class Unite:
                  capacite = 0, portee = 0,
                  portee_projectile = 0,
                  vitesse_projectile = 0,
-                 delai_attaque = 0): #le parent est l'instance qui crée l'unite
+                 delai_attaque = 0,
+                 cout = 0): #le parent est l'instance qui crÃ©e l'unite
         self.id=Id.prochainid()
         self.proprietaire = proprietaire
         self.action = None
@@ -35,6 +36,7 @@ class Unite:
         #caracteristiques de l'unite
         self.taille = taille
         self.energie = energie
+        self.cout = cout
         
         #caracteristiques de l'attaque
         self.attaque = attaque
@@ -246,7 +248,8 @@ class Sonde(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         taille = 16/echelle
+                         taille = 16/echelle,
+                         cout = 5
                          )
 
 class VaisseauAttaqueGalactique(Unite):
@@ -259,7 +262,8 @@ class VaisseauAttaqueGalactique(Unite):
                          portee = 50/echelle,
                          portee_projectile = 60/echelle,
                          vitesse_projectile = 6/echelle,
-                         taille = 16/echelle
+                         taille = 16/echelle,
+                         cout = 5
                          )
     def avancer(self):
         if super().avancer():
@@ -276,7 +280,8 @@ class VaisseauAttaqueSolaire(Unite):
                          portee = 15,
                          portee_projectile = 7,
                          vitesse_projectile = 6,
-                         taille = 16/echelle
+                         taille = 16/echelle,
+                         cout = 5
                          )    
     
 class VaisseauCargoSolaire(Unite):
@@ -284,7 +289,8 @@ class VaisseauCargoSolaire(Unite):
         super().__init__(proprietaire, planete,
                          energie = 100,
                          vitesse = 5,
-                         taille = 16/echelle
+                         taille = 16/echelle,
+                         cout = 5
                          )
         
     def charger(self):
@@ -299,7 +305,8 @@ class VaisseauCargoGalactique(Unite):
         super().__init__(proprietaire, systeme,
                          energie = 100,
                          vitesse = 0.02*5,
-                         taille = 16/echelle
+                         taille = 16/echelle,
+                         cout = 5
                          )    
     
     def charger(self):
@@ -315,7 +322,8 @@ class StationPlanetaire(Unite):
                          energie = 100,
                          vitesse = 5,
                          taille = 20/echelle, 
-                         portee = 15
+                         portee = 15,
+                         cout = 5
                          )
         
         self.action = self.rotation
@@ -346,7 +354,8 @@ class StationGalactique(Unite):
                          taille = 20/echelle,
                          portee = 15,
                          portee_projectile = 10,
-                         capacite = 10
+                         capacite = 10,
+                         cout = 5
                          )
         
         self.action = self.rotation
