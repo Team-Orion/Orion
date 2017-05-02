@@ -36,8 +36,8 @@ class VuePlanete(Perspective):
         self.btntourdefense=Button(self.cadreetataction,text="Construire Tour",command=self.creertourdefense)
         self.btntourdefense.pack(side=BOTTOM)
         
-        self.btnusinevaisseau=Button(self.cadreetataction,text="Construire Usine vaisseau",command=self.creerusinevaisseau)
-        self.btnusinevaisseau.pack(side=BOTTOM)
+        self.btnusine=Button(self.cadreetataction,text="Construire Usine",command=self.creerusine)
+        self.btnusine.pack(side=BOTTOM)
         
         self.btnuniversite=Button(self.cadreetataction,text="Construire Universite",command=self.creeruniversite)
         self.btnuniversite.pack(side=BOTTOM)
