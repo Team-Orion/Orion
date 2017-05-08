@@ -41,7 +41,8 @@ class Joueur():
                       "envoimessage":self.envoiemessage,
                       "envoimessagetous":self.envoiemessagetous,
                       "visitersysteme":self.visitersysteme,
-                      "creerinfrastructure": self.creerinfrastructure
+                      "creerinfrastructure": self.creerinfrastructure,
+                      "alliance": self.alliance
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom,nomquirecoit):
@@ -51,8 +52,8 @@ class Joueur():
         self.messageenvoie=message
         nomquirecoit=""
         self.parent.parent.vue.setmessagerecutous(self.messageenvoie,nom, nomquirecoit)
-    def alliance(self):
-        pass
+    def alliance(self, nomalliance):
+        self.nomjoueuralliance=nomalliance; 
     def gaintechnologique(self):
         pass
                         
