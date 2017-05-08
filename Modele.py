@@ -93,6 +93,7 @@ class Joueur():
                 "temple":Temple,
                 "ruine":Ruine
                 }
+        planete =  self.parent.objets_cliquables[id_planete]
         infrastructure = types[type_unite](self,id_planete,x,y)
         self.parent.objets_cliquables[infrastructure.id] = infrastructure
         self.parent.objets_cliquables[id_planete].infrastructures.append(infrastructure) 
