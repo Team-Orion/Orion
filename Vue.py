@@ -316,49 +316,46 @@ class Vue():
         self.tabmessage=[]
         self.listejoueur=None
         self.nomjoueur=[]
+        self.buttonalliance=None
         
     def setmessagerecutous(self, messsage,nom,nomquirecoit): 
         self.messagerecu=nom+': '+messsage+"\n"
-        if len(self.tabmessage)==6:
-            self.tabmessage=[]
         self.tabmessage.append(self.messagerecu)
         if self.labelrecu:
             self.labelrecu.pack_forget()
-        self.labelrecu=Label(self.canevasmessage, text=self.tabmessage,bg="azure")
-        self.labelrecu.pack(side=BOTTOM)   
+        self.labelrecu= ttk.Combobox(self.canevasmessage,values=self.tabmessage) 
+        self.labelrecu.current(self.tabmessage.__len__()-1)    
+        self.labelrecu.pack(side=LEFT)   
         
     def setmessagerecu(self, messsage,nom,nomquirecoit): 
         if(nomquirecoit==self.nom):
             self.messagerecu=nom+': '+messsage+"\n"
-        if len(self.tabmessage)==6:
-            self.tabmessage=[]
+    
         if(nomquirecoit==self.nom):
             self.tabmessage.append(self.messagerecu)
         if self.labelrecu:
             self.labelrecu.pack_forget()
-        self.labelrecu=Label(self.canevasmessage, text=self.tabmessage,bg="azure")
-        self.labelrecu.pack(side=BOTTOM) 
+        self.labelrecu= ttk.Combobox(self.canevasmessage,values=self.tabmessage)  
+        self.labelrecu.current(self.tabmessage.__len__()-1)  
+        self.labelrecu.pack(side=LEFT)  
         
     def creercadremessage(self): 
         self.cadremessage=Frame(self.root,width=self.largeur)
         self.canevasmessage=Canvas(self.cadrejeu,width=self.largeur,height=self.cadremessage.winfo_height(),bg="azure")
         self.entreemessage = Entry(self.canevasmessage)  
         self.labelrecu=None
-        self.buttonmessage=Button(self.canevasmessage,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":self.listejoueur.get(ACTIVE)}))
+        self.buttonmessage=Button(self.canevasmessage,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":self.listejoueur.get()}))
         self.buttonmessagetous=Button(self.canevasmessage,text="Envoyer a tous", command=lambda: self.action_joueur("envoimessagetous", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":""}))
-        self.canevasmessage.pack() 
-        self.entreemessage.pack(side=TOP) 
-        self.buttonmessage.pack(side=TOP)
-        self.buttonmessagetous.pack(side=TOP)
-        self.listejoueur = Listbox(self.canevasmessage)
+        self.buttonalliance=Button(self.canevasmessage,text="Faire une alliance", command=lambda: self.action_joueur("alliance", {"nomalliance":self.listejoueur.get(ACTIVE)}))
+        
+        self.entreemessage.pack(side=LEFT) 
+        self.buttonmessage.pack(side=LEFT)
+        self.buttonmessagetous.pack(side=LEFT)
+        self.buttonalliance.pack(side=LEFT)
+        self.canevasmessage.pack(side=RIGHT) 
         
     def updatelistejoueur(self):  
-        self.listejoueur = Listbox(self.canevasmessage)
-        print(self.nomjoueur, "self.nomjoueur")
-        compteur=0
-        for i in self.nomjoueur:
-            self.listejoueur.insert(compteur,i )
-            compteur=compteur+1
+        self.listejoueur =ttk.Combobox(self.canevasmessage,values=self.nomjoueur)
         self.listejoueur.pack(side=LEFT,padx=10, pady=10)
         
     def changemode(self,cadre):
