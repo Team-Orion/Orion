@@ -10,6 +10,7 @@ import math
 from VueGalaxie import *
 from VueSysteme import *
 from VuePlanete import *
+from tkinter import ttk
 
 
 class Vue():
