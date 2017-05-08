@@ -81,10 +81,10 @@ class VuePlanete(Perspective):
         labelArgent = Label(self.cadreinfo, image = imgArgent)
         labelMinerai = Label(self.cadreinfo, image = imgMinerai)
 
-        labelBoistxt = Label(self.cadreinfo, text = "qte Bois")
-        labelFointxt = Label(self.cadreinfo, text = "qte Foin")
-        labelArgenttxt = Label(self.cadreinfo, text = "qte Argent")
-        labelMineraitxt = Label(self.cadreinfo, text = "qte Minerai")
+        labelBoistxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbbois) + " |  Utilisable " + str(planete.nbbois))
+        labelFointxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
+        labelArgenttxt = Label(self.cadreinfo, text ="Exploite " + str(systeme.nbargent) + " |  Utilisable " + str(planete.nbargent))
+        labelMineraitxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbminerai) + " | Utilisable " + str(planete.nbminerai))
 
         labelBois.pack(fill=X)
         labelBoistxt.pack(fill=X)
@@ -204,7 +204,13 @@ class VuePlanete(Perspective):
                
     def afficherselection(self):
         pass
-      
+    
+     def exploitation(self):
+        for i in self.infrastructures:
+            if(isinstance(objet, Ferme)):
+               i.exploitationnouriture()
+               self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
+
     def selectionner(self,evt):
         x, y=self.sol.iso_vers_matrice(evt)
         print("action_attente: ", str(self.action_attente))
@@ -291,6 +297,13 @@ class VuePlanete(Perspective):
                     image = self.parent.images["ferme"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("ferme",))
+                    print(objet.planete)
+                    print(objet.lieu)
+                    objet.exploitationnouriture()
+                    print("ferme")
+                    self.systeme.ajusterRessources()
+                    self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
+                    
                 if(isinstance(objet, Tourdefense)):
                     print(objet.x, objet.y)
                     print("type objet ",type(objet))
@@ -305,7 +318,7 @@ class VuePlanete(Perspective):
                     image = self.parent.images["hotelville"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("hotelville",))
-       
+
                 if(isinstance(objet, Ruine)):
                     image = self.parent.images["ruine"]
                     self.canevas.create_image(objet.x, objet.y,
