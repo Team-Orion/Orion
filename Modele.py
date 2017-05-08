@@ -41,8 +41,7 @@ class Joueur():
                       "envoimessage":self.envoiemessage,
                       "envoimessagetous":self.envoiemessagetous,
                       "visitersysteme":self.visitersysteme,
-                      "creerinfrastructure": self.creerinfrastructure,
-                      "alliance": self.alliance
+                      "creerinfrastructure": self.creerinfrastructure
                      }
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom,nomquirecoit):
@@ -52,8 +51,8 @@ class Joueur():
         self.messageenvoie=message
         nomquirecoit=""
         self.parent.parent.vue.setmessagerecutous(self.messageenvoie,nom, nomquirecoit)
-    def alliance(self, nomalliance):
-        self.nomjoueuralliance=nomalliance; 
+    def alliance(self):
+        pass
     def gaintechnologique(self):
         pass
                         
@@ -93,10 +92,12 @@ class Joueur():
                 "temple":Temple,
                 "ruine":Ruine
                 }
-        infrastructure = types[type_unite](self,id_planete,x,y)
+        planete =  self.parent.objets_cliquables[id_planete]
+        infrastructure = types[type_unite](self,planete,x,y)
         self.parent.objets_cliquables[infrastructure.id] = infrastructure
         self.parent.objets_cliquables[id_planete].infrastructures.append(infrastructure) 
-        self.parent.parent.vue.modecourant.afficher_infrastructures()         
+        self.parent.parent.vue.modecourant.afficher_infrastructures()        
+         
     def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
