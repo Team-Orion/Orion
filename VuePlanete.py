@@ -212,6 +212,7 @@ class VuePlanete(Perspective):
                self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
 
     def selectionner(self,evt):
+        self.canevas.delete("messagetemporaire")
         x, y=self.sol.iso_vers_matrice(evt)
         print("action_attente: ", str(self.action_attente))
         t=self.canevas.gettags("current")
@@ -222,6 +223,7 @@ class VuePlanete(Perspective):
             #print("t typeof: ", type(t))
             if not self.action_attente:
                 if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
+                    """
                     if t[0]==self.parent.nom:
                         pass
                     elif t[1]=="systeme":
@@ -232,12 +234,15 @@ class VuePlanete(Perspective):
                         y=self.canevas.canvasy(evt.y)
                         self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
                         self.macommande=None
-            else:
-                if(t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline') :     # fp 2 mai.  pour empecher qu'on construise dans l'eau
+                    """
+            else:# fp 2 mai.  pour empecher qu'on construise dans l'eau
+                if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline"  or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
                     self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+                    self.action_attente = None
                 else:
-                    print("on ne peut pas construire ici!")
-                self.action_attente = None
+                    #print("on ne peut pas construire ici!")
+                    self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres de l'eau!"),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
+                
 
                             
     def montresystemeselection(self):
@@ -284,7 +289,8 @@ class VuePlanete(Perspective):
 
     def afficher_infrastructures(self):
         for objet in self.parent.parent.modele.objets_cliquables.values():
-            if(isinstance(objet, Infrastructure)):
+            #if(isinstance(objet, Infrastructure)):
+            if(isinstance(objet, Infrastructure) and objet.lieu == self.planete.id):
                 if(isinstance(objet, Mine)):
                     print(objet.x, objet.y)
                     print("type objet ",type(objet))
