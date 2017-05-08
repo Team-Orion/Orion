@@ -35,6 +35,8 @@ class VuePlanete(Perspective):
         self.btncreerstation.pack()
         """
         
+        #self.canevas.createTextNode("salutt")
+        
         self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack(side=BOTTOM)
         
@@ -81,10 +83,10 @@ class VuePlanete(Perspective):
         labelArgent = Label(self.cadreinfo, image = imgArgent)
         labelMinerai = Label(self.cadreinfo, image = imgMinerai)
 
-        labelBoistxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbbois) + " |  Utilisable " + str(planete.nbbois))
-        labelFointxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
-        labelArgenttxt = Label(self.cadreinfo, text ="Exploite " + str(systeme.nbargent) + " |  Utilisable " + str(planete.nbargent))
-        labelMineraitxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbminerai) + " | Utilisable " + str(planete.nbminerai))
+        labelBoistxt = Label(self.cadreinfo, text = "qte Bois")
+        labelFointxt = Label(self.cadreinfo, text = "qte Foin")
+        labelArgenttxt = Label(self.cadreinfo, text = "qte Argent")
+        labelMineraitxt = Label(self.cadreinfo, text = "qte Minerai")
 
         labelBois.pack(fill=X)
         labelBoistxt.pack(fill=X)
@@ -103,10 +105,14 @@ class VuePlanete(Perspective):
         self.changecadreetat(self.cadreetataction)
     
     
-    def creermine(self):
+    def creermine(self,evt):
         #img = Label("images/ressources/bois.png")
         self.action_attente = "mine"
+        #self.canevas.create_image("images/ressources/bois.png")
+        #image = self.parent.images["ferme"]
+        #self.canevas.create_image(evt.x, evt.y,image = image, tags=("mine",))
         #self.parent.root.config(cursor='clock red red')
+        #self.canevas.create_text(10, 450, text=str("Cliquez a l'endroit ou vous voulez voir votre infrastructure."),font=("calibri", 28), fill="#2360fc", anchor="nw", tag="messagetemporaire")
         self.macommande="mine"
     
     def creerferme(self):
@@ -204,24 +210,19 @@ class VuePlanete(Perspective):
                
     def afficherselection(self):
         pass
-    
-     def exploitation(self):
-        for i in self.infrastructures:
-            if(isinstance(objet, Ferme)):
-               i.exploitationnouriture()
-               self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
-
+      
     def selectionner(self,evt):
+        self.canevas.delete("messagetemporaire")
         x, y=self.sol.iso_vers_matrice(evt)
         print("action_attente: ", str(self.action_attente))
         t=self.canevas.gettags("current")
-        print("t: ", t)
-        if(t):          #fp 2 mai  if (t) parce que si on clique dans l'espace, on veut que rien se passe (versus toute plante)
-            #print("t[0]: ", t[0])
-            #print(self.sol.terrain[y][x])
-            #print("t typeof: ", type(t))
+        #print("x: ", x, " y: ", y)
+        #print("terrain" ,self.sol.terrain[y][x])
+        #print("t: ", t)
+        if(t):          # fp 2 mai  if (t) parce que si on clique dans l'espace, on veut que rien se passe (versus toute plante)
             if not self.action_attente:
-                if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
+               """
+                if t and t[0]!="current":   # fp 2 mai Est-ce que tout ca pourrait sauter par hasard?? 
                     if t[0]==self.parent.nom:
                         pass
                     elif t[1]=="systeme":
@@ -232,14 +233,19 @@ class VuePlanete(Perspective):
                         y=self.canevas.canvasy(evt.y)
                         self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
                         self.macommande=None
+                """
             else:
-                if(t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline') :     # fp 2 mai.  pour empecher qu'on construise dans l'eau
+                # fp 2 mai.  pour empecher qu'on construise dans l'eau
+                if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline"  or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
                     self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+                    self.action_attente = None
                 else:
-                    print("on ne peut pas construire ici!")
-                self.action_attente = None
+                    #print("on ne peut pas construire ici!")
+                    self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres de l'eau!"),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
+                    # fp 8 mai  Il faudrait une boucle pour que le message s'efface apres X secondes
+                    
+                
 
-                            
     def montresystemeselection(self):
         self.changecadreetat(self.cadreetataction)
         
@@ -284,7 +290,7 @@ class VuePlanete(Perspective):
 
     def afficher_infrastructures(self):
         for objet in self.parent.parent.modele.objets_cliquables.values():
-            if(isinstance(objet, Infrastructure)):
+            if(isinstance(objet, Infrastructure) and objet.lieu == self.planete.id):
                 if(isinstance(objet, Mine)):
                     print(objet.x, objet.y)
                     print("type objet ",type(objet))
@@ -297,13 +303,6 @@ class VuePlanete(Perspective):
                     image = self.parent.images["ferme"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("ferme",))
-                    print(objet.planete)
-                    print(objet.lieu)
-                    objet.exploitationnouriture()
-                    print("ferme")
-                    self.systeme.ajusterRessources()
-                    self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
-                    
                 if(isinstance(objet, Tourdefense)):
                     print(objet.x, objet.y)
                     print("type objet ",type(objet))
@@ -318,7 +317,7 @@ class VuePlanete(Perspective):
                     image = self.parent.images["hotelville"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("hotelville",))
-
+       
                 if(isinstance(objet, Ruine)):
                     image = self.parent.images["ruine"]
                     self.canevas.create_image(objet.x, objet.y,
