@@ -52,10 +52,10 @@ class Systeme():
                 
                 
         for i in self.planetes:
-            self.nbfoin+= i.nbfoin
-            self.nbbois+= i.nbbois
-            self.nbargent+= i.nbargent
-            self.nbminerai+=i.nbminerai
+            self.nbfoin+= i.foinexploite
+            self.nbbois+= i.boisexploite
+            self.nbargent+= i.boisexploite
+            self.nbminerai+=i.mineraiexploite
             self.nbpopulation+=i.nbpopulation
                 
      
