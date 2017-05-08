@@ -55,6 +55,10 @@ class Planete():
         self.nbfoin=random.randrange(1,1000)
         self.nbargent=random.randrange(1,1000)
         self.nbminerai=random.randrange(1,1000)
+        self.boisexploite=0
+        self.foinexploite=0
+        self.argentexploite=0
+        self.mineraiexploite=0
         self.nbpopulation=100
         self.infrastructures = [] 
         
