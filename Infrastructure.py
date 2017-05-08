@@ -12,11 +12,11 @@ class Infrastructure():
 class Ferme(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
-        self.capacite=100
+        self.vitesseproduction=1
     def nourrirpopulation(self):
         pass
     def exploitationnouriture(self):
-        pass
+        self.planete.foinexploite += self.vitesseproduction
 
 
 class Tourdefense(Infrastructure):
