@@ -13,10 +13,32 @@ class Ferme(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
         self.vitesseproduction=1
+        self.action = self.exploitationnouriture
+        self.compteurexploitation=0
+        self.compteurpopulation=0
+        
     def nourrirpopulation(self):
-        pass
+        if(self.compteurpopulation<10):
+            self.compteurpopulation+=10
+        else:
+            self.compteurpopulation=0
+            if(self.planete.nbpopulation>0):
+                self.planete.foinexploite-= self.planete.nbpopulation*0.10
+            else:
+                self.planete.nbpopulation-=1
+                
     def exploitationnouriture(self):
-        self.planete.foinexploite += self.vitesseproduction
+        if(self.planete.nbfoin >0):
+            if (self.compteurexploitation < 10):
+                self.compteurexploitation+=1
+            else:
+                self.compteurexploitation=0
+                self.planete.foinexploite += self.vitesseproduction
+                self.planete.nbfoin-=self.vitesseproduction
+        else:
+            self.nourrirpopulation()
+            
+
 
 
 class Tourdefense(Infrastructure):
@@ -27,12 +49,20 @@ class Tourdefense(Infrastructure):
 class Usine(Infrastructure): 
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
-        self.capacitechargement=0
-        pass
-    def creervaisseaucargo(self):
-        pass
-    def creervaisseauattaque(self):
-        pass
+        self.compteurexploitation=0
+        self.action=self.exploitationargent
+        self.vitesseproduction=1
+        
+        
+    def exploitationargent(self):
+        if(self.planete.nbargent >0):
+            if (self.compteurexploitation < 10):
+                self.compteurexploitation+=1
+            else:
+                self.compteurexploitation=0
+                self.planete.argentexploite += self.vitesseproduction
+                self.planete.nbargent-=self.vitesseproduction
+
 class HotelVille(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
@@ -59,8 +89,16 @@ class Scierie(Infrastructure):
         super().__init__(proprietaire,planete,positionx, positiony)
         self.bois=0
         print("scierie creee! x: ", positionx, " y: ", positiony)
+        
     def exploitationbois(self):
-        pass
+        if(self.planete.nbbois >0):
+            if (self.compteurexploitation < 10):
+                self.compteurexploitation+=1
+            else:
+                self.compteurexploitation=0
+                self.planete.boisexploite += self.vitesseproduction
+                self.planete.nbbois-=self.vitesseproduction
+
 class Temple(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
@@ -92,11 +130,18 @@ class Ville(Infrastructure):
 class Mine(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):
         super().__init__(proprietaire,planete,positionx, positiony)
-        self.entrepot=0
-        self.capacite=100
-        print("mine creee! x: ", positionx, " y: ", positiony)
+        self.compteurexploitation=0
+        self.action=self.exploitationminerai
+        self.vitesseproduction=1
+        
     def exploitationminerai(self):
-        pass
+        if(self.planete.nbminerai >0):
+            if (self.compteurexploitation < 10):
+                self.compteurexploitation+=1
+            else:
+                self.compteurexploitation=0
+                self.planete.mineraiexploite += self.vitesseproduction
+                self.planete.nbminerai-=self.vitesseproduction
     
     
     
