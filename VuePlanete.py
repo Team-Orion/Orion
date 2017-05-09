@@ -35,38 +35,69 @@ class VuePlanete(Perspective):
         self.btncreerstation.pack()
         """
         
-        self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
-        self.btnvuesysteme.pack(side=BOTTOM)
-        
-        self.btncreermine=Button(self.cadreetataction,text="Construire Mine",command=self.creermine)
-        self.btncreermine.pack(side=BOTTOM)
 
-        self.btncreerferme=Button(self.cadreetataction,text="Construire Ferme",command=self.creerferme)
-        self.btncreerferme.pack(side=BOTTOM)
+        self.population=Label(self.cadreetataction, text="CONSTRUIRE DES INFRASTRUCTURES", bg="#8afc92")
+        self.population.pack(side=TOP,fill=X)
         
-        self.btnhotelville=Button(self.cadreetataction,text="Construire Hotel ville", command=self.creerhotelville)
-        self.btnhotelville.pack()
+        self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
+        self.btnvuesysteme.pack(side=BOTTOM, fill=X)
         
-        self.btntourdefense=Button(self.cadreetataction,text="Construire Tour de defense",command=self.creertourdefense)
-        self.btntourdefense.pack(side=BOTTOM)
+        self.btncreermine=Button(self.cadreetataction,text="Mine",command=self.creermine)
+        self.btncreermine.pack(side=BOTTOM, fill=X)        
+                
+        self.btncreermine.bind("<Enter>", self.on_enter)
+        self.btncreermine.bind("<Leave>", self.on_leave)
+
+        self.btncreerferme=Button(self.cadreetataction,text="Ferme",command=self.creerferme)
+        self.btncreerferme.pack(side=BOTTOM, fill=X)
         
-        self.btnusine=Button(self.cadreetataction,text="Construire Usine",command=self.creerusine)
-        self.btnusine.pack(side=BOTTOM)
+        self.btncreerferme.bind("<Enter>", self.on_enter)
+        self.btncreerferme.bind("<Leave>", self.on_leave)
         
-        self.btnuniversite=Button(self.cadreetataction,text="Construire Universite",command=self.creeruniversite)
-        self.btnuniversite.pack(side=BOTTOM)
+        self.btnhotelville=Button(self.cadreetataction,text="Hotel de ville", command=self.creerhotelville)
+        self.btnhotelville.pack(side=BOTTOM, fill=X)
         
-        self.btncaserne=Button(self.cadreetataction,text="Construire Caserne",command=self.creercaserne)
-        self.btncaserne.pack(side=BOTTOM)
+        self.btnhotelville.bind("<Enter>", self.on_enter)
+        self.btnhotelville.bind("<Leave>", self.on_leave)
+                                
+        self.btntourdefense=Button(self.cadreetataction,text="Tour de defense",command=self.creertourdefense)
+        self.btntourdefense.pack(side=BOTTOM, fill=X)
         
-        self.btnscierie=Button(self.cadreetataction,text="Construire Scierie",command=self.creerscierie)
-        self.btnscierie.pack(side=BOTTOM)
+        self.btntourdefense.bind("<Enter>", self.on_enter)
+        self.btntourdefense.bind("<Leave>", self.on_leave)
         
-        self.btntemple=Button(self.cadreetataction,text="Construire Temple",command=self.creertemple)
-        self.btntemple.pack(side=BOTTOM)
+        self.btnusine=Button(self.cadreetataction,text="Usine",command=self.creerusine)
+        self.btnusine.pack(side=BOTTOM, fill=X)
         
-        self.btnruine=Button(self.cadreetataction,text="Construire Ruine",command=self.creerruine)
-        self.btnruine.pack(side=BOTTOM)
+        self.btnusine.bind("<Enter>", self.on_enter)
+        self.btnusine.bind("<Leave>", self.on_leave)
+        
+        self.btnuniversite=Button(self.cadreetataction,text="Universite",command=self.creeruniversite)
+        self.btnuniversite.pack(side=BOTTOM, fill=X)
+        
+        self.btnuniversite.bind("<Enter>", self.on_enter)
+        self.btnuniversite.bind("<Leave>", self.on_leave)
+        
+        self.btncaserne=Button(self.cadreetataction,text="Caserne",command=self.creercaserne)
+        self.btncaserne.pack(side=BOTTOM, fill=X)
+        
+        self.btncaserne.bind("<Enter>", self.on_enter)
+        self.btncaserne.bind("<Leave>", self.on_leave)
+        
+        self.btnscierie=Button(self.cadreetataction,text="Scierie",command=self.creerscierie)
+        self.btnscierie.pack(side=BOTTOM, fill=X)
+        
+        self.btnscierie.bind("<Enter>", self.on_enter)
+        self.btnscierie.bind("<Leave>", self.on_leave)
+        
+        self.btntemple=Button(self.cadreetataction,text="Temple",command=self.creertemple)
+        self.btntemple.pack(side=BOTTOM, fill=X)
+        
+        self.btntemple.bind("<Enter>", self.on_enter)
+        self.btntemple.bind("<Leave>", self.on_leave)
+        
+        #self.btnruine=Button(self.cadreetataction,text=" Ruine",command=self.creerruine)
+        #self.btnruine.pack(side=BOTTOM, fill=X)
 
         self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
         self.population.pack(fill=X)
@@ -102,6 +133,33 @@ class VuePlanete(Perspective):
 
         self.changecadreetat(self.cadreetataction)
     
+    def on_enter(self, event):
+        texteoriginal = event.widget.cget("text")
+        self.prix={   "Mine":           "250 Bois, 100 $",
+                      "Tour de defense":"250 Minerai, 200 Foin, 100 $",
+                      "Usine":          "250 Minerai, 50 Foin",
+                      "Universite":     "250 Minerai, 50 Foin, 50 $",
+                      "Caserne":        "250 Minerai, 50 Foin, 50 Bois, 200$",
+                      "Scierie":        "50 Minerai, 50 Foin, 200 Bois",
+                      "Temple":         "500 Minerai, 500 Foin, 500 $",
+                      "Ferme":          "500 Minerai, 500 Foin, 100 $",
+                      "Hotel de ville": "250 Minerai, 250 Foin, 250 $"
+                     }
+        event.widget.configure(text=self.prix[texteoriginal])
+
+    def on_leave(self, enter):
+        texteprix = enter.widget.cget("text")
+        self.nom={    "250 Bois, 100 $":                    "Mine",
+                      "250 Minerai, 200 Foin, 100 $":       "Tour de defense",
+                      "250 Minerai, 50 Foin":               "Usine",
+                      "250 Minerai, 50 Foin, 50 $":          "Universite",
+                      "250 Minerai, 50 Foin, 50 Bois, 200$": "Caserne",
+                      "50 Minerai, 50 Foin, 200 Bois":      "Scierie",
+                      "500 Minerai, 500 Foin, 500 $":  "Temple",
+                      "500 Minerai, 500 Foin, 100 $":   "Ferme",
+                      "250 Minerai, 250 Foin, 250 $":  "Hotel de ville"
+                     }
+        enter.widget.configure(text=self.nom[texteprix])
     
     def creermine(self):
         #img = Label("images/ressources/bois.png")
