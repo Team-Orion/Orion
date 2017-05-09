@@ -318,13 +318,14 @@ class Vue():
         self.listejoueur=None
         self.nomjoueur=[]
         self.buttonalliance=None
+        self.buttonsupprimeralliance=None
         
     def setmessagerecutous(self, messsage,nom,nomquirecoit): 
         self.messagerecu=nom+': '+messsage+"\n"
         self.tabmessage.append(self.messagerecu)
         if self.labelrecu:
             self.labelrecu.pack_forget()
-        self.labelrecu= ttk.Combobox(self.canevasmessage,values=self.tabmessage) 
+        self.labelrecu= ttk.Combobox(self.canevasmessage,values=self.tabmessage, width=50) 
         self.labelrecu.current(self.tabmessage.__len__()-1)    
         self.labelrecu.pack(side=LEFT)   
         
@@ -336,7 +337,7 @@ class Vue():
             self.tabmessage.append(self.messagerecu)
         if self.labelrecu:
             self.labelrecu.pack_forget()
-        self.labelrecu= ttk.Combobox(self.canevasmessage,values=self.tabmessage)  
+        self.labelrecu= ttk.Combobox(self.canevasmessage,values=self.tabmessage, width=50)  
         self.labelrecu.current(self.tabmessage.__len__()-1)  
         self.labelrecu.pack(side=LEFT)  
         
@@ -347,12 +348,13 @@ class Vue():
         self.labelrecu=None
         self.buttonmessage=Button(self.canevasmessage,text="Envoyer", command=lambda: self.action_joueur("envoimessage", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":self.listejoueur.get()}))
         self.buttonmessagetous=Button(self.canevasmessage,text="Envoyer a tous", command=lambda: self.action_joueur("envoimessagetous", {"message": self.entreemessage.get(),"nom":self.parent.monnom,"nomquirecoit":""}))
-        self.buttonalliance=Button(self.canevasmessage,text="Faire une alliance", command=lambda: self.action_joueur("alliance", {"nomalliance":self.listejoueur.get(ACTIVE)}))
-        
+        self.buttonalliance=Button(self.canevasmessage,text="Faire une alliance", command=lambda: self.action_joueur("alliance", {"nomalliance":self.listejoueur.get(),"nomdemandeuralliance":self.parent.monnom}))
+        self.buttonsupprimeralliance=Button(self.canevasmessage,text="Supprimer alliance", command=lambda: self.action_joueur("alliancesupprimer", {"nomalliance":self.listejoueur.get(),"nomdemandeuralliance":self.parent.monnom}))
         self.entreemessage.pack(side=LEFT) 
         self.buttonmessage.pack(side=LEFT)
         self.buttonmessagetous.pack(side=LEFT)
         self.buttonalliance.pack(side=LEFT)
+        self.buttonsupprimeralliance.pack(side=LEFT)
         self.canevasmessage.pack(side=RIGHT) 
         
     def updatelistejoueur(self):  
