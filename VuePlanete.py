@@ -23,6 +23,7 @@ class VuePlanete(Perspective):
         self.hauteur=self.largeur
         
         self.action_attente = None  #fp 25 avril
+        self.cadrecaserne=Frame(self,width=400,height=400, bg="lightgreen")
         
         """
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
@@ -255,7 +256,15 @@ class VuePlanete(Perspective):
         print("Creer station EN CONSTRUCTION")
          
     def afficherpartie(self,mod):
-        pass
+        self.afficher_infrastructures()
+        self.actualiser_ressources()
+        
+    def actualiser_ressources(self):
+        self.labelFointxt.config(text= "Exploite " + str(self.planete.foinexploite) + " |  Utilisable " + str(self.planete.nbfoin))
+        self.labelBoistxt.config(text= "Exploite " + str(self.planete.boisexploite) + " |  Utilisable " + str(self.planete.nbbois))
+        self.labelMineraitxt.config(text= "Exploite " + str(self.planete.mineraiexploite) + " |  Utilisable " + str(self.planete.nbminerai))
+        self.labelArgenttxt.config(text= "Exploite " + str(self.planete.argentexploite) + " |  Utilisable " + str(self.planete.nbargent))
+
             
     def changerproprietaire(self,prop,couleur,systeme): 
         pass
@@ -284,6 +293,8 @@ class VuePlanete(Perspective):
                     """
                     if t[0]==self.parent.nom:
                         pass
+                    elif t[0] == "caserne":
+                        self.changecadreetat(self.cadrecaserne)
                     elif t[1]=="systeme":
                         pass
                 else:
@@ -346,71 +357,61 @@ class VuePlanete(Perspective):
                                       image = image, tags=(type_tuile))
 
     def afficher_infrastructures(self):
+        self.canevas.delete("infrastructure")
         for objet in self.parent.parent.modele.objets_cliquables.values():
-            #if(isinstance(objet, Infrastructure)):
+            
             if(isinstance(objet, Infrastructure) and objet.lieu == self.planete.id):
                 if(isinstance(objet, Mine)):
-                    print(objet.x, objet.y)
-                    print("type objet ",type(objet))
                     image = self.parent.images["mine"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("mine",))
+                                            image = image, tags=("mine","infrastructure"))
                 if(isinstance(objet, Ferme)):
-                    print(objet.x, objet.y)
-                    print("type objet ",type(objet))
                     image = self.parent.images["ferme"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("ferme",))
-                    print(objet.planete)
-                    print(objet.lieu)
-                    objet.exploitationnouriture()
-                    print("ferme")
-                    self.systeme.ajusterRessources()
-                    self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
+                                            image = image, tags=("ferme","infrastructure"))
+
                     
                 if(isinstance(objet, Tourdefense)):
-                    print(objet.x, objet.y)
-                    print("type objet ",type(objet))
                     image = self.parent.images["tourdefense"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("tourdefense",))
+                                            image = image, tags=("tourdefense","infrastructure"))
                 if(isinstance(objet, Temple)):
                     image = self.parent.images["temple"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("temple",))
+                                            image = image, tags=("temple","infrastructure"))
                 if(isinstance(objet, HotelVille)):
                     image = self.parent.images["hotelville"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("hotelville",))
+                                            image = image, tags=("hotelville","infrastructure"))
 
                 if(isinstance(objet, Ruine)):
                     image = self.parent.images["ruine"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("ruine",))
+                                            image = image, tags=("ruine","infrastructure"))
     
                 if(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("universite",))
+                                            image = image, tags=("universite","infrastructure"))
     
                 if(isinstance(objet, Usine)):
                     image = self.parent.images["usine"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("usine",))
+                                            image = image, tags=("usine","infrastructure"))
 
                 if(isinstance(objet, Scierie)):
                     image = self.parent.images["scierie"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("scierie",))
+                                            image = image, tags=("scierie","infrastructure"))
                     
                 if(isinstance(objet, Caserne)):
                     image = self.parent.images["caserne"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("caserne",))                    
+                                            image = image, tags=("caserne","infrastructure"))                    
                 if(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("universite",))
+                                            image = image, tags=("universite","infrastructure"))
     
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"
