@@ -205,7 +205,7 @@ class VuePlanete(Perspective):
     def afficherselection(self):
         pass
     
-     def exploitation(self):
+    def exploitation(self):
         for i in self.infrastructures:
             if(isinstance(objet, Ferme)):
                i.exploitationnouriture()
