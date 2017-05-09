@@ -42,8 +42,10 @@ class Joueur():
                       "envoimessagetous":self.envoiemessagetous,
                       "visitersysteme":self.visitersysteme,
                       "creerinfrastructure": self.creerinfrastructure,
-                      "alliance": self.alliance
+                      "alliance": self.alliance,
+                      "alliancesupprimer":self.supressionalliance
                      }
+        self.alliances={}
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom,nomquirecoit):
         self.messageenvoie=message
@@ -52,8 +54,19 @@ class Joueur():
         self.messageenvoie=message
         nomquirecoit=""
         self.parent.parent.vue.setmessagerecutous(self.messageenvoie,nom, nomquirecoit)
-    def alliance(self, nomalliance):
-        self.nomjoueuralliance=nomalliance; 
+    def alliance(self, nomalliance, nomdemandeuralliance):
+        self.alliances[nomdemandeuralliance] = nomalliance
+        self.envoiemessagetous(nomdemandeuralliance+" est en alliance avec "+nomalliance,"","")
+    
+    def supressionalliance(self,nomalliance, nomdemandeuralliance): 
+        if(nomalliance in self.alliances):  
+            del self.alliances[nomalliance]
+            self.envoiemessagetous("Supression de l'alliance entre "+nomalliance+" et "+nomdemandeuralliance,"","")
+        elif(nomdemandeuralliance in self.alliances): 
+            del self.alliances[nomdemandeuralliance]
+            self.envoiemessagetous("Supression de l'alliance entre "+nomalliance+" et "+nomdemandeuralliance,"","")
+        else:
+            self.envoiemessage("La supression impossible, l'alliance n'existe pas","",self.nom) 
     def gaintechnologique(self):
         pass
                         
