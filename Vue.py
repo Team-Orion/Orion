@@ -285,7 +285,10 @@ class Vue():
                 InfosImg("epee", "images/menu/militaire/epee.png"),
                 InfosImg("missile", "images/menu/militaire/missile.png"),
                 InfosImg("char", "images/menu/militaire/char.png"),
-                InfosImg("mine1", "images/menu/ressources/mine1.png")
+                InfosImg("mine1", "images/menu/ressources/mine1.png"),
+                InfosImg("humain", "images/unites/humain.png"),
+                InfosImg("disciple", "images/unites/discipleguide.png"),
+                InfosImg("vache", "images/unites/vache.png")
                 ]
 
     
