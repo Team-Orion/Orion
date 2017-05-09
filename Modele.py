@@ -110,7 +110,7 @@ class Joueur():
         infrastructure = types[type_unite](self,planete,x,y)
         self.parent.objets_cliquables[infrastructure.id] = infrastructure
         self.parent.objets_cliquables[id_planete].infrastructures.append(infrastructure) 
-        self.parent.parent.vue.modecourant.afficher_infrastructures()  #CETTE LIGNE DOIT SE RETROUVER DANS LA VUE       
+              
     def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]
         types = {
