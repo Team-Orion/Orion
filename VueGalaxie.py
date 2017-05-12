@@ -18,6 +18,21 @@ class VueGalaxie(Perspective):
         self.nbargent=0
         self.nbminerai=0
         
+        self.cadreetatsysteme=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        self.initier_cadresysteme()
+        
+        self.cadreetatsonde=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        self.initier_cadresonde()
+        
+        self.cadreetatattaquegalactique=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        self.initier_cadreetatattaquegalactique()
+        
+        self.cadreetatcargogalactique=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        self.initier_cadreetatcargogalactique()
+        
+        self.cadreetatstationgalactique=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        self.initier_cadreetatstationgalactique()
+
         self.lieu = None
         
         self.largeur=self.modele.diametre*self.AL2pixel
@@ -25,38 +40,69 @@ class VueGalaxie(Perspective):
         
         self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
         
-        self.labid.bind("<Button-1>",self.identifierplanetemere) #io 03-04
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Sonde", command= lambda: self.action_joueur("creerunite", {"type_unite": "sonde"}))
+        
+        self.labid.bind("<Button-1>",self.identifierplanetemere)
+        
+        self.tags_unite = ("sonde", "cargo_galactique", "attaque_galactique", "station_galactique")
+
+    def initier_cadresysteme(self):
+        self.btncreervaisseau=Button(self.cadreetatsysteme,text="Creer Sonde", command= lambda: self.action_joueur("creerunite", {"type_unite": "sonde"}))
         self.btncreervaisseau.pack()
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creerunite", {"type_unite": "attaquegalaxie"}))
+        self.btncreervaisseau=Button(self.cadreetatsysteme,text="Creer Vaisseau-Attaque", command= lambda: self.action_joueur("creerunite", {"type_unite": "attaquegalaxie"}))
         self.btncreervaisseau.pack()
         
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creerunite", {"type_unite": "cargogalaxie"}))
+        self.btncreervaisseau=Button(self.cadreetatsysteme,text="Creer Vaisseau-Cargo", command= lambda: self.action_joueur("creerunite", {"type_unite": "cargogalaxie"}))
         self.btncreervaisseau.pack()
         
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Station",command=lambda: self.action_joueur("creerunite",{"type_unite": "stationgalaxie"}))
+        self.btncreerstation=Button(self.cadreetatsysteme,text="Creer Station",command=lambda: self.action_joueur("creerunite",{"type_unite": "stationgalaxie"}))
         self.btncreerstation.pack()
-        self.btnvuesysteme=Button(self.cadreetataction,text="Voir systeme",command=self.voirsysteme)
+        self.btnvuesysteme=Button(self.cadreetatsysteme,text="Voir systeme",command=self.voirsysteme)
         self.btnvuesysteme.pack()
         
-        self.btnmenuavancer= Button(self.cadreetataction,text="Menu Avance", command= self.parent.creermenuavancer)
+        self.packer_ressources(self.cadreetatsysteme)
+        
+        self.btnmenuavancer= Button(self.cadreetatsysteme,text="Menu Avance", command= self.parent.creermenuavancer)
         self.btnmenuavancer.pack()
         
-        imgBois = self.parent.images["bois"]
-        imgFoin = self.parent.images["foin"]
-        imgArgent = self.parent.images["argent"]
-        imgMinerai = self.parent.images["minerai"]
-
-        self.labelBois = Label(self.cadreetataction, image = imgBois)
-        self.labelFoin = Label(self.cadreetataction, image = imgFoin)
-        self.labelArgent = Label(self.cadreetataction, image = imgArgent)
-        self.labelMinerai = Label(self.cadreetataction, image = imgMinerai)
+    def initier_cadresonde(self):
+        self.btnvisiter=Button(self.cadreetatsonde,text="Visiter", command=lambda: self.action_joueur("ciblerdestination", {"mode": "visiter"}, selectionner = True))
+        self.btnvisiter.pack()
+        self.packer_ressources(self.cadreetatsonde)
         
-        self.labelBoistxt = Label(self.cadreetataction, text = "Qte Bois: "+str(self.nbbois))
-        self.labelFointxt = Label(self.cadreetataction, text = "Qte Foin: "+str(self.nbfoin))
-        self.labelArgenttxt = Label(self.cadreetataction, text = "Qte Argent: "+str(self.nbargent))
-        self.labelMineraitxt = Label(self.cadreetataction, text = "Qte Minerai: "+str(self.nbminerai))
+        self.btnmenuavancer= Button(self.cadreetatsonde,text="Menu Avance", command= self.parent.creermenuavancer)
+        self.btnmenuavancer.pack()
+        
+    def initier_cadreetatattaquegalactique(self):
+        self.btnvisiter=Button(self.cadreetatattaquegalactique,text="Visiter", command=lambda: self.action_joueur("ciblerdestination", {"mode": "visiter"}, selectionner = True))
+        self.btnvisiter.pack()
+        self.packer_ressources(self.cadreetatattaquegalactique)
+        
+        self.btnmenuavancer= Button(self.cadreetatattaquegalactique,text="Menu Avance", command= self.parent.creermenuavancer)
+        self.btnmenuavancer.pack()
+        
+    def initier_cadreetatcargogalactique(self):
+        self.btnvisiter=Button(self.cadreetatcargogalactique,text="Visiter", command=lambda: self.action_joueur("ciblerdestination", {"mode": "visiter"}, selectionner = True))
+        self.btnvisiter.pack()
+        self.packer_ressources(self.cadreetatcargogalactique)
+        
+        self.btnmenuavancer= Button(self.cadreetatcargogalactique,text="Menu Avance", command= self.parent.creermenuavancer)
+        self.btnmenuavancer.pack()
+        
+    def initier_cadreetatstationgalactique(self):        
+        self.btnmenuavancer= Button(self.cadreetatstationgalactique,text="Menu Avance", command= self.parent.creermenuavancer)
+        self.btnmenuavancer.pack()
+    
+    def packer_ressources(self, cadreetat):
+        self.labelBois = Label(cadreetat, image = self.parent.images["bois"])
+        self.labelFoin = Label(cadreetat, image = self.parent.images["foin"])
+        self.labelArgent = Label(cadreetat, image = self.parent.images["argent"])
+        self.labelMinerai = Label(cadreetat, image = self.parent.images["minerai"])
+        
+        self.labelBoistxt = Label(cadreetat, text = "Qte Bois: "+str(self.nbbois))
+        self.labelFointxt = Label(cadreetat, text = "Qte Foin: "+str(self.nbfoin))
+        self.labelArgenttxt = Label(cadreetat, text = "Qte Argent: "+str(self.nbargent))
+        self.labelMineraitxt = Label(cadreetat, text = "Qte Minerai: "+str(self.nbminerai))
         
         
         self.labelMinerai.pack(fill=X,side=BOTTOM)
@@ -67,16 +113,7 @@ class VueGalaxie(Perspective):
         self.labelFointxt.pack(fill=X,side = BOTTOM)
         self.labelBois.pack(fill=X,side=BOTTOM)
         self.labelBoistxt.pack(fill=X,side = BOTTOM)
-         
-        self.labelBois.image=imgBois
-        self.labelFoin.image=imgFoin
-        self.labelArgent.image=imgArgent
-        self.labelMinerai.image= imgMinerai
-        
-        
-        self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey")
-        self.lbselectecible.pack()
-    
+
     def voirsysteme(self,systeme=None):
         if systeme==None:
             if self.maselection and self.maselection[0]==self.parent.nom and self.maselection[1]=="systeme":
@@ -84,9 +121,10 @@ class VueGalaxie(Perspective):
                 for i in self.modele.joueurs[self.parent.nom].systemesvisites:
                     if i.id==sid:
                         s=i
+                        self.action_joueur("visitersysteme", {"id_appelant": sid}) #io
+                        self.parent.voirsysteme(s) #normalement devrait pas planter
                         break
-                self.action_joueur("visitersysteme", {"id_appelant": sid}) #io
-                self.parent.voirsysteme(s) #normalement devrait pas planter
+                
         else:                
             sid=systeme.id
             for i in self.modele.joueurs[self.parent.nom].systemesvisites:
@@ -216,21 +254,21 @@ class VueGalaxie(Perspective):
                 if(isinstance(objet, VaisseauAttaqueGalactique)):
                      angle = math.degrees(objet.angletrajet)
                      if( angle >= -22 and angle <0 or angle <= 23 and angle >=0):
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["0vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["0vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                      elif (angle < -22 and angle >= -68) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["45vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["45vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                      elif (angle < -68 and angle >= -113) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["90vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["90vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom, "attaque_galactique",objet.id,"artefact"))
                      elif (angle < -113 and angle >= -158) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["135vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["135vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                      elif (angle >158 or angle < -158) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["180vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["180vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                      elif (angle >113 and angle <= 158) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["225vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["225vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                      elif (angle >68 and angle <= 113) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["270vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["270vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                      elif (angle >23 and angle <= 68) :
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["315vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["315vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"attaque_galactique",objet.id,"artefact"))
                 
                 elif isinstance(objet, Pulsar):
                     t=objet.taille
@@ -241,43 +279,43 @@ class VueGalaxie(Perspective):
                 elif (isinstance(objet, VaisseauCargoGalactique)):
                         angle = math.degrees(objet.angletrajet)
                         if( angle >= -22 and angle <0 or angle <= 23 and angle >=0):
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["0vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["0vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle < -22 and angle >= -68) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["45vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["45vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle < -68 and angle >= -113) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["90vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["90vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle < -113 and angle >= -158) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["135vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["135vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle >158 or angle < -158) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["180vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["180vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle >113 and angle <= 158) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["225vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["225vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle >68 and angle <= 113) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["270vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["270vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                         elif (angle >23 and angle <= 68) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["315vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["315vaisseaucargo"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"cargo_galactique",objet.id,"artefact"))
                 
                 elif(isinstance(objet, Sonde)): 
                         angle = math.degrees(objet.angletrajet)
                         if( angle >= -22 and angle <0 or angle <= 23 and angle >=0):
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["0sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["0sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle < -22 and angle >= -68) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["45sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["45sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle < -68 and angle >= -113) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["90sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["90sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle < -113 and angle >= -158) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["135sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["135sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle >158 or angle < -158) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["180sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["180sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle >113 and angle <= 158) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["225sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["225sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle >68 and angle <= 113) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["270sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["270sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact"))
                         elif (angle >23 and angle <= 68) :
-                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["315sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact")) 
+                            self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["315sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"sonde",objet.id,"artefact")) 
                         
                 elif (isinstance(objet,StationGalactique)):
-                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        self.canevas.create_image(objet.x*e, objet.y*e, image = self.vue.images["stationgalaxie"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire.nom,"station_galactique",objet.id,"artefact"))
           
         for proj in mod.projectiles:
             self.canevas.create_rectangle(proj.x*e-2, proj.y*e-2, proj.x*e+2, proj.y*e+2, fill = "red", tag=("projectile",))
@@ -309,7 +347,7 @@ class VueGalaxie(Perspective):
                                                  outline=joueur.couleur,
                                                  tags=("select","selecteur"))
                         self.chercheqte()
-            elif self.maselection[1]=="unite":
+            elif self.maselection[1] in self.tags_unite:
                 for i in joueur.vaisseauxinterstellaires:
                     if i.id == self.maselection[2]:
                         x=i.x
@@ -318,42 +356,49 @@ class VueGalaxie(Perspective):
                         self.canevas.create_rectangle((x*e)-t,(y*e)-t,(x*e)+t,(y*e)+t,dash=(2,2),
                                                       outline=joueur.couleur,
                                                       tags=("select","selecteur"))
-      
+
     def selectionner(self,evt):
         self.changecadreetat(None)
         t=self.canevas.gettags("current")
-        if t and t[0]!="current":
-
-            if t[1]=="unite":
-                self.maselection=[self.parent.nom,t[1],t[2]]
-                self.montrevaisseauxselection()
-            
-            elif t[1]=="systeme":
-                #if self.parent.nom in t:
-                self.maselection=[self.parent.nom,t[1],t[2]]
-                self.montresystemeselection()
-                #else:    
-                #    print("IN systeme + RIEN")
-                #    self.maselection=None
-                #    self.maselection=[self.parent.nom,t[1],t[2]]
-                #    self.lbselectecible.pack_forget()
-                #    self.canevas.delete("selecteur")
+        if self.action_attente is None:
+            if t and t[0]!="current":
+                if t[1] in self.tags_unite and t[0]==self.parent.nom:
+                    self.maselection=[self.parent.nom,t[1],t[2]]
+                    if t[1] == "sonde": 
+                        self.changecadreetat(self.cadreetatsonde)
+                    if t[1] == "cadreetat_attaquegalactique": 
+                        self.changecadreetat(self.cadreetatattaquegalactique)
+                    if t[1] == "cargo_galactique": 
+                        self.changecadreetat(self.cadreetatcargogalactique)
+                    if t[1] == "station_galactique": 
+                        self.changecadreetat(self.cadreetatstationgalactique)
+                
+                elif t[1]=="systeme" : #and self.parent.nom in t: #manque la logique pour déterminer si on peut fabvriquer à partir du système #io 09-05
+                    self.maselection=[self.parent.nom,t[1],t[2]]
+                    self.changecadreetat(self.cadreetatsysteme)
+                else:
+                    print("Objet inconnu")
             else:
-                print("Objet inconnu")
+                print("Region inconnue")
+                self.maselection=None
+                self.canevas.delete("selecteur")
         else:
-            print("Region inconnue")
-            self.maselection=None
-            self.lbselectecible.pack_forget()
-            self.canevas.delete("selecteur")
-            
-    def montresystemeselection(self):
-        self.changecadreetat(self.cadreetataction)
+            try:
+                self.action_attente["parametres"]["cible"] =  t[2]
+                self.action_joueur(**self.action_attente)
+                self.action_attente = None
+            except IndexError:
+                pass
+    
+    def afficherartefacts(self,joueurs):
+        pass #print("ARTEFACTS de ",self.nom)    
+
         
     def afficherartefacts(self,joueurs):
         pass #print("ARTEFACTS de ",self.nom)
     
     def cibler(self, evt): #io 02-05
-        if self.maselection and self.maselection[1]=="unite":
+        if self.maselection and self.maselection[1] in self.tags_unite:
             cible=self.canevas.gettags("current")
             if cible and cible[0] !="current":
                 cible = cible[2]

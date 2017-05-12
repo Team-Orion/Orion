@@ -75,9 +75,13 @@ class VueSysteme(Perspective):
         self.labelMinerai.image= imgMinerai
         
         
-        self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey")
-        self.lbselectecible.pack()
+        #self.lbselectecible=Label(self.cadreetatmsg,text="Choisir cible",bg="darkgrey") #io 08-05
+        #self.lbselectecible.pack() #io -8-05
         self.changecadreetat(self.cadreetataction)
+        
+    def initier_menu_cargosolaire(self):
+        self.cadreetatcargosolaire = None    
+        
     def chercheqte(self):
         for objet in self.modele.objets_cliquables.values():
             if objet.id == self.maselection[2]:
@@ -204,7 +208,29 @@ class VueSysteme(Perspective):
                         self.canevas.create_image(objet.x, objet.y, image = self.parent.images["270vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
                     elif (angle >23 and angle <= 68) :
                         self.canevas.create_image(objet.x, objet.y, image = self.parent.images["315vaisseauattaque"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
-        
+                
+                elif(isinstance(objet, Sonde)): 
+                        angle = math.degrees(objet.angletrajet)
+                        if( angle >= -22 and angle <0 or angle <= 23 and angle >=0):
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["0sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle < -22 and angle >= -68) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["45sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle < -68 and angle >= -113) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["90sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle < -113 and angle >= -158) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["135sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle >158 or angle < -158) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["180sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle >113 and angle <= 158) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["225sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle >68 and angle <= 113) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["270sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
+                        elif (angle >23 and angle <= 68) :
+                            self.canevas.create_image(objet.x, objet.y, image = self.parent.images["315sonde"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact")) 
+                
+                
+                
+                
                 elif (isinstance(objet,StationPlanetaire)):
                     self.canevas.create_image(int(objet.x),int(objet.y),image = self.parent.images["stationplanetaire"+str(objet.proprietaire.codecouleur)],tags=(objet.proprietaire,"unite",objet.id,"artefact"))
 
@@ -243,7 +269,7 @@ class VueSysteme(Perspective):
             print(t)
             if t[1]=="unite":
                 self.maselection=[self.parent.nom,t[1],t[2]]
-                self.montrevaisseauxselection()
+                #self.montrevaisseauxselection()
             if t[1] == "planete" :
                 self.maselection=[self.parent.nom,t[1],t[2],t[5],t[6],t[4]]  # prop, type, id; self.canevas.find_withtag(CURRENT)#[0]
             if t[1] == "planete" and t[3]=="inconnu":
@@ -260,7 +286,7 @@ class VueSysteme(Perspective):
         else:
             print("Region inconnue")
             self.maselection=None
-            self.lbselectecible.pack_forget()
+            #self.lbselectecible.pack_forget()
             self.canevas.delete("selecteur")
             
     def montreplaneteselection(self):

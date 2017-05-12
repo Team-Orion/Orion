@@ -54,6 +54,7 @@ class Systeme():
             self.nbbois+= i.boisexploite
             self.nbargent+= i.argentexploite
             self.nbminerai+=i.mineraiexploite
-            self.nbpopulation+=i.nbpopulation
+            print("LA POPULATION PLAAANTE") #io 12-05
+            #self.nbpopulation+=i.nbpopulation #PLANTE #io 12-05
                 
      

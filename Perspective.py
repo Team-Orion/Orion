@@ -10,7 +10,7 @@ class Perspective(Frame):
         self.modele=None
         self.cadreetatactif=None
         self.images={}
-        self.cible = False
+        self.action_attente =  None #io 08-05
         self.cadrevue=Frame(self,width=400,height=400, bg="lightgreen")
         self.cadrevue.pack(side=LEFT,expand=1,fill=BOTH)
         
@@ -42,7 +42,8 @@ class Perspective(Frame):
         
         self.cadreetataction=Frame(self.cadreetat,width=200,height=200,bg="grey20")
         
-        self.cadreetatmsg=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        
+        #self.cadreetatmsg=Frame(self.cadreetat,width=200,height=200,bg="grey20")
         
         self.cadreminimap=Frame(self.cadreinfo,width=200,height=200,bg="grey20")
         self.cadreminimap.pack(side=BOTTOM)
@@ -92,13 +93,13 @@ class Perspective(Frame):
         if cadre:
             self.cadreetatactif=cadre
             self.cadreetatactif.pack()
-            
+    """ #io 08-05       
     def montrevaisseauxselection(self):
         self.changecadreetat(self.cadreetatmsg)
-    
+    """
     def action_joueur(self, action, parametres = {}, selectionner = False):
         if selectionner:
-            pass
+            self.action_attente = {"action": action, "parametres": parametres}
         else:
             try:
                 parametres["id_appelant"] = self.maselection[2]

@@ -192,6 +192,15 @@ class Unite:
         elif isinstance(self.lieu, Systeme.Systeme):
             return parent.x+(parent.taille)*echelle+15, parent.y
         
+    def visiter(self):
+        
+        if self.avancer():
+            print("trallalala")
+            self.lieu = self.cible
+            self.x = 2500#self.cible.etoile.x*echelle
+            self.y = 2500 #self.cible.etoile.y*echelle
+            print("cooords", self.x, self.y)
+            
         
      
     #Methodes d'attaque
@@ -257,7 +266,9 @@ class Projectile():
     
     def toucher_unite(self):
         unites_mortes = set()
-        for objet in self.objets_cliquables.values():
+        
+        liste_objets = sorted(self.objets_cliquables.values(), key = (lambda objet: objet.id))
+        for objet in liste_objets:
             if self.lieu == objet.lieu:
                 if self.intersection(objet):
                     try:
@@ -269,6 +280,7 @@ class Projectile():
         
         for unite in unites_mortes:
             self.objets_cliquables.pop(unite.id)
+        
                     
     
     def intersection(self, unite):

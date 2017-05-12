@@ -84,13 +84,21 @@ class Joueur():
         unite = self.parent.objets_cliquables[id_appelant]
         if mode == "id":
             lacible = self.parent.objets_cliquables[cible]
+            unite.action = unite.avancer
+            unite.cible = lacible
         elif mode == "coord":
             lacible = Coord(**cible)
             lacible.lieu = unite.lieu
-        unite.cible = lacible
-        #unite.ciblerdestination(lacible)
-        unite.action = unite.avancer
+            unite.action = unite.avancer
+            unite.cible = lacible
+        elif mode == "visiter":
+            lacible = self.parent.objets_cliquables[cible]
+            if isinstance(lacible, Systeme) or isinstance(lacible, Planete):
+                print("visisititeer") 
+                unite.action = unite.visiter
+                unite.cible = lacible
         return 
+    
     
     def creerinfrastructure(self,id_planete,type_unite,x,y):
         print("creer infrastructure! ici x: ", x, " y: ", y)
@@ -209,45 +217,80 @@ class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
         Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
         self.contexte="galaxie"
-         # le delai est calcule pour chaque prochaine action en seconde
-        self.delaiaction=random.randrange(5,10)*20  # le 20 =nbr de boucle par sec.
-        
-        #self.derniereaction=time.time()
-        
-    # NOTE sur l'analyse de la situation   
-    #          on utilise le temps (time.time() retourne le nombre de secondes depuis 1970) pour le delai de 'cool down'
-    #          la decision dependra du contexte (modes de la vue)
-    #          aussi presentement - on s'occupe uniquement d'avoir un vaisseau et de deplacer ce vaisseau vers 
-    #          le systeme le plus proche non prealablement visite.
+        self.delaiaction=random.randrange(5,10)*20
     def analysesituation(self):
         #t=time.time()
-        if self.delaiaction==0:#self.derniereaction and t-self.derniereaction>self.delaiaction:
-            if self.contexte=="galaxie":
+        if self.delaiaction==0:
+            c=self.parent.parent.cadre+5 #Je ne sais pas ca sert a quoi #io 12-05
+            
+            action = random.choice(["attaquer", "explorer"])#, "creerunite"])
+            if action == "attaquer":
                 unites_IA = list()
                 unites_enemies = list()
                 for x in self.parent.objets_cliquables.values():
                     if x.proprietaire == self:
                         unites_IA.append(x)
-                    else:
+                    elif x.proprietaire is not "inconnu":
                         unites_enemies.append(x)
-                        
+                
+                unites_IA.sort(key=(lambda unite : unite.id))  
+                unites_enemies.sort(key=(lambda unite : unite.id))
+                 
                 for unite in unites_IA:
                     if isinstance(unite, Unite):
-                        cible = random.choice(unites_enemies)
+                        try:
+                            cible = random.choice(unites_enemies)
+                            if unite.lieu == cible.lieu:
+                                unite.cible = cible
+                                unite.action = unite.avancer
+                        except IndexError:
+                            pass #La liste d'unitew est vide
+            
+            elif action == "explorer":
+                unites_IA = list()
+                astres = list()
+                for x in self.parent.objets_cliquables.values():
+                    if x.proprietaire == self:
+                        unites_IA.append(x)
+                    elif x.proprietaire is "inconnu":
+                        astres.append(x)
+                
+                unites_IA.sort(key=(lambda unite : unite.id))
+                astres.sort(key=(lambda astre : astre.id))
+                for unite in unites_IA:
+                    if isinstance(unite, Unite):
+                        cible = random.choice(astres)
                         if unite.lieu == cible.lieu:
-                            unite.cible = random.choice(unites_enemies)
+                            unite.cible = cible
                             unite.action = unite.avancer
-                        
-                c=self.parent.parent.cadre+5
+            """
+            elif action == "creerunite":
+                id_astres = list()
+                type_lieu = random.choice(["galaxie", "systeme"])
+                if type_lieu == "systeme":
+                    for systeme in self.systemesvisites:
+                        for planete in systeme.planetes:
+                            id_astres.append(planete.id)
+                    id_astres.sort()
+                    type_unite = random.choice(["cargosolaire", "attaquesolaire", "stationplanetaire"])
+                elif type_lieu == "galaxie":
+                    type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
+                    id_astres = sorted([sys.id for sys in self.systemesvisites])
+                
+                id_appelant = random.choice(id_astres)
                 if c not in self.parent.actionsafaire.keys(): 
                     self.parent.actionsafaire[c]=[]
-                appelant = random.sample(self.systemesvisites, 1)[0]
-                type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
-                self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":appelant.id,"type_unite": type_unite}])
+                self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant": id_appelant,"type_unite": type_unite}])
+            """
+            if c not in self.parent.actionsafaire.keys(): 
+                self.parent.actionsafaire[c]=[]
+            appelant = random.choice(sorted(self.systemesvisites, key=(lambda sys: sys.id)))#[0]
+            type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
+            self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":appelant.id,"type_unite": type_unite}])
+
             self.delaiaction=random.randrange(5,10)*5
         else:
             self.delaiaction-=1
-        
 # FIN IA
 
 class Modele():
