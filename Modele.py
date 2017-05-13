@@ -213,6 +213,7 @@ class IA(Joueur):
 
 
 #  DEBUT IA
+
 class IA(Joueur):
     def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
         Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
@@ -263,7 +264,7 @@ class IA(Joueur):
                         if unite.lieu == cible.lieu:
                             unite.cible = cible
                             unite.action = unite.avancer
-            """
+            
             elif action == "creerunite":
                 id_astres = list()
                 type_lieu = random.choice(["galaxie", "systeme"])
@@ -281,7 +282,7 @@ class IA(Joueur):
                 if c not in self.parent.actionsafaire.keys(): 
                     self.parent.actionsafaire[c]=[]
                 self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant": id_appelant,"type_unite": type_unite}])
-            """
+            
             if c not in self.parent.actionsafaire.keys(): 
                 self.parent.actionsafaire[c]=[]
             appelant = random.choice(sorted(self.systemesvisites, key=(lambda sys: sys.id)))#[0]
@@ -291,6 +292,7 @@ class IA(Joueur):
             self.delaiaction=random.randrange(5,10)*5
         else:
             self.delaiaction-=1
+
 # FIN IA
 
 class Modele():
@@ -368,14 +370,14 @@ class Modele():
         for i in self.ias:
             i.analysesituation()
             
-        for objet in self.objets_cliquables.values():
+        for objet in sorted(self.objets_cliquables.values(), key=lambda objet: objet.id):
             try:
                 objet.action()
             except AttributeError:
                 pass #l'ojet n'a pas d'attibut "action". C'est normal s'il s'agit d'un système solaire ou une planete.
             except TypeError:
                 pass #l'objet n'a pas d'action assignee. C'est normal.
-            
+        
         for projectile in self.projectiles:
             if not projectile.action():
                 self.projectiles.remove(projectile)

@@ -280,8 +280,6 @@ class Projectile():
         
         for unite in unites_mortes:
             self.objets_cliquables.pop(unite.id)
-        
-                    
     
     def intersection(self, unite):
         diff_x = abs(self.x - unite.x)
@@ -320,6 +318,7 @@ class VaisseauAttaqueGalactique(Unite):
         if super().avancer():
             if self.proprietaire is not self.cible.proprietaire:
                 self.attaquer()
+                
 
 class VaisseauAttaqueSolaire(Unite):
     def __init__(self, proprietaire, planete):
@@ -356,7 +355,7 @@ class VaisseauCargoGalactique(Unite):
     def __init__(self, proprietaire ,systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
-                         vitesse = 0.02*5,
+                         vitesse = 0.01*5,
                          taille = 16/echelle,
                          cout = 5
                          )    
@@ -414,7 +413,10 @@ class StationGalactique(Unite):
     
     def avancer(self):
         if super().avancer():
+            #self.vitesse= self.cible.vitesse
             self.rotation()
+        else:
+            self.vitesse =self.vitesse_defaut
             
     def reparation(self):
         pass
