@@ -451,13 +451,7 @@ class Vue():
         self.canevaslobby.create_window(200,450,window=self.btnlancerpartie,width=100,height=30)
 
         
-        self.canevaslobby.create_window(300,250,window=self.densitestellaire,width=100,height=30)
-        self.canevaslobby.create_text(150,250,text="Nb systeme/AL cube")
         
-        self.canevaslobby.create_window(300,300,window=self.qteIA,width=100,height=30)
-        self.canevaslobby.create_text(150,300,text="Nb d'IA")
-        
-        self.canevaslobby.create_window(200,450,window=self.btnlancerpartie,width=100,height=30)
 
     def voirgalaxie(self):
         # A FAIRE comme pour voirsysteme et voirplanete, tester si on a deja la vuegalaxie
