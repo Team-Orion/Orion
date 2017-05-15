@@ -288,7 +288,9 @@ class Vue():
                 InfosImg("mine1", "images/menu/ressources/mine1.png"),
                 InfosImg("humain", "images/unites/humain.png"),
                 InfosImg("disciple", "images/unites/discipleguide.png"),
-                InfosImg("vache", "images/unites/vache.png")
+                InfosImg("vache", "images/unites/vache.png"),
+                InfosImg("logo","images/logo_orion2.png"),
+                InfosImg("vachemenu", "images/vachemenu.png")
                 ]
 
     
@@ -394,38 +396,50 @@ class Vue():
         self.cadrejeu=Frame(self.root,bg="azure")
         self.modecourant=None
                 
+                
     def creercadresplash(self,ip,nom):
         self.cadresplash=Frame(self.root)
-        self.canevasplash=Canvas(self.cadresplash,width=640,height=480,bg="red")
+        self.canevasplash=Canvas(self.cadresplash,width=640,height=480,bg="black")
+        self.canevasplash.create_image(300,100, image = self.images["logo"]) 
         self.canevasplash.pack()
-        self.nomsplash=Entry(bg="pink")
+        self.nomsplash=Entry(bg="yellow")
         self.nomsplash.insert(0, nom)
-        self.ipsplash=Entry(bg="pink")
+        self.ipsplash=Entry(bg="yellow")
         self.ipsplash.insert(0, ip)
-        labip=Label(text=ip,bg="red",borderwidth=0,relief=RIDGE)
-        btncreerpartie=Button(text="Creer partie",bg="pink",command=self.creerpartie)
-        btnconnecterpartie=Button(text="Connecter partie",bg="pink",command=self.connecterpartie)
-        self.canevasplash.create_window(200,200,window=self.nomsplash,width=100,height=30)
-        self.canevasplash.create_window(200,250,window=self.ipsplash,width=100,height=30)
-        self.canevasplash.create_window(200,300,window=labip,width=100,height=30)
-        self.canevasplash.create_window(200,350,window=btncreerpartie,width=100,height=30)
-        self.canevasplash.create_window(200,400,window=btnconnecterpartie,width=100,height=30) 
+        labip=Label(text=ip,bg="white",borderwidth=0,relief=RIDGE)
+        btncreerpartie=Button(text="Creer partie",bg="green",command=self.creerpartie)
+        btnconnecterpartie=Button(text="Connecter partie",bg="red",command=self.connecterpartie)
+        self.canevasplash.create_window(300,250,window=self.nomsplash,width=100,height=30)
+        self.canevasplash.create_window(300,300,window=self.ipsplash,width=100,height=30)
+        self.canevasplash.create_window(300,350,window=labip,width=100,height=30)
+        self.canevasplash.create_window(300,400,window=btncreerpartie,width=100,height=30)
+        self.canevasplash.create_window(300,450,window=btnconnecterpartie,width=100,height=30) 
         
     def creercadrelobby(self):
         self.cadrelobby=Frame(self.root)
-        self.canevaslobby=Canvas(self.cadrelobby,width=640,height=480,bg="lightblue")
+        self.canevaslobby=Canvas(self.cadrelobby,width=640,height=480,bg="black")
+        self.canevaslobby.create_image(300,100, image = self.images["vachemenu"])
         self.canevaslobby.pack()
-        self.listelobby=Listbox(bg="red",borderwidth=0,relief=FLAT)
-        self.diametre=Entry(bg="pink")
+        self.listelobby=Listbox(bg="lightblue",borderwidth=0,relief=FLAT)
+        self.diametre=Entry(bg="brown")
         self.diametre.insert(0, 50)
-        self.densitestellaire=Entry(bg="pink")
+        self.densitestellaire=Entry(bg="brown")
         self.densitestellaire.insert(0, 2)
-        self.qteIA=Entry(bg="pink")
+        self.qteIA=Entry(bg="brown")
         self.qteIA.insert(0, 4)
-        self.btnlancerpartie=Button(text="Lancer partie",bg="pink",command=self.lancerpartie,state=DISABLED)
+        self.btnlancerpartie=Button(text="Lancer partie",bg="green",command=self.lancerpartie,state=DISABLED)
         self.canevaslobby.create_window(520,240,window=self.listelobby,width=200,height=400)
         self.canevaslobby.create_window(300,200,window=self.diametre,width=100,height=30)
-        self.canevaslobby.create_text(150,200,text="Diametre en annee lumiere")
+        self.canevaslobby.create_text(150,200,text="Diametre en annee lumiere", fill="white")
+        
+        self.canevaslobby.create_window(300,250,window=self.densitestellaire,width=100,height=30)
+        self.canevaslobby.create_text(150,250,text="Nb systeme/AL cube", fill="white")
+        
+        self.canevaslobby.create_window(300,300,window=self.qteIA,width=100,height=30)
+        self.canevaslobby.create_text(150,300,text="Nb d'IA", fill="white")
+        
+        self.canevaslobby.create_window(200,450,window=self.btnlancerpartie,width=100,height=30)
+
         
         self.canevaslobby.create_window(300,250,window=self.densitestellaire,width=100,height=30)
         self.canevaslobby.create_text(150,250,text="Nb systeme/AL cube")
