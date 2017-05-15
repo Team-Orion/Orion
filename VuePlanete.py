@@ -416,7 +416,6 @@ class VuePlanete(Perspective):
             #print("t typeof: ", type(t))
             if not self.action_attente:
                 if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
-                    """
                     if t[0]=='universite':
                         self.btnmenuavancer.pack()
                     elif t[0] == "caserne":
@@ -429,7 +428,7 @@ class VuePlanete(Perspective):
                         y=self.canevas.canvasy(evt.y)
                         self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
                         self.macommande=None
-                    """
+                   
             else:# fp 2 mai.  pour empecher qu'on construise dans l'eau
                 if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline"  or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
                     self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
