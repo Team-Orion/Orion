@@ -48,13 +48,13 @@ class Systeme():
         self.nbbois=0
         self.nbargent=0
         self.nbminerai=0
+        self.nbpopulation=0
          
         for i in self.planetes:
             self.nbfoin+= i.foinexploite
             self.nbbois+= i.boisexploite
             self.nbargent+= i.argentexploite
             self.nbminerai+=i.mineraiexploite
-            print("LA POPULATION PLAAANTE") #io 12-05
-            #self.nbpopulation+=i.nbpopulation #PLANTE #io 12-05
+            self.nbpopulation+=i.nbpopulation 
                 
      
