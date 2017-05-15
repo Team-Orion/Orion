@@ -42,6 +42,9 @@ class Perspective(Frame):
         
         self.cadreetataction=Frame(self.cadreetat,width=200,height=200,bg="grey20")
         
+        self.cadreUni=Frame(self.cadreetat,width=200,height=200,bg="grey20")
+        
+        self.cadreCaserne=Frame(self.cadreetat,width=200,height=200,bg="grey20")
         
         #self.cadreetatmsg=Frame(self.cadreetat,width=200,height=200,bg="grey20")
         
