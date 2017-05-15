@@ -139,9 +139,14 @@ class VuePlanete(Perspective):
         self.btnmenuavancer.pack_forget()  
                
     def changeronglet(self,FrameActuel,NextFrame):
+        if(NextFrame==self.FrameDiplo):
+            self.refrechalliance()
         FrameActuel.pack_forget()
         NextFrame.pack(side=BOTTOM)   
         self.current = NextFrame 
+        
+    def refrechalliance(self):
+        self.CanevasDiplo.create_text(100,100,text=self.modele.getalliance())
         
     def changerTech(self,FrameActuel,NextFrame):
         FrameActuel.pack_forget()
@@ -219,6 +224,8 @@ class VuePlanete(Perspective):
         self.ButtonArt.pack()
         
         self.FrameDiplo=Frame(self.fenetre,width=self.largeur,height=400,bg="red")
+        self.CanevasDiplo=Canvas(self.FrameDiplo,width=self.largeur,height=400,bg="white")
+        self.CanevasDiplo.pack()
         
         self.FrameText=Frame(self.FrameDef,width=self.largeur,height=200,bg="white")
         self.FrameText.pack();
