@@ -130,15 +130,15 @@ class VueSysteme(Perspective):
         n=i.etoile.taille*self.UA2pixel/2
         mini=2
         UAmini=4
-        self.canevas.create_oval(xl-n,yl-n,xl+n,yl+n,fill="yellow",dash=(1,2),width=4,outline="white",
-                                 tags=("systeme",i.id,"etoile",str(n),))
+        self.canevas.create_image(xl, yl, image = self.parent.images["soleil"],tags=("systeme",i.id,"etoile",str(n),))
         self.minimap.create_oval(100-mini,100-mini,100+mini,100+mini,fill="yellow")
         for p in i.planetes:
             x,y=hlp.getAngledPoint(math.radians(p.angle),p.distance*self.UA2pixel,xl,yl)
             p.x=int(x)
             p.y=int(y)
             n=p.taille*self.UA2pixel
-            self.canevas.create_oval(x-n,y-n,x+n,y+n,fill="red",tags=(i.proprietaire,"planete",p.id,"inconnu",i.id,int(x),int(y)))
+            no = random.randrange(1,8)
+            self.canevas.create_image(x, y, image = self.parent.images["planete"+str(no)],tags=(i.proprietaire,"planete",p.id,"inconnu",i.id,int(x),int(y)))
             x,y=hlp.getAngledPoint(math.radians(p.angle),p.distance*UAmini,100,100)
             self.minimap.create_oval(x-mini,y-mini,x+mini,y+mini,fill="red",tags=())
             self.planetes.append(p)
