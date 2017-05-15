@@ -46,6 +46,8 @@ class Joueur():
                       "alliancesupprimer":self.supressionalliance
                      }
         self.alliances={}
+    def getalliance(self):
+        return self.alliances
     ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
     def envoiemessage(self, message, nom,nomquirecoit):
         self.messageenvoie=message
@@ -56,14 +58,17 @@ class Joueur():
         self.parent.parent.vue.setmessagerecutous(self.messageenvoie,nom, nomquirecoit)
     def alliance(self, nomalliance, nomdemandeuralliance):
         self.alliances[nomdemandeuralliance] = nomalliance
+        self.parent.setalliance(self.alliances)
         self.envoiemessagetous(nomdemandeuralliance+" est en alliance avec "+nomalliance,"","")
     
     def supressionalliance(self,nomalliance, nomdemandeuralliance): 
         if(nomalliance in self.alliances):  
             del self.alliances[nomalliance]
+            self.parent.setalliance(self.alliances)
             self.envoiemessagetous("Supression de l'alliance entre "+nomalliance+" et "+nomdemandeuralliance,"","")
         elif(nomdemandeuralliance in self.alliances): 
             del self.alliances[nomdemandeuralliance]
+            self.parent.setalliance(self.alliances)
             self.envoiemessagetous("Supression de l'alliance entre "+nomalliance+" et "+nomdemandeuralliance,"","")
         else:
             self.envoiemessage("La supression impossible, l'alliance n'existe pas","",self.nom) 
@@ -322,6 +327,13 @@ class Modele():
         self.objets_cliquables = {} 
         self.projectiles = list()
         self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
+        self.alliancesmodele={}
+        
+    def setalliance(self,alliance): 
+        self.alliancesmodele=alliance
+    
+    def getalliance(self):
+        return self.alliancesmodele
         
     def creersystemes(self,nbias):  # IA ajout du parametre du nombre d'ias a ajouter
         for i in range(self.nbsystemes):
