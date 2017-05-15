@@ -1,3 +1,6 @@
+## -*- coding: utf-8 -*-
+
+
 from Id import *
 import random
 from helper import Helper as hlp
@@ -16,8 +19,9 @@ class Unite:
                  portee_projectile = 0,
                  taille_projectile = 0,
                  vitesse_projectile = 0,
+                 type_projectile = None,
                  delai_attaque = 0, cout = 5
-                 ): #le parent est l'instance qui crée l'unite
+                 ): #le parent est l'instance qui crï¿½e l'unite
         self.id=Id.prochainid()
         self.proprietaire = proprietaire
         self.action = None
@@ -40,6 +44,7 @@ class Unite:
         self.cout = cout
         
         #caracteristiques de l'attaque
+        self.type_projectile = type_projectile
         self.attaque = attaque
         self.portee = portee
         self.taille_projectile = taille_projectile
@@ -191,25 +196,37 @@ class Unite:
             return parent.x+20/echelle, parent.y
         elif isinstance(self.lieu, Systeme.Systeme):
             return parent.x+(parent.taille)*echelle+15, parent.y
+        elif isinstance(self.lieu, Planete.Planete):
+            class coord(): #N'IMPORTE QUOII
+                def __init__(self, positionx, positiony):
+                    self.x = positionx
+                    self.y = positiony
+            sol = parent.planete.sol
+            x_infra, y_infra = sol.iso_vers_matrice(coord(parent.x, parent.y))
+            for i in (-1, 1):
+                for j in (-1, 1):
+                    x_unit = x_infra+i
+                    y_unit = y_infra+j
+                    if sol.terrain[y_unit][x_unit] == "terre":
+                        return sol.matrice_vers_iso(x_unit, y_unit)
         
     def visiter(self):
-        
         if self.avancer():
-            print("trallalala")
             self.lieu = self.cible
-            self.x = 2500#self.cible.etoile.x*echelle
-            self.y = 2500 #self.cible.etoile.y*echelle
-            print("cooords", self.x, self.y)
+            self.x = 2500
+            self.y = 2500
             
         
      
     #Methodes d'attaque
     def attaquer(self):
+        types_projectiles = {"rond_rouge": RondRouge, "trou_noir": TrouNoir}
+        
         self.indice_delai_attaque += 1
         if self.indice_delai_attaque >= self.delai_attaque:
             self.indice_delai_attaque = 0
             if self.cible.energie > 0:
-                projectile = Projectile(self, self.cible, self.attaque,
+                projectile = types_projectiles[self.type_projectile](self, self.cible, self.attaque,
                                         self.vitesse_projectile, self.portee_projectile,
                                         self.taille_projectile, self.proprietaire.parent.objets_cliquables)
                 self.proprietaire.parent.projectiles.append(projectile)
@@ -229,12 +246,13 @@ class UniteAttaque(Unite):
 class Station(Unite):
     pass
 
+
+
 class Projectile():
     def __init__(self, parent, cible,
                  attaque, vitesse, portee,
                  taille, objets_cliquables
                  ):
-        
         self.lieu = parent.lieu
         self.init_x = parent.x #position de depart
         self.init_y = parent.y #position de depart
@@ -243,18 +261,18 @@ class Projectile():
         self.portee_carree = portee**2
         self.angletrajet = hlp.calcAngle(parent.x, parent.y, cible.x, cible.y)
         self.angleinverse = math.radians(math.degrees(self.angletrajet)+180)
-        
-        self.action = self.avancer
+
         self.vitesse = vitesse
         self.attaque = attaque
-        
         self.objets_cliquables = objets_cliquables
+        #self.avancer
     
     def avancer(self):
         diff_x_caree = (self.init_x-self.x)**2
         diff_y_caree = (self.init_y-self.y)**2
         if (diff_x_caree+diff_y_caree <= self.portee_carree):
             self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
+            
             self.toucher_unite()
             return True
         return False # Le projectile a atteint sa distance maximale
@@ -289,28 +307,49 @@ class Projectile():
             return True
         else:
             return False
-    
+        
+class RondRouge(Projectile):
+    def __init__(self, parent, cible,
+                 attaque, vitesse, portee,
+                 taille, objets_cliquables):
+        super().__init__(parent, cible,
+                 attaque, vitesse, portee,
+                 taille, objets_cliquables)
+        self.action = self.avancer
+        
+class TrouNoir(Projectile):
+    def __init__(self, parent, cible,
+                 attaque, vitesse, portee,
+                 taille, objets_cliquables):
+        super().__init__(parent, cible,
+                 attaque, vitesse, portee,
+                 taille, objets_cliquables)
+        self.action = self.avancer
+
 class Sonde(Unite):
     def __init__(self, proprietaire, systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
-                         vitesse = 0.02*5,
+                         vitesse = 0.3,
                          taille = 16/echelle,
                          cout = 5
                          )
+        
+        self.action = self.avancer
 
 class VaisseauAttaqueGalactique(Unite):
     def __init__(self, proprietaire, systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
-                         vitesse = 0.02*5,
+                         vitesse = 0.1,
                          #vitesse = 0.50,
-                         attaque = 15,
-                         delai_attaque = 2,
+                         attaque = 2,
+                         delai_attaque = 6,
                          portee = 50/echelle,
                          portee_projectile = 60/echelle,
                          vitesse_projectile = 6/echelle,
                          taille_projectile = 10/echelle,
+                         type_projectile = "trou_noir",
                          taille = 16/echelle,
                          cout = 5
                          )
@@ -325,13 +364,14 @@ class VaisseauAttaqueSolaire(Unite):
         super().__init__(proprietaire, planete,
                          energie = 100,
                          vitesse = 5,
-                         attaque = 15,
+                         attaque = 2,
                          delai_attaque = 3,
                          portee = 15,
                          portee_projectile = 7,
                          taille_projectile = 10,
                          vitesse_projectile = 6,
                          taille = 16/echelle,
+                         type_projectile = "trou_noir",
                          cout = 5
                          )    
     
@@ -355,7 +395,7 @@ class VaisseauCargoGalactique(Unite):
     def __init__(self, proprietaire ,systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
-                         vitesse = 0.01*5,
+                         vitesse = 0.07,
                          taille = 16/echelle,
                          cout = 5
                          )    
@@ -381,10 +421,7 @@ class StationPlanetaire(Unite):
         
     def avancer():
         pass #La station planetaire ne se deplace pas, je crois. #io 28-04
-    
-    def avancer(self):
-        if super().avancer():
-            self.rotation()
+
         
     def creercargogalactique(self):
         pass
@@ -398,13 +435,15 @@ class StationGalactique(Unite):
     def __init__(self, proprietaire, systeme):
         super().__init__(proprietaire, systeme,
                          energie = 100,
-                         vitesse = 0.02*5,
-                         attaque = 10,
-                         delai_attaque = 10,
-                         vitesse_projectile = 6,
-                         taille = 20/echelle,
-                         portee = 40/echelle,
-                         portee_projectile = 10/echelle,
+                         vitesse = 0.02,
+                         taille = 25/echelle,
+                         attaque = 5,
+                         delai_attaque = 4,
+                         portee = 50/echelle,
+                         portee_projectile = 100/echelle,
+                         taille_projectile = 10/echelle,
+                         vitesse_projectile = 10/echelle,
+                         type_projectile = "rond_rouge",
                          capacite = 10,
                          cout = 5
                          )
@@ -413,10 +452,9 @@ class StationGalactique(Unite):
     
     def avancer(self):
         if super().avancer():
-            #self.vitesse= self.cible.vitesse
             self.rotation()
-        else:
-            self.vitesse =self.vitesse_defaut
+            if self.proprietaire is not self.cible.proprietaire:
+                self.attaquer()
             
     def reparation(self):
         pass
@@ -426,7 +464,22 @@ class StationGalactique(Unite):
         pass
     
 class Disciple(Unite):
-    def __init__(self):
-        Unite.__init__(proprietaire, parent)
-        self.experience=None
+    def __init__(self, proprietaire, infrastructure):
+        super().__init__(proprietaire, infrastructure,
+                         energie = 100,
+                         vitesse = 5,
+                         attaque = 2,
+                         delai_attaque = 3,
+                         portee = 15,
+                         portee_projectile = 7,
+                         taille_projectile = 10,
+                         vitesse_projectile = 6,
+                         taille = 16/echelle,
+                         cout = 5
+                         )
+        
+        self.type = random.choice(["vache", "tortue", "discipleguide"])
+        print(self.x, self.y, self.type, self.lieu)
+                
+                     
         

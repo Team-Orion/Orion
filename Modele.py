@@ -137,7 +137,8 @@ class Joueur():
                  "attaquesolaire": VaisseauAttaqueSolaire,
                  "cargosolaire": VaisseauCargoSolaire,
                  "stationgalaxie": StationGalactique,
-                 "stationplanetaire": StationPlanetaire
+                 "stationplanetaire": StationPlanetaire,
+                 "disciple": Disciple
                 }
         unite = types[type_unite](self, appelant)
         
@@ -146,7 +147,7 @@ class Joueur():
             print("vous n'avez pas assez d'argent")
         else:
             #print(appelant.nbargent)
-            appelant.nbargent-=unite.cout
+            #appelant.nbargent-=unite.cout
             #print (appelant.nbargent) # ON VA DEVOIR METTRE A JOUR CETTE LIGNE AVEC LA FONCTION CAR ON DOIT DÉDUIRE D'UNE PLANETE LES RESSOURCES NORMALEMENT
             self.vaisseauxinterstellaires.append(unite) #a supprimer #io 18-04
             self.parent.objets_cliquables[unite.id] = unite
@@ -243,12 +244,12 @@ class IA(Joueur):
         if self.delaiaction==0:
             c=self.parent.parent.cadre+5 #Je ne sais pas ca sert a quoi #io 12-05
             
-            action = random.choice(["attaquer", "explorer"])#, "creerunite"])
+            action = random.choice(["attaquer", "explorer", "creerunite"])
             if action == "attaquer":
                 unites_IA = list()
                 unites_enemies = list()
                 for x in self.parent.objets_cliquables.values():
-                    if x.proprietaire == self:
+                    if x.proprietaire == self and isinstance(x, (VaisseauAttaqueGalactique, StationGalactique)):
                         unites_IA.append(x)
                     elif x.proprietaire is not "inconnu":
                         unites_enemies.append(x)
@@ -301,13 +302,13 @@ class IA(Joueur):
                 if c not in self.parent.actionsafaire.keys(): 
                     self.parent.actionsafaire[c]=[]
                 self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant": id_appelant,"type_unite": type_unite}])
-            
+            """
             if c not in self.parent.actionsafaire.keys(): 
                 self.parent.actionsafaire[c]=[]
             appelant = random.choice(sorted(self.systemesvisites, key=(lambda sys: sys.id)))#[0]
             type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
             self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":appelant.id,"type_unite": type_unite}])
-
+            """
             self.delaiaction=random.randrange(5,10)*5
         else:
             self.delaiaction-=1

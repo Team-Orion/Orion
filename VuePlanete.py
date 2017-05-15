@@ -6,6 +6,7 @@ import random
 from helper import Helper as hlp
 import tkinter
 from Infrastructure import *
+import Unite
 
 class VuePlanete(Perspective):
     def __init__(self,parent,systeme,planete):
@@ -38,7 +39,7 @@ class VuePlanete(Perspective):
         self.btnmenuavancer= Button(self.cadreUni,text="Menu Universite", command= self.creermenuavancer)
         self.btnmenuavancer.pack()
         
-        self.btncreerDis= Button(self.cadreCaserne,text="Creer Disciple", command= self.creerDisciple)
+        self.btncreerDis= Button(self.cadreCaserne,text="Creer Disciple", command= lambda: self.action_joueur("creerunite", {"type_unite": "disciple"}))
         self.btncreerDis.pack()
         
         self.btnRetour= Button(self.cadreCaserne,text="Retour", command=lambda: self.changecadreetat(self.cadreetataction))
@@ -449,10 +450,10 @@ class VuePlanete(Perspective):
             #print(self.sol.terrain[y][x])
             #print("t typeof: ", type(t))
             if not self.action_attente:
-                if t and t[0]!="current":   #fp 2 mai Est-ce que tout Ã§a pourrait sauter par hasard?? 
+                print("pas attente")
+                if t and t[0]!="current":   #fp 2 mai Est-ce que tout Ã§a pourrait sauter par hasard??
                     self.afficherMenu(t[0])
-                    if t[1]=="systeme":
-                        pass
+                    self.maselection=[self.parent.nom,t[1],t[2]]
                 else:
                     if self.macommande:
                         x=self.canevas.canvasx(evt.x)
@@ -461,7 +462,7 @@ class VuePlanete(Perspective):
                         self.macommande=None
                    
             else:# fp 2 mai.  pour empecher qu'on construise dans l'eau
-                if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline" or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
+                if(self.sol.terrain[y][x] == "terre"):# or self.sol.terrain[y][x] == "colline" or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
                     if(t[1] == 'infrastructure'):
                         self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres d'un autre batiment."),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
                     else:
@@ -517,60 +518,67 @@ class VuePlanete(Perspective):
 
     def afficher_infrastructures(self):
         self.canevas.delete("infrastructure")
+        self.canevas.delete("unite")
         for objet in self.parent.parent.modele.objets_cliquables.values():
             
             if(isinstance(objet, Infrastructure) and objet.lieu == self.planete):
                 if(isinstance(objet, Mine)):
                     image = self.parent.images["mine"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("mine","infrastructure"))
+                                            image = image, tags=("mine","infrastructure", objet.id))
                 elif(isinstance(objet, Ferme)):
                     image = self.parent.images["ferme"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("ferme","infrastructure"))
+                                            image = image, tags=("ferme","infrastructure", objet.id))
 
                     
                 elif(isinstance(objet, Tourdefense)):
                     image = self.parent.images["tourdefense"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("tourdefense","infrastructure"))
+                                            image = image, tags=("tourdefense","infrastructure", objet.id))
                 elif(isinstance(objet, Temple)):
                     image = self.parent.images["temple"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("temple","infrastructure"))
+                                            image = image, tags=("temple","infrastructure", objet.id))
                 elif(isinstance(objet, HotelVille)):
                     image = self.parent.images["hotelville"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("hotelville","infrastructure"))
+                                            image = image, tags=("hotelville","infrastructure", objet.id))
 
                 elif(isinstance(objet, Ruine)):
                     image = self.parent.images["ruine"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("ruine","infrastructure"))
+                                            image = image, tags=("ruine","infrastructure", objet.id))
     
                 elif(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("universite","infrastructure"))
+                                            image = image, tags=("universite","infrastructure", objet.id))
     
                 elif(isinstance(objet, Usine)):
                     image = self.parent.images["usine"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("usine","infrastructure"))
+                                            image = image, tags=("usine","infrastructure", objet.id))
 
                 elif(isinstance(objet, Scierie)):
                     image = self.parent.images["scierie"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("scierie","infrastructure"))
+                                            image = image, tags=("scierie","infrastructure", objet.id))
                     
                 elif(isinstance(objet, Caserne)):
                     image = self.parent.images["caserne"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("caserne","infrastructure"))                    
+                                            image = image, tags=("caserne","infrastructure", objet.id))                    
                 elif(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("universite","infrastructure"))
+                                            image = image, tags=("universite","infrastructure", objet.id))
+            elif(isinstance(objet, Unite.Disciple) and objet.lieu == self.planete):
+                print("une unite veut se faire afficher")
+                type = objet.type
+                image = self.parent.images[type]
+                self.canevas.create_image(objet.x, objet.y,
+                                    image = image, tags=(type,"unite", objet.id))
     
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"

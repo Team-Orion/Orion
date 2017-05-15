@@ -46,7 +46,7 @@ class Planete():
         self.visiteurs={}
         self.distance=dist
         self.type=type
-        self.taille=taille
+        self.taille= 25/echelle#taille
         self.angle=angle
         self.sol = None
         self.x=x
@@ -66,7 +66,7 @@ class Planete():
         pass
     
     def initier_sol(self):
-        self.sol = Sol(15, 15) #refaire plus propre #io 11-04
+        self.sol = Sol(16, 16) #refaire plus propre #io 11-04
         return self.sol
 
 class Sol():

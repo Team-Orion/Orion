@@ -2,12 +2,23 @@ from Id import *
 
 class Infrastructure():
     def __init__(self,proprietaire,planete,positionx, positiony):
-        self.x=positionx
-        self.y=positiony
+        self.planete=planete
+        #self.x=positionx
+        #self.y=positiony
+        self.x, self.y = self.init_position(planete, positionx, positiony)
         self.id=Id.prochainid()
         self.proprietaire = proprietaire
-        self.planete=planete
         self.lieu = planete
+        
+    def init_position(self, planete, positionx, positiony):
+        class coord(): #N'IMPORTE QUOII
+            def __init__(self, positionx, positiony):
+                self.x = positionx
+                self.y = positiony
+        sol = planete.sol
+        x, y = sol.iso_vers_matrice(coord(positionx, positiony))
+        sol.terrain[y][x] = "infrastructure"
+        return sol.matrice_vers_iso(x, y)
 
 class Ferme(Infrastructure):
     def __init__(self,proprietaire,planete,positionx, positiony):

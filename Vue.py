@@ -49,11 +49,13 @@ class Vue():
                 InfosImg("colline-O", "images/tuiles/colline-O.png"),
                 InfosImg("colline-S", "images/tuiles/colline-S.png"),
                 InfosImg("colline-E", "images/tuiles/colline-E.png"),
-                InfosImg("tortue", "images/unites/tortue_1.png"),
                 InfosImg("bois", "images/ressources/bois.png"),
                 InfosImg("foin", "images/ressources/foin.png"),
                 InfosImg("argent", "images/ressources/argent.png"),
                 InfosImg("minerai", "images/ressources/minerai.png"),
+                InfosImg("tortue", "images/unites/tortue_1.png"),
+                InfosImg("discipleguide", "images/unites/discipleguide.png"),
+                InfosImg("vache", "images/unites/vache.png"),
                 InfosImg("0vaisseauattaque1", "images/unites/0attaque_1.png"),
                 InfosImg("45vaisseauattaque1", "images/unites/45attaque_1.png"),
                 InfosImg("90vaisseauattaque1", "images/unites/90attaque_1.png"),
@@ -262,6 +264,7 @@ class Vue():
                 InfosImg("stationplanetaire6", "images/unites/stationplanete_6.png"),
                 InfosImg("stationplanetaire7", "images/unites/stationplanete_7.png"),
                 InfosImg("stationplanetaire8", "images/unites/stationplanete_8.png"),
+                
                 InfosImg("ferme", "images/infrastructures/ferme.png"),
                 InfosImg("ferme2", "images/infrastructures/ferme2.png"),
                 InfosImg("temple", "images/infrastructures/temple.png"),
@@ -300,7 +303,8 @@ class Vue():
                 InfosImg("planete5", "images/planete/planete5.png"),
                 InfosImg("planete6", "images/planete/planete6.png"),
                 InfosImg("planete7", "images/planete/planete7.png"),
-                InfosImg("planete8", "images/planete/planete8.png")
+                InfosImg("planete8", "images/planete/planete8.png"),
+                InfosImg("pomme", "images/attaque/pomme.png")
                 ]
 
     
