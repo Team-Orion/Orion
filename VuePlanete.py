@@ -108,29 +108,29 @@ class VuePlanete(Perspective):
         imgArgent = self.parent.images["argent"]
         imgMinerai = self.parent.images["minerai"]
 
-        labelBois = Label(self.cadreinfo, image = imgBois)
-        labelFoin = Label(self.cadreinfo, image = imgFoin)
-        labelArgent = Label(self.cadreinfo, image = imgArgent)
-        labelMinerai = Label(self.cadreinfo, image = imgMinerai)
+        self.labelBois = Label(self.cadreinfo, image = imgBois)
+        self.labelFoin = Label(self.cadreinfo, image = imgFoin)
+        self.labelArgent = Label(self.cadreinfo, image = imgArgent)
+        self.labelMinerai = Label(self.cadreinfo, image = imgMinerai)
 
-        labelBoistxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbbois) + " |  Utilisable " + str(planete.nbbois))
-        labelFointxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
-        labelArgenttxt = Label(self.cadreinfo, text ="Exploite " + str(systeme.nbargent) + " |  Utilisable " + str(planete.nbargent))
-        labelMineraitxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbminerai) + " | Utilisable " + str(planete.nbminerai))
+        self.labelBoistxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbbois) + " |  Utilisable " + str(planete.nbbois))
+        self.labelFointxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
+        self.labelArgenttxt = Label(self.cadreinfo, text ="Exploite " + str(systeme.nbargent) + " |  Utilisable " + str(planete.nbargent))
+        self.labelMineraitxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbminerai) + " | Utilisable " + str(planete.nbminerai))
 
-        labelBois.pack(fill=X)
-        labelBoistxt.pack(fill=X)
-        labelFoin.pack(fill=X)
-        labelFointxt.pack(fill=X)
-        labelArgent.pack(fill=X)
-        labelArgenttxt.pack(fill=X)    
-        labelMinerai.pack(fill=X)
-        labelMineraitxt.pack(fill=X)
+        self.labelBois.pack(fill=X)
+        self.labelBoistxt.pack(fill=X)
+        self.labelFoin.pack(fill=X)
+        self.labelFointxt.pack(fill=X)
+        self.labelArgent.pack(fill=X)
+        self.labelArgenttxt.pack(fill=X)    
+        self.labelMinerai.pack(fill=X)
+        self.labelMineraitxt.pack(fill=X)
         
-        labelBois.image = imgBois
-        labelFoin.image = imgFoin
-        labelArgent.image = imgArgent
-        labelMinerai.image = imgMinerai
+        self.labelBois.image = imgBois
+        self.labelFoin.image = imgFoin
+        self.labelArgent.image = imgArgent
+        self.labelMinerai.image = imgMinerai
 
         self.changecadreetat(self.cadreetataction)
     
