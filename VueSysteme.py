@@ -125,6 +125,16 @@ class VueSysteme(Perspective):
         self.affichermodelestatique(i)
     
     def affichermodelestatique(self,i):
+        imgfondpil = Image.new("RGBA", (self.largeur,self.hauteur),"black")
+        draw = ImageDraw.Draw(imgfondpil) 
+        for j in range(self.largeur*2):
+            x=random.randrange(self.largeur)
+            y=random.randrange(self.hauteur)
+            #draw.ellipse((x,y,x+1,y+1), fill="white")
+            draw.ellipse((x,y,x+0.1,y+0.11), fill="white")
+        self.images["fond"] = ImageTk.PhotoImage(imgfondpil)
+        self.canevas.create_image(self.largeur/2,self.hauteur/2,image=self.images["fond"])
+        
         xl=self.largeur/2
         yl=self.hauteur/2
         n=i.etoile.taille*self.UA2pixel/2
