@@ -68,28 +68,19 @@ class VueGalaxie(Perspective):
         self.btnvisiter.pack()
         self.packer_ressources(self.cadreetatsonde)
         
-        self.btnmenuavancer= Button(self.cadreetatsonde,text="Menu Avance", command= self.parent.creermenuavancer)
-        self.btnmenuavancer.pack()
-        
     def initier_cadreetatattaquegalactique(self):
         self.btnvisiter=Button(self.cadreetatattaquegalactique,text="Visiter", command=lambda: self.action_joueur("ciblerdestination", {"mode": "visiter"}, selectionner = True))
         self.btnvisiter.pack()
         self.packer_ressources(self.cadreetatattaquegalactique)
-        
-        self.btnmenuavancer= Button(self.cadreetatattaquegalactique,text="Menu Avance", command= self.parent.creermenuavancer)
-        self.btnmenuavancer.pack()
         
     def initier_cadreetatcargogalactique(self):
         self.btnvisiter=Button(self.cadreetatcargogalactique,text="Visiter", command=lambda: self.action_joueur("ciblerdestination", {"mode": "visiter"}, selectionner = True))
         self.btnvisiter.pack()
         self.packer_ressources(self.cadreetatcargogalactique)
         
-        self.btnmenuavancer= Button(self.cadreetatcargogalactique,text="Menu Avance", command= self.parent.creermenuavancer)
-        self.btnmenuavancer.pack()
         
     def initier_cadreetatstationgalactique(self):        
-        self.btnmenuavancer= Button(self.cadreetatstationgalactique,text="Menu Avance", command= self.parent.creermenuavancer)
-        self.btnmenuavancer.pack()
+        pass
     
     def packer_ressources(self, cadreetat):
         self.labelBois = Label(cadreetat, image = self.parent.images["bois"])
