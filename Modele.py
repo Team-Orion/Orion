@@ -102,6 +102,7 @@ class Joueur():
     
     def creerinfrastructure(self,id_planete,type_unite,x,y):
         print("creer infrastructure! ici x: ", x, " y: ", y)
+        self.parent.parent.vue.root.config(cursor='')
         types ={
                 "mine": Mine,
                 "hotelville":HotelVille,
@@ -147,7 +148,17 @@ class Joueur():
         planete = self.parent.objets_cliquables[id_planete]
         planete.sol = sol 
         print("Le SOL: ", planete.sol)
+        self.generer_ruine(id_planete, sol)
         
+    def generer_ruine(self, id_planete, sol):
+        nbruine = random.randrange(0,5)
+        for i in range(nbruine):
+            x = random.randrange(1,15)
+            y = random.randrange(1,15)
+            if(sol.terrain[y][x] != "eau"):
+                x,y = sol.matrice_vers_iso(x,y)
+                self.creerinfrastructure(id_planete,"ruine",x,y)
+                
     def visitersysteme(self, id_appelant):
         for i in self.parent.systemes:
             if i.id==id_appelant:
