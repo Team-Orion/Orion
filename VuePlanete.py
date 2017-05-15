@@ -362,6 +362,9 @@ class VuePlanete(Perspective):
     def creermanufacture(self):
         pass
     
+    def creerDisciple(self):
+        pass
+    
     def voirsysteme(self):
         self.action_attente = None
         self.parent.root.config(cursor='')
