@@ -360,55 +360,55 @@ class VuePlanete(Perspective):
         self.canevas.delete("infrastructure")
         for objet in self.parent.parent.modele.objets_cliquables.values():
             
-            if(isinstance(objet, Infrastructure) and objet.lieu == self.planete.id):
-                if(isinstance(objet, Mine)):
+            if(isinstance(objet, Infrastructure) and objet.lieu == self.planete):
+                elif(isinstance(objet, Mine)):
                     image = self.parent.images["mine"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("mine","infrastructure"))
-                if(isinstance(objet, Ferme)):
+                elif(isinstance(objet, Ferme)):
                     image = self.parent.images["ferme"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("ferme","infrastructure"))
 
                     
-                if(isinstance(objet, Tourdefense)):
+                elif(isinstance(objet, Tourdefense)):
                     image = self.parent.images["tourdefense"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("tourdefense","infrastructure"))
-                if(isinstance(objet, Temple)):
+                elif(isinstance(objet, Temple)):
                     image = self.parent.images["temple"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("temple","infrastructure"))
-                if(isinstance(objet, HotelVille)):
+                elif(isinstance(objet, HotelVille)):
                     image = self.parent.images["hotelville"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("hotelville","infrastructure"))
 
-                if(isinstance(objet, Ruine)):
+                elif(isinstance(objet, Ruine)):
                     image = self.parent.images["ruine"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("ruine","infrastructure"))
     
-                if(isinstance(objet, Universite)):
+                elif(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("universite","infrastructure"))
     
-                if(isinstance(objet, Usine)):
+                elif(isinstance(objet, Usine)):
                     image = self.parent.images["usine"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("usine","infrastructure"))
 
-                if(isinstance(objet, Scierie)):
+                elif(isinstance(objet, Scierie)):
                     image = self.parent.images["scierie"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("scierie","infrastructure"))
                     
-                if(isinstance(objet, Caserne)):
+                elif(isinstance(objet, Caserne)):
                     image = self.parent.images["caserne"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("caserne","infrastructure"))                    
-                if(isinstance(objet, Universite)):
+                elif(isinstance(objet, Universite)):
                     image = self.parent.images["universite"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("universite","infrastructure"))
