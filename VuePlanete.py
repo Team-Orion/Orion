@@ -289,51 +289,62 @@ class VuePlanete(Perspective):
         enter.widget.configure(text=self.nom[texteprix])
     
     def creermine(self):
-        #img = Label("images/ressources/bois.png")
         self.action_attente = "mine"
-        #self.parent.root.config(cursor='clock red red')
+        self.parent.root.config(cursor='cross red red')
         self.macommande="mine"
     
     def creerferme(self):
+        print(self.parent)
         self.action_attente = "ferme"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="ferme"
         
     def creerhotelville(self):
         self.action_attente = "hotelville"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="hotelville"
         
     def creertourdefense(self):
         self.action_attente = "tourdefense"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="tourdefense"
         
     def creerusine(self):
         self.action_attente = "usine"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="usine"
         
     def creeruniversite(self):
         self.action_attente = "universite"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="universite"
         
     def creercaserne(self):
         self.action_attente = "caserne"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="caserne"
         
     def creerscierie(self):
         self.action_attente = "scierie"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="scierie"
         
     def creertemple(self):
         self.action_attente = "temple"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="temple"
         
     def creerruine(self):
         self.action_attente = "ruine"
+        self.parent.root.config(cursor='cross red red')
         self.macommande="ruine"
     
     def creermanufacture(self):
         pass
     
     def voirsysteme(self):
+        self.action_attente = None
+        self.parent.root.config(cursor='')
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
             if i.id==self.systeme.id:
                 self.parent.voirsysteme(i)
@@ -415,7 +426,7 @@ class VuePlanete(Perspective):
             #print(self.sol.terrain[y][x])
             #print("t typeof: ", type(t))
             if not self.action_attente:
-                if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
+                if t and t[0]!="current":   #fp 2 mai Est-ce que tout Ã§a pourrait sauter par hasard?? 
                     if t[0]=='universite':
                         self.btnmenuavancer.pack()
                     elif t[0] == "caserne":
@@ -430,12 +441,15 @@ class VuePlanete(Perspective):
                         self.macommande=None
                    
             else:# fp 2 mai.  pour empecher qu'on construise dans l'eau
-                if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline"  or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
-                    self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
-                    self.action_attente = None
+                if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline" or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
+                    if(t[1] == 'infrastructure'):
+                        self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres d'un autre batiment."),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
+                    else:
+                        self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+                        self.action_attente = None
                 else:
                     #print("on ne peut pas construire ici!")
-                    self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres de l'eau!"),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
+                    self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres de l'eau."),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
                 
 
                             
