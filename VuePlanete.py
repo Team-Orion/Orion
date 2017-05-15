@@ -35,7 +35,7 @@ class VuePlanete(Perspective):
         self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
         self.btncreerstation.pack()
         """
-        
+        self.btnmenuavancer= Button(self.cadreetataction,text="Menu Universite", command= self.creermenuavancer)
 
         self.population=Label(self.cadreetataction, text="CONSTRUIRE DES INFRASTRUCTURES", bg="#8afc92")
         self.population.pack(side=TOP,fill=X)
@@ -133,6 +133,132 @@ class VuePlanete(Perspective):
         self.labelMinerai.image = imgMinerai
 
         self.changecadreetat(self.cadreetataction)
+        
+    def detruire(self):
+        self.fenetre.destroy()
+        self.btnmenuavancer.pack_forget()  
+               
+    def changeronglet(self,FrameActuel,NextFrame):
+        FrameActuel.pack_forget()
+        NextFrame.pack(side=BOTTOM)   
+        self.current = NextFrame 
+        
+    def changerTech(self,FrameActuel,NextFrame):
+        FrameActuel.pack_forget()
+        NextFrame.pack(side=BOTTOM)
+        self.tech = NextFrame  
+            
+    def creermenuavancer(self):
+        self.largeur=600
+        self.hauteur=600
+        self.current=None
+        self.tech=None
+        
+        self.fenetre=Toplevel(height=self.hauteur, width=self.largeur, bg="black") #contenant
+        
+        
+        
+        self.topframe=Frame(self.fenetre,width=self.largeur,height=200,bg="grey")
+        self.topframe.pack() 
+        
+        self.FrameDef=Frame(self.fenetre,width=self.largeur,height=400)
+        self.FrameDef.pack(side=BOTTOM)
+        self.current = self.FrameDef
+        
+        self.FrameTech = Frame(self.fenetre,height=self.hauteur,width=self.largeur,bg="blue") #contenant
+        self.toptech=Frame(self.FrameTech,width=self.largeur,height=200,bg="grey")
+        self.toptech.pack()
+        
+        
+        self.FrameTechMilit=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
+        
+        self.ButtonM1=Button(self.FrameTechMilit,image=self.parent.images["epee"],state=DISABLED)
+        self.ButtonM1.pack()
+        
+        self.ButtonM2=Button(self.FrameTechMilit,image=self.parent.images["char"],state=DISABLED)
+        self.ButtonM2.pack()
+        
+        self.ButtonM3=Button(self.FrameTechMilit,image=self.parent.images["missile"],state=DISABLED)
+        self.ButtonM3.pack()
+        
+        self.FrameTechMilit.pack()
+        self.tech = self.FrameTechMilit
+        
+        self.FrameTechRess=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
+        
+        self.ButtonR1=Button(self.FrameTechRess,image=self.parent.images["mine1"],state=DISABLED)
+        self.ButtonR1.pack()
+        
+        self.FrameTechRess.pack()
+        self.tech = self.FrameTechRess
+ 
+        self.FrameTechAgr=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
+        
+        self.ButtonA1=Button(self.FrameTechAgr,image=self.parent.images["cart"],state=DISABLED)
+        self.ButtonA1.pack()
+        
+        self.ButtonA2=Button(self.FrameTechAgr,image=self.parent.images["puit"],state=DISABLED)
+        self.ButtonA2.pack()
+        
+        self.ButtonA3=Button(self.FrameTechAgr,image=self.parent.images["moulin"],state=DISABLED)
+        self.ButtonA3.pack()
+        
+        self.ButtonA4=Button(self.FrameTechAgr,image=self.parent.images["tracteur"],state=DISABLED)
+        self.ButtonA4.pack()
+        
+        self.ButtonA5=Button(self.FrameTechAgr,image=self.parent.images["batteuse"],state=DISABLED)
+        self.ButtonA5.pack()
+        
+        self.FrameTechAgr.pack()
+        self.tech = self.FrameTechAgr
+        
+        self.FrameArt=Frame(self.fenetre,width=self.largeur,height=400,bg="brown")
+        self.FrameA=Frame(self.FrameArt,width=self.largeur,height=400,bg="black")
+        #A REVOIR
+        self.ButtonArt=Button(self.FrameA,image=self.parent.images["batteuse"],state=DISABLED)
+        self.ButtonArt.pack()
+        
+        self.FrameDiplo=Frame(self.fenetre,width=self.largeur,height=400,bg="red")
+        
+        self.FrameText=Frame(self.FrameDef,width=self.largeur,height=200,bg="white")
+        self.FrameText.pack();
+        
+        self.CanevasText=Canvas(self.FrameText,width=self.largeur,height=200,bg="white")
+        self.CanevasText.pack();
+        
+        self.CanevasText.create_text(300,100,text="Bienvenue, dans le menu avance d'ORION."+'\n' +" Vous pouvez cliquez sur les trois bouton ci-dessus pour connaitre les options avance du jeu. "+'\n' +" Le boutons TECHONOLOGIE vous permet d'acceder aux nouvelles technologies "+'\n' +"debloquer et bloquer par votre universite.Le boutons ARTEFACTS vous permet de voir les nouvelles "+'\n' +"fonctionnalites, tels que de nouveau batiments,"+'\n' +" nouvelles unites ou meme des TECHNOLOGIES EXTRATERRESTRES. "+'\n' +"Le bouton Diplomatie affiche l'arbre des alliances entre tous les joueurs du jeu. "+'\n' +"Vous pouvez ainsi mieux planifier votre prochain attaque. "+'\n' +"Choissisez judicieusement ")
+        
+        
+        self.FrameImage=Frame(self.FrameDef, width=self.largeur,height=200,bg="white")
+        self.FrameImage.pack(side=RIGHT);
+        
+        self.CanevasImage=Canvas(self.FrameImage, width=self.largeur,height=200,bg="white")
+        self.CanevasImage.pack();
+        
+        self.CanevasImage.create_image(300,100, image = self.parent.images["fermier"]) 
+        
+        self.buttontech=Button(self.topframe, text="Technologies", fg="blue" , command=lambda: self.changeronglet(self.current, self.FrameTech ))
+        self.buttontech.pack(side=LEFT)
+        
+        self.buttonartefact= Button(self.topframe, text="Artefact", fg="brown", command=lambda: self.changeronglet(self.current, self.FrameArt))
+        self.buttonartefact.pack(side=LEFT)
+        
+        self.buttondiplo=Button(self.topframe, text="Diplomatie", fg="red", command=lambda: self.changeronglet(self.current, self.FrameDiplo))
+        self.buttondiplo.pack(side=LEFT)
+        
+        self.buttonDef=Button(self.topframe, text="Retour", fg="pink", command=lambda: self.changeronglet(self.current, self.FrameDef))
+        self.buttonDef.pack(side=LEFT)
+        
+        self.buttonMilit=Button(self.toptech,text="Militaire",fg="blue" , command=lambda: self.changerTech(self.tech, self.FrameTechMilit))
+        self.buttonMilit.pack(side=LEFT)
+        
+        self.buttonRess=Button(self.toptech,text="Ressources",fg="blue",command=lambda: self.changerTech(self.tech, self.FrameTechRess))
+        self.buttonRess.pack(side=LEFT)
+        
+        self.buttonAgr=Button(self.toptech,text="Agriculture",fg="blue",command=lambda: self.changerTech(self.tech, self.FrameTechAgr))
+        self.buttonAgr.pack(side=LEFT)
+        
+        self.fenetre.protocol("WM_DELETE_WINDOW", self.detruire)
     
     def on_enter(self, event):
         texteoriginal = event.widget.cget("text")
@@ -291,8 +417,8 @@ class VuePlanete(Perspective):
             if not self.action_attente:
                 if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
                     """
-                    if t[0]==self.parent.nom:
-                        pass
+                    if t[0]=='universite':
+                        self.btnmenuavancer.pack()
                     elif t[0] == "caserne":
                         self.changecadreetat(self.cadrecaserne)
                     elif t[1]=="systeme":
