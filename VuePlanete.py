@@ -361,7 +361,7 @@ class VuePlanete(Perspective):
         for objet in self.parent.parent.modele.objets_cliquables.values():
             
             if(isinstance(objet, Infrastructure) and objet.lieu == self.planete):
-                elif(isinstance(objet, Mine)):
+                if(isinstance(objet, Mine)):
                     image = self.parent.images["mine"]
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("mine","infrastructure"))
