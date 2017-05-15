@@ -62,8 +62,6 @@ class VueGalaxie(Perspective):
         
         self.packer_ressources(self.cadreetatsysteme)
         
-        self.btnmenuavancer= Button(self.cadreetatsysteme,text="Menu Avance", command= self.parent.creermenuavancer)
-        self.btnmenuavancer.pack()
         
     def initier_cadresonde(self):
         self.btnvisiter=Button(self.cadreetatsonde,text="Visiter", command=lambda: self.action_joueur("ciblerdestination", {"mode": "visiter"}, selectionner = True))
@@ -373,7 +371,7 @@ class VueGalaxie(Perspective):
                     if t[1] == "station_galactique": 
                         self.changecadreetat(self.cadreetatstationgalactique)
                 
-                elif t[1]=="systeme" : #and self.parent.nom in t: #manque la logique pour déterminer si on peut fabvriquer à partir du système #io 09-05
+                elif t[1]=="systeme" : #and self.parent.nom in t: #manque la logique pour dÃ©terminer si on peut fabvriquer Ã  partir du systÃ¨me #io 09-05
                     self.maselection=[self.parent.nom,t[1],t[2]]
                     self.changecadreetat(self.cadreetatsysteme)
                 else:
