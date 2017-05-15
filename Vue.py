@@ -363,7 +363,7 @@ class Vue():
         self.canevasmessage.pack(side=RIGHT) 
         
     def updatelistejoueur(self):  
-        self.listejoueur =ttk.Combobox(self.canevasmessage,values=self.nomjoueur)
+        self.listejoueur =ttk.Combobox(self.canevasmessage,values=self.nomjoueur,height=30)
         self.listejoueur.pack(side=LEFT,padx=10, pady=10)
         
     def changemode(self,cadre):
