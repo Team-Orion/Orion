@@ -290,7 +290,17 @@ class Vue():
                 InfosImg("disciple", "images/unites/discipleguide.png"),
                 InfosImg("vache", "images/unites/vache.png"),
                 InfosImg("logo","images/logo_orion2.png"),
-                InfosImg("vachemenu", "images/vachemenu.png")
+                InfosImg("vachemenu", "images/vachemenu.png"),
+                InfosImg("soleil", "images/planete/soleil.png"),
+                InfosImg("planete1", "images/planete/planete1.png"),
+                InfosImg("pulsar", "images/planete/pulsar.png"),
+                InfosImg("planete2", "images/planete/planete2.png"),
+                InfosImg("planete3", "images/planete/planete3.png"),
+                InfosImg("planete4", "images/planete/planete4.png"),
+                InfosImg("planete5", "images/planete/planete5.png"),
+                InfosImg("planete6", "images/planete/planete6.png"),
+                InfosImg("planete7", "images/planete/planete7.png"),
+                InfosImg("planete8", "images/planete/planete8.png")
                 ]
 
     
