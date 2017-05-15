@@ -86,23 +86,26 @@ class Joueur():
                         return 1
 
     def ciblerdestination(self, id_appelant, cible, mode = "id"):
-        unite = self.parent.objets_cliquables[id_appelant]
-        if mode == "id":
-            lacible = self.parent.objets_cliquables[cible]
-            unite.action = unite.avancer
-            unite.cible = lacible
-        elif mode == "coord":
-            lacible = Coord(**cible)
-            lacible.lieu = unite.lieu
-            unite.action = unite.avancer
-            unite.cible = lacible
-        elif mode == "visiter":
-            lacible = self.parent.objets_cliquables[cible]
-            if isinstance(lacible, Systeme) or isinstance(lacible, Planete):
-                print("visisititeer") 
-                unite.action = unite.visiter
+        try:
+            unite = self.parent.objets_cliquables[id_appelant]
+            if mode == "id":
+                lacible = self.parent.objets_cliquables[cible]
+                unite.action = unite.avancer
                 unite.cible = lacible
-        return 
+            elif mode == "coord":
+                lacible = Coord(**cible)
+                lacible.lieu = unite.lieu
+                unite.action = unite.avancer
+                unite.cible = lacible
+            elif mode == "visiter":
+                lacible = self.parent.objets_cliquables[cible]
+                if isinstance(lacible, Systeme) or isinstance(lacible, Planete):
+                    print("visisititeer") 
+                    unite.action = unite.visiter
+                    unite.cible = lacible
+            return
+        except KeyError:
+            print("Le vaisseau est mort")
     
     
     def creerinfrastructure(self,id_planete,type_unite,x,y):
