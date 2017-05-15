@@ -261,9 +261,7 @@ class VueGalaxie(Perspective):
                 
                 elif isinstance(objet, Pulsar):
                     t=objet.taille
-                    self.canevas.create_oval((objet.x*e)-t,(objet.y*e)-t,(objet.x*e)+t,(objet.y*e)+t,fill="orchid3",dash=(1,1),
-                                                     outline="maroon1",width=2,
-                                         tags=("inconnu","pulsar",objet.id))
+                    self.canevas.create_image((objet.x*e), (objet.y*e), image = self.parent.images["pulsar"],tags=("inconnu","pulsar",objet.id))
                     
                 elif (isinstance(objet, VaisseauCargoGalactique)):
                         angle = math.degrees(objet.angletrajet)
