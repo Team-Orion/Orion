@@ -1,594 +1,398 @@
-# continuer les infrastructures
+# -*- coding: utf-8 -*-
+import os,os.path
+import sys
 
-from PIL import *
-from Perspective import *
 import random
 from helper import Helper as hlp
-import tkinter
+import math
+import time
+from Unite import *
 from Infrastructure import *
+from Id import *
+from Planete import *
+from Systeme import *
 
-class VuePlanete(Perspective):
-    def __init__(self,parent,systeme,planete):
-        Perspective.__init__(self,parent)
-        self.modele=self.parent.modele
-        self.planete = planete
-        self.sol = planete.sol
-        self.systeme=systeme
-        self.infrastructures={}
-        self.maselection=None
-        self.macommande=None
-        
-        self.KM2pixel=100 # ainsi la terre serait a 100 pixels du soleil et Uranus a 19 Unites Astronomique       
-        self.largeur=self.modele.diametre*self.KM2pixel
-        self.hauteur=self.largeur
-        
-        self.action_attente = None  #fp 25 avril
-        self.cadrecaserne=Frame(self,width=400,height=400, bg="lightgreen")
-        
-        """
-        self.canevas.config(scrollregion=(0,0,self.largeur,self.hauteur))
-        self.canevas.config(bg="sandy brown")
-        
-        self.btncreervaisseau=Button(self.cadreetataction,text="Creer Mine",command=self.creermine)
-        self.btncreervaisseau.pack()
-        
-        self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
-        self.btncreerstation.pack()
-        """
-        self.btnmenuavancer= Button(self.cadreetataction,text="Menu Universite", command= self.creermenuavancer)
 
-        self.population=Label(self.cadreetataction, text="CONSTRUIRE DES INFRASTRUCTURES", bg="#8afc92")
-        self.population.pack(side=TOP,fill=X)
-        
-        self.btnvuesysteme=Button(self.cadreetataction,text="Voir Systeme",command=self.voirsysteme)
-        self.btnvuesysteme.pack(side=BOTTOM, fill=X)
-        
-        self.btncreermine=Button(self.cadreetataction,text="Mine",command=self.creermine)
-        self.btncreermine.pack(side=BOTTOM, fill=X)        
-                
-        self.btncreermine.bind("<Enter>", self.on_enter)
-        self.btncreermine.bind("<Leave>", self.on_leave)
+class Coord():
+    def __init__(self, x, y, lieu = None):
+        self.x = x
+        self.y = y
+        self.lieu = lieu
+        self.proprietaire = None
+        self.taille = 0
 
-        self.btncreerferme=Button(self.cadreetataction,text="Ferme",command=self.creerferme)
-        self.btncreerferme.pack(side=BOTTOM, fill=X)
-        
-        self.btncreerferme.bind("<Enter>", self.on_enter)
-        self.btncreerferme.bind("<Leave>", self.on_leave)
-        
-        self.btnhotelville=Button(self.cadreetataction,text="Hotel de ville", command=self.creerhotelville)
-        self.btnhotelville.pack(side=BOTTOM, fill=X)
-        
-        self.btnhotelville.bind("<Enter>", self.on_enter)
-        self.btnhotelville.bind("<Leave>", self.on_leave)
-                                
-        self.btntourdefense=Button(self.cadreetataction,text="Tour de defense",command=self.creertourdefense)
-        self.btntourdefense.pack(side=BOTTOM, fill=X)
-        
-        self.btntourdefense.bind("<Enter>", self.on_enter)
-        self.btntourdefense.bind("<Leave>", self.on_leave)
-        
-        self.btnusine=Button(self.cadreetataction,text="Usine",command=self.creerusine)
-        self.btnusine.pack(side=BOTTOM, fill=X)
-        
-        self.btnusine.bind("<Enter>", self.on_enter)
-        self.btnusine.bind("<Leave>", self.on_leave)
-        
-        self.btnuniversite=Button(self.cadreetataction,text="Universite",command=self.creeruniversite)
-        self.btnuniversite.pack(side=BOTTOM, fill=X)
-        
-        self.btnuniversite.bind("<Enter>", self.on_enter)
-        self.btnuniversite.bind("<Leave>", self.on_leave)
-        
-        self.btncaserne=Button(self.cadreetataction,text="Caserne",command=self.creercaserne)
-        self.btncaserne.pack(side=BOTTOM, fill=X)
-        
-        self.btncaserne.bind("<Enter>", self.on_enter)
-        self.btncaserne.bind("<Leave>", self.on_leave)
-        
-        self.btnscierie=Button(self.cadreetataction,text="Scierie",command=self.creerscierie)
-        self.btnscierie.pack(side=BOTTOM, fill=X)
-        
-        self.btnscierie.bind("<Enter>", self.on_enter)
-        self.btnscierie.bind("<Leave>", self.on_leave)
-        
-        self.btntemple=Button(self.cadreetataction,text="Temple",command=self.creertemple)
-        self.btntemple.pack(side=BOTTOM, fill=X)
-        
-        self.btntemple.bind("<Enter>", self.on_enter)
-        self.btntemple.bind("<Leave>", self.on_leave)
-        
-        #self.btnruine=Button(self.cadreetataction,text=" Ruine",command=self.creerruine)
-        #self.btnruine.pack(side=BOTTOM, fill=X)
-
-        self.population=Label(self.cadreinfo, text="POPULATION :", bg="red")
-        self.population.pack(fill=X)
-        
-        imgBois = self.parent.images["bois"]
-        imgFoin = self.parent.images["foin"]
-        imgArgent = self.parent.images["argent"]
-        imgMinerai = self.parent.images["minerai"]
-
-        self.labelBois = Label(self.cadreinfo, image = imgBois)
-        self.labelFoin = Label(self.cadreinfo, image = imgFoin)
-        self.labelArgent = Label(self.cadreinfo, image = imgArgent)
-        self.labelMinerai = Label(self.cadreinfo, image = imgMinerai)
-
-        self.labelBoistxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbbois) + " |  Utilisable " + str(planete.nbbois))
-        self.labelFointxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
-        self.labelArgenttxt = Label(self.cadreinfo, text ="Exploite " + str(systeme.nbargent) + " |  Utilisable " + str(planete.nbargent))
-        self.labelMineraitxt = Label(self.cadreinfo, text = "Exploite " + str(systeme.nbminerai) + " | Utilisable " + str(planete.nbminerai))
-
-        self.labelBois.pack(fill=X)
-        self.labelBoistxt.pack(fill=X)
-        self.labelFoin.pack(fill=X)
-        self.labelFointxt.pack(fill=X)
-        self.labelArgent.pack(fill=X)
-        self.labelArgenttxt.pack(fill=X)    
-        self.labelMinerai.pack(fill=X)
-        self.labelMineraitxt.pack(fill=X)
-        
-        self.labelBois.image = imgBois
-        self.labelFoin.image = imgFoin
-        self.labelArgent.image = imgArgent
-        self.labelMinerai.image = imgMinerai
-
-        self.changecadreetat(self.cadreetataction)
-        
-    def detruire(self):
-        self.fenetre.destroy()
-        self.btnmenuavancer.pack_forget()  
-               
-    def changeronglet(self,FrameActuel,NextFrame):
-        FrameActuel.pack_forget()
-        NextFrame.pack(side=BOTTOM)   
-        self.current = NextFrame 
-        
-    def changerTech(self,FrameActuel,NextFrame):
-        FrameActuel.pack_forget()
-        NextFrame.pack(side=BOTTOM)
-        self.tech = NextFrame  
-            
-    def creermenuavancer(self):
-        self.largeur=600
-        self.hauteur=600
-        self.current=None
-        self.tech=None
-        
-        self.fenetre=Toplevel(height=self.hauteur, width=self.largeur, bg="black") #contenant
-        
-        
-        
-        self.topframe=Frame(self.fenetre,width=self.largeur,height=200,bg="grey")
-        self.topframe.pack() 
-        
-        self.FrameDef=Frame(self.fenetre,width=self.largeur,height=400)
-        self.FrameDef.pack(side=BOTTOM)
-        self.current = self.FrameDef
-        
-        self.FrameTech = Frame(self.fenetre,height=self.hauteur,width=self.largeur,bg="blue") #contenant
-        self.toptech=Frame(self.FrameTech,width=self.largeur,height=200,bg="grey")
-        self.toptech.pack()
-        
-        
-        self.FrameTechMilit=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
-        
-        self.ButtonM1=Button(self.FrameTechMilit,image=self.parent.images["epee"],state=DISABLED)
-        self.ButtonM1.pack()
-        
-        self.ButtonM2=Button(self.FrameTechMilit,image=self.parent.images["char"],state=DISABLED)
-        self.ButtonM2.pack()
-        
-        self.ButtonM3=Button(self.FrameTechMilit,image=self.parent.images["missile"],state=DISABLED)
-        self.ButtonM3.pack()
-        
-        self.FrameTechMilit.pack()
-        self.tech = self.FrameTechMilit
-        
-        self.FrameTechRess=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
-        
-        self.ButtonR1=Button(self.FrameTechRess,image=self.parent.images["mine1"],state=DISABLED)
-        self.ButtonR1.pack()
-        
-        self.FrameTechRess.pack()
-        self.tech = self.FrameTechRess
- 
-        self.FrameTechAgr=Frame(self.FrameTech,width=self.largeur,height=400,bg="black")
-        
-        self.ButtonA1=Button(self.FrameTechAgr,image=self.parent.images["cart"],state=DISABLED)
-        self.ButtonA1.pack()
-        
-        self.ButtonA2=Button(self.FrameTechAgr,image=self.parent.images["puit"],state=DISABLED)
-        self.ButtonA2.pack()
-        
-        self.ButtonA3=Button(self.FrameTechAgr,image=self.parent.images["moulin"],state=DISABLED)
-        self.ButtonA3.pack()
-        
-        self.ButtonA4=Button(self.FrameTechAgr,image=self.parent.images["tracteur"],state=DISABLED)
-        self.ButtonA4.pack()
-        
-        self.ButtonA5=Button(self.FrameTechAgr,image=self.parent.images["batteuse"],state=DISABLED)
-        self.ButtonA5.pack()
-        
-        self.FrameTechAgr.pack()
-        self.tech = self.FrameTechAgr
-        
-        self.FrameArt=Frame(self.fenetre,width=self.largeur,height=400,bg="brown")
-        self.FrameA=Frame(self.FrameArt,width=self.largeur,height=400,bg="black")
-        #A REVOIR
-        self.ButtonArt=Button(self.FrameA,image=self.parent.images["batteuse"],state=DISABLED)
-        self.ButtonArt.pack()
-        
-        self.FrameDiplo=Frame(self.fenetre,width=self.largeur,height=400,bg="red")
-        
-        self.FrameText=Frame(self.FrameDef,width=self.largeur,height=200,bg="white")
-        self.FrameText.pack();
-        
-        self.CanevasText=Canvas(self.FrameText,width=self.largeur,height=200,bg="white")
-        self.CanevasText.pack();
-        
-        self.CanevasText.create_text(300,100,text="Bienvenue, dans le menu avance d'ORION."+'\n' +" Vous pouvez cliquez sur les trois bouton ci-dessus pour connaitre les options avance du jeu. "+'\n' +" Le boutons TECHONOLOGIE vous permet d'acceder aux nouvelles technologies "+'\n' +"debloquer et bloquer par votre universite.Le boutons ARTEFACTS vous permet de voir les nouvelles "+'\n' +"fonctionnalites, tels que de nouveau batiments,"+'\n' +" nouvelles unites ou meme des TECHNOLOGIES EXTRATERRESTRES. "+'\n' +"Le bouton Diplomatie affiche l'arbre des alliances entre tous les joueurs du jeu. "+'\n' +"Vous pouvez ainsi mieux planifier votre prochain attaque. "+'\n' +"Choissisez judicieusement ")
-        
-        
-        self.FrameImage=Frame(self.FrameDef, width=self.largeur,height=200,bg="white")
-        self.FrameImage.pack(side=RIGHT);
-        
-        self.CanevasImage=Canvas(self.FrameImage, width=self.largeur,height=200,bg="white")
-        self.CanevasImage.pack();
-        
-        self.CanevasImage.create_image(300,100, image = self.parent.images["fermier"]) 
-        
-        self.buttontech=Button(self.topframe, text="Technologies", fg="blue" , command=lambda: self.changeronglet(self.current, self.FrameTech ))
-        self.buttontech.pack(side=LEFT)
-        
-        self.buttonartefact= Button(self.topframe, text="Artefact", fg="brown", command=lambda: self.changeronglet(self.current, self.FrameArt))
-        self.buttonartefact.pack(side=LEFT)
-        
-        self.buttondiplo=Button(self.topframe, text="Diplomatie", fg="red", command=lambda: self.changeronglet(self.current, self.FrameDiplo))
-        self.buttondiplo.pack(side=LEFT)
-        
-        self.buttonDef=Button(self.topframe, text="Retour", fg="pink", command=lambda: self.changeronglet(self.current, self.FrameDef))
-        self.buttonDef.pack(side=LEFT)
-        
-        self.buttonMilit=Button(self.toptech,text="Militaire",fg="blue" , command=lambda: self.changerTech(self.tech, self.FrameTechMilit))
-        self.buttonMilit.pack(side=LEFT)
-        
-        self.buttonRess=Button(self.toptech,text="Ressources",fg="blue",command=lambda: self.changerTech(self.tech, self.FrameTechRess))
-        self.buttonRess.pack(side=LEFT)
-        
-        self.buttonAgr=Button(self.toptech,text="Agriculture",fg="blue",command=lambda: self.changerTech(self.tech, self.FrameTechAgr))
-        self.buttonAgr.pack(side=LEFT)
-        
-        self.fenetre.protocol("WM_DELETE_WINDOW", self.detruire)
-    
-    def on_enter(self, event):
-        texteoriginal = event.widget.cget("text")
-        self.prix={   "Mine":           "250 Bois, 100 $",
-                      "Tour de defense":"250 Minerai, 200 Foin, 100 $",
-                      "Usine":          "250 Minerai, 50 Foin",
-                      "Universite":     "250 Minerai, 50 Foin, 50 $",
-                      "Caserne":        "250 Minerai, 50 Foin, 50 Bois, 200$",
-                      "Scierie":        "50 Minerai, 50 Foin, 200 Bois",
-                      "Temple":         "500 Minerai, 500 Foin, 500 $",
-                      "Ferme":          "500 Minerai, 500 Foin, 100 $",
-                      "Hotel de ville": "250 Minerai, 250 Foin, 250 $"
+class Joueur():
+    def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
+        self.id=Id.prochainid()
+        self.artificiel=0   # IA
+        self.parent=parent
+        self.nom=nom
+        self.systemeorigine=systemeorigine
+        self.couleur=couleur
+        self.codecouleur=codecouleur
+        self.systemesvisites= set([systemeorigine])
+        self.vaisseauxinterstellaires=[] #à suppr #io 11-04
+        self.vaisseauxinterplanetaires=[] #à suppr #io 11-04
+        self.messageenvoie=None
+        self.actions={"atterrirplanete":self.atterrirplanete,
+                      "decouvrirplanete":self.decouvrirplanete,
+                      "ciblerdestination":self.ciblerdestination,
+                      "creerunite":self.creerunite,
+                      "envoimessage":self.envoiemessage,
+                      "envoimessagetous":self.envoiemessagetous,
+                      "visitersysteme":self.visitersysteme,
+                      "creerinfrastructure": self.creerinfrastructure,
+                      "alliance": self.alliance,
+                      "alliancesupprimer":self.supressionalliance
                      }
-        event.widget.configure(text=self.prix[texteoriginal])
-
-    def on_leave(self, enter):
-        texteprix = enter.widget.cget("text")
-        self.nom={    "250 Bois, 100 $":                    "Mine",
-                      "250 Minerai, 200 Foin, 100 $":       "Tour de defense",
-                      "250 Minerai, 50 Foin":               "Usine",
-                      "250 Minerai, 50 Foin, 50 $":          "Universite",
-                      "250 Minerai, 50 Foin, 50 Bois, 200$": "Caserne",
-                      "50 Minerai, 50 Foin, 200 Bois":      "Scierie",
-                      "500 Minerai, 500 Foin, 500 $":  "Temple",
-                      "500 Minerai, 500 Foin, 100 $":   "Ferme",
-                      "250 Minerai, 250 Foin, 250 $":  "Hotel de ville"
-                     }
-        enter.widget.configure(text=self.nom[texteprix])
+        self.alliances={}
+    ##lorsqu'un message a ete envoyer au serveur, cette fonction est executer sur toute les machines
+    def envoiemessage(self, message, nom,nomquirecoit):
+        self.messageenvoie=message
+        self.parent.parent.vue.setmessagerecu(self.messageenvoie,nom, nomquirecoit)
+    def envoiemessagetous(self, message, nom,nomquirecoit):
+        self.messageenvoie=message
+        nomquirecoit=""
+        self.parent.parent.vue.setmessagerecutous(self.messageenvoie,nom, nomquirecoit)
+    def alliance(self, nomalliance, nomdemandeuralliance):
+        self.alliances[nomdemandeuralliance] = nomalliance
+        self.envoiemessagetous(nomdemandeuralliance+" est en alliance avec "+nomalliance,"","")
     
-    def creermine(self):
-        #img = Label("images/ressources/bois.png")
-        self.action_attente = "mine"
-        #self.parent.root.config(cursor='clock red red')
-        self.macommande="mine"
-    
-    def creerferme(self):
-        self.action_attente = "ferme"
-        self.macommande="ferme"
-        
-    def creerhotelville(self):
-        self.action_attente = "hotelville"
-        self.macommande="hotelville"
-        
-    def creertourdefense(self):
-        self.action_attente = "tourdefense"
-        self.macommande="tourdefense"
-        
-    def creerusine(self):
-        self.action_attente = "usine"
-        self.macommande="usine"
-        
-    def creeruniversite(self):
-        self.action_attente = "universite"
-        self.macommande="universite"
-        
-    def creercaserne(self):
-        self.action_attente = "caserne"
-        self.macommande="caserne"
-        
-    def creerscierie(self):
-        self.action_attente = "scierie"
-        self.macommande="scierie"
-        
-    def creertemple(self):
-        self.action_attente = "temple"
-        self.macommande="temple"
-        
-    def creerruine(self):
-        self.action_attente = "ruine"
-        self.macommande="ruine"
-    
-    def creermanufacture(self):
+    def supressionalliance(self,nomalliance, nomdemandeuralliance): 
+        if(nomalliance in self.alliances):  
+            del self.alliances[nomalliance]
+            self.envoiemessagetous("Supression de l'alliance entre "+nomalliance+" et "+nomdemandeuralliance,"","")
+        elif(nomdemandeuralliance in self.alliances): 
+            del self.alliances[nomdemandeuralliance]
+            self.envoiemessagetous("Supression de l'alliance entre "+nomalliance+" et "+nomdemandeuralliance,"","")
+        else:
+            self.envoiemessage("La supression impossible, l'alliance n'existe pas","",self.nom) 
+    def gaintechnologique(self):
         pass
-    
-    def voirsysteme(self):
-        for i in self.modele.joueurs[self.parent.nom].systemesvisites:
-            if i.id==self.systeme.id:
-                self.parent.voirsysteme(i)
-    
-    """        
-    def initplanete(self,sys,plane):
-        print(123)
-        s=None
-        p=None
-        for i in self.modele.joueurs[self.parent.nom].systemesvisites:
-            if i.id==sys:
-                s=i
+                        
+    def atterrirplanete(self, id_appelant, id_planete):
+        for i in self.systemesvisites:
+            if i.id==systeid:
                 for j in i.planetes:
-                    if j.id==plane:
-                        p=j
-                        break
-        self.systemeid=sys
-        self.planeteid=plane
-        #self.affichermodelestatique(s,p)
+                    if j.id==planeid:
+                        i.planetesvisites.append(j)
+                        if nom==self.parent.parent.monnom:
+                            self.parent.parent.voirplanete(i.id,j.id)
+                        return 1
+
+    def ciblerdestination(self, id_appelant, cible, mode = "id"):
+        unite = self.parent.objets_cliquables[id_appelant]
+        if mode == "id":
+            lacible = self.parent.objets_cliquables[cible]
+            unite.action = unite.avancer
+            unite.cible = lacible
+        elif mode == "coord":
+            lacible = Coord(**cible)
+            lacible.lieu = unite.lieu
+            unite.action = unite.avancer
+            unite.cible = lacible
+        elif mode == "visiter":
+            lacible = self.parent.objets_cliquables[cible]
+            if isinstance(lacible, Systeme) or isinstance(lacible, Planete):
+                print("visisititeer") 
+                unite.action = unite.visiter
+                unite.cible = lacible
+        return 
     
     
-    def affichermodelestatique(self,s,p):
-        xl=self.largeur/2
-        yl=self.hauteur/2
-        mini=2
-        UAmini=4
-        for i in p.infrastructures:
-            pass
+    def creerinfrastructure(self,id_planete,type_unite,x,y):
+        print("creer infrastructure! ici x: ", x, " y: ", y)
+        self.parent.parent.vue.root.config(cursor='')
+        types ={
+                "mine": Mine,
+                "hotelville":HotelVille,
+                "ferme":Ferme,
+                "tourdefense":Tourdefense,
+                "usine":Usine,
+                "universite":Universite,
+                "caserne":Caserne,
+                "scierie":Scierie,
+                "temple":Temple,
+                "ruine":Ruine
+                }
+        planete =  self.parent.objets_cliquables[id_planete]
+        infrastructure = types[type_unite](self,planete,x,y)
+        self.parent.objets_cliquables[infrastructure.id] = infrastructure
+        self.parent.objets_cliquables[id_planete].infrastructures.append(infrastructure) 
+              
+    def creerunite(self, id_appelant, type_unite):
+        appelant = self.parent.objets_cliquables[id_appelant]
+        types = {
+                 "sonde": Sonde,
+                 "attaquegalaxie": VaisseauAttaqueGalactique,
+                 "cargogalaxie": VaisseauCargoGalactique,
+                 "attaquesolaire": VaisseauAttaqueSolaire,
+                 "cargosolaire": VaisseauCargoSolaire,
+                 "stationgalaxie": StationGalactique,
+                 "stationplanetaire": StationPlanetaire
+                }
+        unite = types[type_unite](self, appelant)
         
-        self.canevas.create_image(p.posXatterrissage,p.posYatterrissage,image=self.parent.images["tortue"])
+        if False:
+        #if(unite.cout>appelant.nbargent):
+            print("vous n'avez pas assez d'argent")
+        else:
+            #print(appelant.nbargent)
+            appelant.nbargent-=unite.cout
+            #print (appelant.nbargent) # ON VA DEVOIR METTRE A JOUR CETTE LIGNE AVEC LA FONCTION CAR ON DOIT DÉDUIRE D'UNE PLANETE LES RESSOURCES NORMALEMENT
+            self.vaisseauxinterstellaires.append(unite) #a supprimer #io 18-04
+            self.parent.objets_cliquables[unite.id] = unite
         
-        canl=int(p.posXatterrissage-100)/self.largeur
-        canh=int(p.posYatterrissage-100)/self.hauteur
-        self.canevas.xview(MOVETO,canl)
-        self.canevas.yview(MOVETO, canh)
         
-        pass  
-     """   
-    def afficherdecor(self):
-        pass
+    def decouvrirplanete(self, id_planete, sol):
+        planete = self.parent.objets_cliquables[id_planete]
+        planete.sol = sol 
+        print("Le SOL: ", planete.sol)
+        self.generer_ruine(id_planete, sol)
+        
+    def generer_ruine(self, id_planete, sol):
+        nbruine = random.randrange(0,5)
+        for i in range(nbruine):
+            x = random.randrange(1,15)
+            y = random.randrange(1,15)
+            if(sol.terrain[y][x] != "eau"):
+                x,y = sol.matrice_vers_iso(x,y)
+                self.creerinfrastructure(id_planete,"ruine",x,y)
                 
-    def creervaisseau(self):
-        pass
-    
-    def creerstation(self):
-        print("Creer station EN CONSTRUCTION")
-         
-    def afficherpartie(self,mod):
-        self.afficher_infrastructures()
-        self.actualiser_ressources()
+    def visitersysteme(self, id_appelant):
+        for i in self.parent.systemes:
+            if i.id==id_appelant:
+                self.systemesvisites.add(i)
         
-    def actualiser_ressources(self):
-        self.labelFointxt.config(text= "Exploite " + str(self.planete.foinexploite) + " |  Utilisable " + str(self.planete.nbfoin))
-        self.labelBoistxt.config(text= "Exploite " + str(self.planete.boisexploite) + " |  Utilisable " + str(self.planete.nbbois))
-        self.labelMineraitxt.config(text= "Exploite " + str(self.planete.mineraiexploite) + " |  Utilisable " + str(self.planete.nbminerai))
-        self.labelArgenttxt.config(text= "Exploite " + str(self.planete.argentexploite) + " |  Utilisable " + str(self.planete.nbargent))
+    def prochaineaction(self): # NOTE : cette fonction sera au coeur de votre developpement        
+        """
+        
+        Le contenu de cette fonction a été déplacé dans Modele.prochaineaction.
+        
+        """
 
+#  DEBUT IA
+"""
+class IA(Joueur):
+    def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
+        Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
+        self.contexte="galaxie"
+         # le delai est calcule pour chaque prochaine action en seconde
+        self.delaiaction=random.randrange(5,10)*20  # le 20 =nbr de boucle par sec.
+        
+        #self.derniereaction=time.time()
+        
+    # NOTE sur l'analyse de la situation   
+    #          on utilise le temps (time.time() retourne le nombre de secondes depuis 1970) pour le delai de 'cool down'
+    #          la decision dependra du contexte (modes de la vue)
+    #          aussi presentement - on s'occupe uniquement d'avoir un vaisseau et de deplacer ce vaisseau vers 
+    #          le systeme le plus proche non prealablement visite.
+    def analysesituation(self):
+        #t=time.time()
+        if self.delaiaction==0:#self.derniereaction and t-self.derniereaction>self.delaiaction:
+            if self.contexte=="galaxie":
+                if len(self.vaisseauxinterstellaires)==0:
+                    c=self.parent.parent.cadre+5
+                    if c not in self.parent.actionsafaire.keys(): 
+                        self.parent.actionsafaire[c]=[] 
+                    self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":self.systemeorigine.id,"type_unite": "attaquegalaxie"}])
+                else:
+                    for i in self.vaisseauxinterstellaires:
+                        sanscible=[]
+                        if i.cible==None:
+                            sanscible.append(i)
+                        if sanscible:
+                            vi=random.choice(sanscible)
+                            systtemp=None
+                            systdist=1000000000000
+                            for j in self.parent.systemes:
+                                d=hlp.calcDistance(vi.x,vi.y,j.x,j.y)
+                                if d<systdist and j not in self.systemesvisites:
+                                    systdist=d
+                                    systtemp=j
+                            #if systtemp:
+                            #   vi.ciblerdestination()
+                            else:
+                                print("JE NE TROUVE PLUS DE CIBLE")
+                self.delaiaction=random.randrange(5,10)*20
+
+        else:
+            self.delaiaction-=1
+"""
+        
+# FIN IA
+
+
+#  DEBUT IA
+
+class IA(Joueur):
+    def __init__(self,parent,nom,systemeorigine,couleur,codecouleur):
+        Joueur.__init__(self,parent,nom,systemeorigine,couleur,codecouleur)
+        self.contexte="galaxie"
+        self.delaiaction=random.randrange(5,10)*20
+    def analysesituation(self):
+        #t=time.time()
+        if self.delaiaction==0:
+            c=self.parent.parent.cadre+5 #Je ne sais pas ca sert a quoi #io 12-05
             
-    def changerproprietaire(self,prop,couleur,systeme): 
-        pass
-               
-    def afficherselection(self):
-        pass
-    
-    def exploitation(self):
-        for i in self.infrastructures:
-            if(isinstance(objet, Ferme)):
-               i.exploitationnouriture()
-               self.labelFointxt.config(text= "Exploite " + str(systeme.nbfoin) + " |  Utilisable " + str(planete.nbfoin))
-
-    def selectionner(self,evt):
-        self.canevas.delete("messagetemporaire")
-        x, y=self.sol.iso_vers_matrice(evt)
-        print("action_attente: ", str(self.action_attente))
-        t=self.canevas.gettags("current")
-        print("t: ", t)
-        if(t):          #fp 2 mai  if (t) parce que si on clique dans l'espace, on veut que rien se passe (versus toute plante)
-            #print("t[0]: ", t[0])
-            #print(self.sol.terrain[y][x])
-            #print("t typeof: ", type(t))
-            if not self.action_attente:
-                if t and t[0]!="current":   #fp 2 mai Est-ce que tout ça pourrait sauter par hasard?? 
-                    if t[0]=='universite':
-                        self.btnmenuavancer.pack()
-                    elif t[0] == "caserne":
-                        self.changecadreetat(self.cadrecaserne)
-                    elif t[1]=="systeme":
-                        pass
-                else:
-                    if self.macommande:
-                        x=self.canevas.canvasx(evt.x)
-                        y=self.canevas.canvasy(evt.y)
-                        self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
-                        self.macommande=None
-                   
-            else:# fp 2 mai.  pour empecher qu'on construise dans l'eau
-                if(self.sol.terrain[y][x] == "terre" or self.sol.terrain[y][x] == "colline"  or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
-                    self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
-                    self.action_attente = None
-                else:
-                    #print("on ne peut pas construire ici!")
-                    self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres de l'eau!"),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
+            action = random.choice(["attaquer", "explorer"])#, "creerunite"])
+            if action == "attaquer":
+                unites_IA = list()
+                unites_enemies = list()
+                for x in self.parent.objets_cliquables.values():
+                    if x.proprietaire == self:
+                        unites_IA.append(x)
+                    elif x.proprietaire is not "inconnu":
+                        unites_enemies.append(x)
                 
-
-                            
-    def montresystemeselection(self):
-        self.changecadreetat(self.cadreetataction)
-        
-    def montrevaisseauxselection(self):
-        self.changecadreetat(self.cadreetatmsg)
-    
-    def afficherartefacts(self,joueurs):
-        pass #print("ARTEFACTS de ",self.nom)
-
-    #### Affichage du terrain
-    def initier_affichage(self):
-        if self.sol is None:
-            self.sol = self.planete.initier_sol()
-            self.action_joueur("decouvrirplanete", {"id_planete": self.planete.id, "sol": self.sol})
-        self.afficher_sol()
-        self.afficher_infrastructures()
-    
-    def afficher_base(self):
-        for y in range(self.sol.matrice_hauteur):
-            for x in range(self.sol.matrice_largeur):
-                type_tuile = "terre" + str(random.randrange(1, 4))
-                image = self.parent.images[type_tuile]
-                self.afficher_tuile(x, y, image, type_tuile)
-
-    def afficher_sol(self):
-        self.afficher_base()
-        for y in range(self.sol.matrice_hauteur):
-            for x in range(self.sol.matrice_largeur):
-                type_tuile = self.sol.terrain[y][x]
-                if type_tuile != "terre":
-                    if  type_tuile == "eau":
-                        type_tuile = self.selectionner_tuile_eau(x, y)
-                    elif type_tuile == "colline":
-                        type_tuile = self.selectionner_tuile_colline(x, y)
-                    image = self.parent.images[type_tuile]
-                    self.afficher_tuile(x, y, image, type_tuile)
-                    
-    def afficher_tuile(self, x, y, image, type_tuile):
-        vue_x, vue_y = self.sol.matrice_vers_iso(x, y)
-        self.canevas.create_image(vue_x, vue_y,
-                                      image = image, tags=(type_tuile))
-
-    def afficher_infrastructures(self):
-        self.canevas.delete("infrastructure")
-        for objet in self.parent.parent.modele.objets_cliquables.values():
+                unites_IA.sort(key=(lambda unite : unite.id))  
+                unites_enemies.sort(key=(lambda unite : unite.id))
+                 
+                for unite in unites_IA:
+                    if isinstance(unite, Unite):
+                        try:
+                            cible = random.choice(unites_enemies)
+                            if unite.lieu == cible.lieu:
+                                unite.cible = cible
+                                unite.action = unite.avancer
+                        except IndexError:
+                            pass #La liste d'unitew est vide
             
-            if(isinstance(objet, Infrastructure) and objet.lieu == self.planete):
-                if(isinstance(objet, Mine)):
-                    image = self.parent.images["mine"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("mine","infrastructure"))
-                elif(isinstance(objet, Ferme)):
-                    image = self.parent.images["ferme"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("ferme","infrastructure"))
+            elif action == "explorer":
+                unites_IA = list()
+                astres = list()
+                for x in self.parent.objets_cliquables.values():
+                    if x.proprietaire == self:
+                        unites_IA.append(x)
+                    elif x.proprietaire is "inconnu":
+                        astres.append(x)
+                
+                unites_IA.sort(key=(lambda unite : unite.id))
+                astres.sort(key=(lambda astre : astre.id))
+                for unite in unites_IA:
+                    if isinstance(unite, Unite):
+                        cible = random.choice(astres)
+                        if unite.lieu == cible.lieu:
+                            unite.cible = cible
+                            unite.action = unite.avancer
+            
+            elif action == "creerunite":
+                id_astres = list()
+                type_lieu = random.choice(["galaxie", "systeme"])
+                if type_lieu == "systeme":
+                    for systeme in self.systemesvisites:
+                        for planete in systeme.planetes:
+                            id_astres.append(planete.id)
+                    id_astres.sort()
+                    type_unite = random.choice(["cargosolaire", "attaquesolaire", "stationplanetaire"])
+                elif type_lieu == "galaxie":
+                    type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
+                    id_astres = sorted([sys.id for sys in self.systemesvisites])
+                
+                id_appelant = random.choice(id_astres)
+                if c not in self.parent.actionsafaire.keys(): 
+                    self.parent.actionsafaire[c]=[]
+                self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant": id_appelant,"type_unite": type_unite}])
+            
+            if c not in self.parent.actionsafaire.keys(): 
+                self.parent.actionsafaire[c]=[]
+            appelant = random.choice(sorted(self.systemesvisites, key=(lambda sys: sys.id)))#[0]
+            type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
+            self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":appelant.id,"type_unite": type_unite}])
 
-                    
-                elif(isinstance(objet, Tourdefense)):
-                    image = self.parent.images["tourdefense"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("tourdefense","infrastructure"))
-                elif(isinstance(objet, Temple)):
-                    image = self.parent.images["temple"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("temple","infrastructure"))
-                elif(isinstance(objet, HotelVille)):
-                    image = self.parent.images["hotelville"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("hotelville","infrastructure"))
+            self.delaiaction=random.randrange(5,10)*5
+        else:
+            self.delaiaction-=1
 
-                elif(isinstance(objet, Ruine)):
-                    image = self.parent.images["ruine"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("ruine","infrastructure"))
-    
-                elif(isinstance(objet, Universite)):
-                    image = self.parent.images["universite"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("universite","infrastructure"))
-    
-                elif(isinstance(objet, Usine)):
-                    image = self.parent.images["usine"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("usine","infrastructure"))
+# FIN IA
 
-                elif(isinstance(objet, Scierie)):
-                    image = self.parent.images["scierie"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("scierie","infrastructure"))
-                    
-                elif(isinstance(objet, Caserne)):
-                    image = self.parent.images["caserne"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("caserne","infrastructure"))                    
-                elif(isinstance(objet, Universite)):
-                    image = self.parent.images["universite"]
-                    self.canevas.create_image(objet.x, objet.y,
-                                            image = image, tags=("universite","infrastructure"))
-    
-    def selectionner_tuile_colline(self, x, y):
-        nom_tuile = "colline"
-        i = (x+1)%self.sol.matrice_largeur #pour aller de l'autre cote si l'on depasse la matrice
-        j = (y+1)%self.sol.matrice_hauteur
-
-        if self.sol.terrain[j][x] != "colline":
-            nom_tuile += "-SO"
-        if self.sol.terrain[y][i] != "colline":
-            nom_tuile += "-SE"
-        if self.sol.terrain[y-1][x] != "colline":
-                nom_tuile += "-NE"
-        if self.sol.terrain[y][x-1] != "colline":
-            nom_tuile += "-NO"
- 
-        if len(nom_tuile)>13:
-            nom_tuile = "colline"
-        if nom_tuile == "colline":
-            if self.sol.terrain[j][i] != "colline":
-                nom_tuile += "-S"
-            elif self.sol.terrain[y-1][i] != "colline":
-                nom_tuile += "-E"
-            elif self.sol.terrain[y-1][x-1] != "colline":
-                nom_tuile += "-N"
-            elif self.sol.terrain[j][x-1] != "colline":
-                nom_tuile += "-O"
-
-        return nom_tuile
-
-    def selectionner_tuile_eau(self, x, y):
-        nom_tuile = "eau"
-        i = (x+1)%self.sol.matrice_largeur #pour aller de l'autre cote si l'on depasse la matrice
-        j = (y+1)%self.sol.matrice_hauteur
-        if self.sol.terrain[j][x] != "eau":
-            nom_tuile += "-SO"
-        if self.sol.terrain[y][i] != "eau":
-            nom_tuile += "-SE"
-        if self.sol.terrain[y-1][x] != "eau":
-                nom_tuile += "-NE"
-        if self.sol.terrain[y][x-1] != "eau":
-            nom_tuile += "-NO"
-               
-        if len(nom_tuile) == 3:
-            if self.sol.terrain[j][i] != "eau":
-                nom_tuile += "-S"
-            elif self.sol.terrain[y-1][i] != "eau":
-                nom_tuile += "-E"
-            elif self.sol.terrain[y-1][x-1] != "eau":
-                nom_tuile += "-N"
-            elif self.sol.terrain[j][x-1] != "eau":
-                nom_tuile += "-O"
+class Modele():
+    def __init__(self,parent,joueurs,dd):
+        self.parent=parent
+        self.diametre,self.densitestellaire,qteIA=dd
+        self.nbsystemes=int(self.diametre**2/self.densitestellaire)
+        self.ias=[]    # IA 
+        self.joueurs={}
+        self.joueurscles=joueurs
+        self.actionsafaire={}
+        self.pulsars=[] #à suppr #io 11-04
+        self.systemes=[] #à suppr #io 11-04
+        self.terrain=[]
+        self.unites = [] #io 03-04
+        self.objets_cliquables = {} 
+        self.projectiles = list()
+        self.creersystemes(int(qteIA))  # nombre d'ias a ajouter
         
-        if nom_tuile == "eau":
-            nom_tuile += str(random.choice([1, 1, 1, 2, 2, 2, 3, 4])) #les tuiles n'ont pas le meme nombre de chances d'etre obtenue
-        return nom_tuile[:9] #Les tuiles d'eau a trois bords ne sont pas disponibles
+    def creersystemes(self,nbias):  # IA ajout du parametre du nombre d'ias a ajouter
+        for i in range(self.nbsystemes):
+            x=random.randrange(self.diametre*10)/10
+            y=random.randrange(self.diametre*10)/10
+            for i in self.systemes:
+                if x == i.x:
+                    x=random.randrange(self.diametre*10)/10
+                if y == i.y:
+                    y=random.randrange(self.diametre*10)/10
+            systeme = Systeme(x,y, self)
+            self.systemes.append(systeme)
+            self.objets_cliquables[systeme.id] = systeme
+        
+        for i in range(20):
+            x=random.randrange(self.diametre*10)/10
+            y=random.randrange(self.diametre*10)/10
+            pulsar = Pulsar(x,y) #à suprr #io 11-04
+            self.pulsars.append(pulsar) #à suprr #io 11-04
+            self.objets_cliquables[pulsar.id] = pulsar
+            
+        np=len(self.joueurscles) + nbias  # on ajoute le nombre d'ias
+        planes=[]
+        systemetemp=self.systemes[:]
+        while np:
+            systeme=random.choice(systemetemp)
+            if systeme not in planes and len(systeme.planetes)>0:
+                planes.append(systeme)
+                systemetemp.remove(systeme)
+                np-=1
+        couleurs=["firebrick","saddlebrown","seagreen","chartreuse","darkturquoise",
+                  "dodgerblue3","purple4","maroon3"]    # IA ajout de 3 couleurs
+        
+        codecouleur=1
+        
+        for i in self.joueurscles:
+            self.joueurs[i]=Joueur(self,i,planes.pop(0),couleurs.pop(0),codecouleur)
+            codecouleur+=1
+            
+        for i in range(nbias): # IA
+            nomia="IA_"+str(i)
+            self.joueurscles.append(nomia)
+            ia=IA(self,nomia,planes.pop(0),couleurs.pop(0),codecouleur)
+            self.joueurs[nomia]=ia  #IA
+            self.ias.append(ia)  #IA
+            codecouleur+=1
+        
+    def prochaineaction(self,cadre):
+        if cadre in self.actionsafaire:
+            for nom_joueur, action, parametres in self.actionsafaire[cadre]:
+                self.joueurs[nom_joueur].actions[action](**parametres)
+            del self.actionsafaire[cadre]
+                
+        for i in self.joueurscles: #il se pourrait que cette instruction ne servent plus #io 20-04
+            self.joueurs[i].prochaineaction()
+            
+        for i in self.ias:
+            i.analysesituation()
+            
+        for objet in sorted(self.objets_cliquables.values(), key=lambda objet: objet.id):
+            try:
+                objet.action()
+            except AttributeError:
+                pass #l'ojet n'a pas d'attibut "action". C'est normal s'il s'agit d'un système solaire ou une planete.
+            except TypeError:
+                pass #l'objet n'a pas d'action assignee. C'est normal.
+        
+        for projectile in self.projectiles:
+            if not projectile.action():
+                self.projectiles.remove(projectile)
+            
+    def changerproprietaire(self,nom,couleur,syst):
+        self.parent.changerproprietaire(nom,couleur,syst)
+                
