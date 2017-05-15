@@ -35,7 +35,14 @@ class VuePlanete(Perspective):
         self.btncreerstation=Button(self.cadreetataction,text="Creer Manufacture",command=self.creermanufacture)
         self.btncreerstation.pack()
         """
-        self.btnmenuavancer= Button(self.cadreetataction,text="Menu Universite", command= self.creermenuavancer)
+        self.btnmenuavancer= Button(self.cadreUni,text="Menu Universite", command= self.creermenuavancer)
+        self.btnmenuavancer.pack()
+        
+        self.btncreerDis= Button(self.cadreCaserne,text="Creer Disciple", command= self.creerDisciple)
+        self.btncreerDis.pack()
+        
+        self.btnRetour= Button(self.cadreCaserne,text="Retour", command=lambda: self.changecadreetat(self.cadreetataction))
+        self.btnRetour.pack()
 
         self.population=Label(self.cadreetataction, text="CONSTRUIRE DES INFRASTRUCTURES", bg="#8afc92")
         self.population.pack(side=TOP,fill=X)
@@ -134,10 +141,16 @@ class VuePlanete(Perspective):
 
         self.changecadreetat(self.cadreetataction)
         
+    def afficherMenu(self, infrastructure):
+        if infrastructure == 'caserne':
+            self.changecadreetat(self.cadreCaserne)   
+        elif infrastructure == 'universite':
+             self.changecadreetat(self.cadreUni)
+                   
     def detruire(self):
         self.fenetre.destroy()
-        self.btnmenuavancer.pack_forget()  
-               
+        self.changecadreetat(self.cadreetataction)    
+                
     def changeronglet(self,FrameActuel,NextFrame):
         if(NextFrame==self.FrameDiplo):
             self.refrechalliance()
@@ -434,11 +447,8 @@ class VuePlanete(Perspective):
             #print("t typeof: ", type(t))
             if not self.action_attente:
                 if t and t[0]!="current":   #fp 2 mai Est-ce que tout Ã§a pourrait sauter par hasard?? 
-                    if t[0]=='universite':
-                        self.btnmenuavancer.pack()
-                    elif t[0] == "caserne":
-                        self.changecadreetat(self.cadrecaserne)
-                    elif t[1]=="systeme":
+                    self.afficherMenu(t[0])
+                    if t[1]=="systeme":
                         pass
                 else:
                     if self.macommande:
