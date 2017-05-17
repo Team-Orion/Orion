@@ -17,7 +17,6 @@ from Modele import *
 
 class Controleur():
     def __init__(self):
-        print("IN CONTROLEUR")
         self.attente=0
         self.cadre=0 # le no de cadre pour assurer la syncronisation avec les autres participants
         self.egoserveur=0 
@@ -64,7 +63,6 @@ class Controleur():
     def boucleattente(self):
         rep=self.serveur.faireaction([self.monnom,0,0])
         if rep[0]:
-            print("Recu ORDRE de DEMARRER")
             self.initierpartie(rep[2])
         elif rep[0]==0:
             self.vue.affichelisteparticipants(rep[2])
@@ -72,12 +70,10 @@ class Controleur():
         
     def initierpartie(self,rep):  # initalisation locale de la simulation, creation du modele, generation des assets et suppression du layout de lobby
         if rep[1][0][0]=="lancerpartie":
-            #print("REP",rep)
             self.modele=Modele(self,rep[1][0][1],rep[1][0][2]) # on cree le modele
             self.vue.afficherinitpartie(self.modele)
             self.vue.nomjoueur=self.modele.joueurscles 
             self.vue.updatelistejoueur()
-            #print(self.monnom,"LANCE PROCHAINTOUR")
             
             self.prochaintour()
         

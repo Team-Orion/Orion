@@ -13,6 +13,7 @@ class VuePlanete(Perspective):
         Perspective.__init__(self,parent)
         self.modele=self.parent.modele
         self.planete = planete
+        print("init planete", self.planete)
         self.sol = planete.sol
         self.systeme=systeme
         self.infrastructures={}
@@ -142,11 +143,13 @@ class VuePlanete(Perspective):
 
         self.changecadreetat(self.cadreetataction)
         
-    def afficherMenu(self, infrastructure):
-        if infrastructure == 'caserne':
+    def afficherMenu(self, objet):
+        if objet == 'caserne':
             self.changecadreetat(self.cadreCaserne)   
-        elif infrastructure == 'universite':
+        elif objet == 'universite':
              self.changecadreetat(self.cadreUni)
+        else:
+            self.changecadreetat(self.cadreetataction)
                    
     def detruire(self):
         self.fenetre.destroy()
@@ -315,7 +318,6 @@ class VuePlanete(Perspective):
         self.macommande="mine"
     
     def creerferme(self):
-        print(self.parent)
         self.action_attente = "ferme"
         self.parent.root.config(cursor='cross red red')
         self.macommande="ferme"
@@ -375,7 +377,6 @@ class VuePlanete(Perspective):
     
     """        
     def initplanete(self,sys,plane):
-        print(123)
         s=None
         p=None
         for i in self.modele.joueurs[self.parent.nom].systemesvisites:
@@ -442,37 +443,49 @@ class VuePlanete(Perspective):
     def selectionner(self,evt):
         self.canevas.delete("messagetemporaire")
         x, y=self.sol.iso_vers_matrice(evt)
-        print("action_attente: ", str(self.action_attente))
         t=self.canevas.gettags("current")
-        print("t: ", t)
+        print("selectionner, planete", self.planete)
         if(t):          #fp 2 mai  if (t) parce que si on clique dans l'espace, on veut que rien se passe (versus toute plante)
-            #print("t[0]: ", t[0])
-            #print(self.sol.terrain[y][x])
-            #print("t typeof: ", type(t))
             if not self.action_attente:
-                print("pas attente")
-                if t and t[0]!="current":   #fp 2 mai Est-ce que tout Ã§a pourrait sauter par hasard??
+                if t[1]!="current":
                     self.afficherMenu(t[0])
                     self.maselection=[self.parent.nom,t[1],t[2]]
+                """    
                 else:
                     if self.macommande:
                         x=self.canevas.canvasx(evt.x)
                         y=self.canevas.canvasy(evt.y)
                         self.parent.parent.creermine(self.parent.nom,self.systemeid,self.planeteid,x,y)
                         self.macommande=None
-                   
+                """   
             else:# fp 2 mai.  pour empecher qu'on construise dans l'eau
                 if(self.sol.terrain[y][x] == "terre"):# or self.sol.terrain[y][x] == "colline" or t[0] == 'terre1' or t[0] == 'terre2' or t[0] == 'terre3' or t[0] == 'colline'):
                     if(t[1] == 'infrastructure'):
                         self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres d'un autre batiment."),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
                     else:
-                        self.action_joueur("creerinfrastructure", {"id_planete": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+                        print("id planete", self.planete.id)
+                        #self.action_joueur("creerinfrastructure", {"id_appelant": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
+                        parametres = {"x": evt.x, "y": evt.y, "id_appelant": self.planete.id, "type_unite": self.action_attente}
+                        self.parent.parent.action_joueur("creerinfrastructure", parametres)
+                        #self.action_joueur("creerinfrastructure", {"id_appelant": self.planete.id, "type_unite":self.action_attente, "x":evt.x, "y":evt.y})
                         self.action_attente = None
                 else:
-                    #print("on ne peut pas construire ici!")
                     self.canevas.create_text(10, 500, text=str("On ne peut pas construire si pres de l'eau."),font=("calibri", 36), fill="#ff0022", anchor="nw", tag="messagetemporaire")
                 
-
+    def cibler(self, evt): #io 02-05
+        if self.maselection and self.maselection[1]=="unite":
+            cible=self.canevas.gettags("current")
+            
+            if cible and cible[0] and cible[1] in ("infrastructure", "unite"):
+                cible = cible[2]
+                mode = "id"
+            else:
+                x = self.canevas.canvasx(evt.x)#/100
+                y = self.canevas.canvasy(evt.y)#/100
+                cible = {'x': x, 'y': y}
+                mode = "coord"
+            self.action_joueur("ciblerdestination", {"id_appelant": self.maselection[2], "cible": cible, "mode": mode})
+            
                             
     def montresystemeselection(self):
         self.changecadreetat(self.cadreetataction)
@@ -481,7 +494,7 @@ class VuePlanete(Perspective):
         self.changecadreetat(self.cadreetatmsg)
     
     def afficherartefacts(self,joueurs):
-        pass #print("ARTEFACTS de ",self.nom)
+        pass 
 
     #### Affichage du terrain
     def initier_affichage(self):
@@ -574,11 +587,9 @@ class VuePlanete(Perspective):
                     self.canevas.create_image(objet.x, objet.y,
                                             image = image, tags=("universite","infrastructure", objet.id))
             elif(isinstance(objet, Unite.Disciple) and objet.lieu == self.planete):
-                print("une unite veut se faire afficher")
-                type = objet.type
-                image = self.parent.images[type]
+                image = self.parent.images[objet.type]
                 self.canevas.create_image(objet.x, objet.y,
-                                    image = image, tags=(type,"unite", objet.id))
+                                    image = image, tags=("disciple","unite", objet.id))
     
     def selectionner_tuile_colline(self, x, y):
         nom_tuile = "colline"

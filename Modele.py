@@ -93,14 +93,21 @@ class Joueur():
                 unite.action = unite.avancer
                 unite.cible = lacible
             elif mode == "coord":
-                lacible = Coord(**cible)
-                lacible.lieu = unite.lieu
-                unite.action = unite.avancer
-                unite.cible = lacible
+                if isinstance(unite.lieu, Planete):
+                    lacible = Coord(**cible)
+                    unite.cible = lacible
+                    lacible.lieu = unite.lieu
+                    unite.action = unite.avancer
+                    unite.chemin = unite.calculer_chemin(lacible)
+                    unite.indice_chemin = 1
+                else:
+                    lacible = Coord(**cible)
+                    lacible.lieu = unite.lieu
+                    unite.action = unite.avancer
+                    unite.cible = lacible
             elif mode == "visiter":
                 lacible = self.parent.objets_cliquables[cible]
                 if isinstance(lacible, Systeme) or isinstance(lacible, Planete):
-                    print("visisititeer") 
                     unite.action = unite.visiter
                     unite.cible = lacible
             return
@@ -108,7 +115,7 @@ class Joueur():
             print("Le vaisseau est mort")
     
     
-    def creerinfrastructure(self,id_planete,type_unite,x,y):
+    def creerinfrastructure(self,id_appelant,type_unite,x,y):
         print("creer infrastructure! ici x: ", x, " y: ", y)
         self.parent.parent.vue.root.config(cursor='')
         types ={
@@ -123,10 +130,10 @@ class Joueur():
                 "temple":Temple,
                 "ruine":Ruine
                 }
-        planete =  self.parent.objets_cliquables[id_planete]
+        planete =  self.parent.objets_cliquables[id_appelant]
         infrastructure = types[type_unite](self,planete,x,y)
         self.parent.objets_cliquables[infrastructure.id] = infrastructure
-        self.parent.objets_cliquables[id_planete].infrastructures.append(infrastructure) 
+        self.parent.objets_cliquables[id_appelant].infrastructures.append(infrastructure) 
               
     def creerunite(self, id_appelant, type_unite):
         appelant = self.parent.objets_cliquables[id_appelant]

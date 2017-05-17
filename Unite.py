@@ -5,9 +5,12 @@ from Id import *
 import random
 from helper import Helper as hlp
 import math
+import collections
 
 import Systeme
 import Planete
+
+
 
 echelle = 100
 
@@ -83,6 +86,7 @@ class Unite:
                     return True #La cible est atteinte
             elif isinstance(self.lieu, Systeme.Systeme):
                 self.ciblerdestination()
+                
                 x=self.cible.x
                 y=self.cible.y
                 if hlp.calcDistance(self.x,self.y,x,y) >= distance_avec_cible: #self.vitesse+self.cible.taille+self.taille+portee:
@@ -91,22 +95,14 @@ class Unite:
                     if isinstance(self.cible, Systeme.Systeme):
                         self.proprietaire.systemesvisites.add(self.cible)
                     self.base=self.cible
-                    return True #La cible est atteinte
-                """
-                self.ciblerdestination()
-                x=self.cible.x
-                y=self.cible.y
-                if hlp.calcDistance(self.x, self.y, x, y) >= self.vitesse:
-                    self.x,self.y=hlp.getAngledPoint(self.angletrajet,self.vitesse,self.x,self.y)
-                else:
-                    rep = self.cible
-                    self.base = self.cible
-                    return True #La cible est atteinte
-                """
-            elif self.chemin and isinstance(self.lieu, Planete.Planete):
-                x_cible, y_cible = self.lieu.matrice_vers_iso(*self.chemin[self.indice_chemin])
+                    return True
+            elif isinstance(self.lieu, Planete.Planete):
+                x_cible, y_cible = self.lieu.sol.matrice_vers_iso(*self.chemin[self.indice_chemin])
                 diff_x = x_cible - self.x
                 diff_y = y_cible - self.y
+                if abs(diff_x) > 120 or abs(diff_y) > 120:
+                    self.x = x_cible
+                    self.y = y_cible
                 if abs(diff_x) >5 or abs(diff_y) >5:
                     hypot = math.hypot(diff_x, diff_y)
                     self.x += diff_x/hypot
@@ -122,10 +118,9 @@ class Unite:
     def assigner_cible(self, cible):
             self.cible = Coord(cible.x, cible.y)
             self.chemin = self.calculer_chemin(cible)
-            print(self.chemin)
             self.indice_chemin = 1
             
-    def calculer_chemin(self, coords_cible):
+    def calculer_chemin(self, coords_cible):        
         def chemin_reconstruit(infos_cases, cible):
             case_courante = cible
             
@@ -136,8 +131,8 @@ class Unite:
             chemin.reverse()
             return chemin
 
-        x_init, y_init = self.lieu.iso_vers_matrice(self)
-        x_cible, y_cible = self.lieu.iso_vers_matrice(coords_cible)
+        x_init, y_init = self.lieu.sol.iso_vers_matrice(self)
+        x_cible, y_cible = self.lieu.sol.iso_vers_matrice(coords_cible)
         InfosCase = collections.namedtuple("InfosCase",
                                              "distance voisin")
         cases_visitees = set()
@@ -146,25 +141,23 @@ class Unite:
         infos_cases = dict()
         infos_cases[(x_init, y_init)] = InfosCase(0, None)
         cible = (x_cible, y_cible)
-        while len(cases_nontestees) != 0: 
+        while len(cases_nontestees) != 0:
             cases_par_distance = sorted([(infos_cases[case].distance, case)
                                          for case in cases_nontestees])
             case_courante = cases_par_distance[0][1]
             cases_nontestees.remove(case_courante)
             cases_visitees.add(case_courante)
             if case_courante == cible :
-                print(test)
                 return chemin_reconstruit(infos_cases, cible)
             x, y = case_courante
             for a in range(-1, 2):
                 for b in range(-1, 2):
-                    i = (x+a)%self.lieu.matrice_largeur
-                    j = (y+b)%self.lieu.matrice_hauteur
+                    i = (x+a)%self.lieu.sol.matrice_largeur
+                    j = (y+b)%self.lieu.sol.matrice_hauteur
                     voisin = (i, j)
                     if (voisin in cases_visitees):
                         continue
-                    if (self.lieu.terrain[j][i] != "terre"):
-                        test.add((i, j))
+                    if (self.lieu.sol.terrain[j][i] != "terre"):
                         continue
 
                     distance = infos_cases[case_courante].distance+1*abs(a)+0.5*abs(b)
@@ -479,7 +472,6 @@ class Disciple(Unite):
                          )
         
         self.type = random.choice(["vache", "tortue", "discipleguide"])
-        print(self.x, self.y, self.type, self.lieu)
                 
                      
         
