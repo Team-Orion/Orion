@@ -309,7 +309,7 @@ class VueGalaxie(Perspective):
                 #self.canevas.create_oval(proj.x*e-2, proj.y*e-2, proj.x*e+2, proj.y*e+2, fill = "red", tag=("projectile",))
                 self.canevas.create_image(proj.x*e-2, proj.y*e-2, image = self.vue.images["pomme"],tags=("projectile",))
             elif isinstance(proj, TrouNoir):
-                self.canevas.create_oval(proj.x*e-2, proj.y*e-2, proj.x*e+2, proj.y*e+2, fill = "blue", tag=("projectile",))
+                self.canevas.create_oval(proj.x*e-2, proj.y*e-2, proj.x*e+2, proj.y*e+2, fill = "pink", tag=("projectile",))
             
     def changerproprietaire(self,prop,couleur,systeme):
         #lp=self.canevas.find_withtag(systeme.id) 
