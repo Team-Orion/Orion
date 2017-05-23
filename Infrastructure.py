@@ -100,6 +100,8 @@ class Scierie(Infrastructure):
         super().__init__(proprietaire,planete,positionx, positiony)
         self.bois=0
         self.action=self.exploitationbois
+        self.vitesseproduction = 1
+        self.compteurexploitation=0
         print("scierie creee! x: ", positionx, " y: ", positiony)
         
     def exploitationbois(self):
