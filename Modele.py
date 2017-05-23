@@ -251,7 +251,7 @@ class IA(Joueur):
         if self.delaiaction==0:
             c=self.parent.parent.cadre+5 #Je ne sais pas ca sert a quoi #io 12-05
             
-            action = random.choice(["attaquer", "explorer"])#, "creerunite"])
+            action = random.choice(["attaquer", "attaquer", "attaquer", "explorer"])#, "creerunite"])
             if action == "attaquer":
                 unites_IA = list()
                 unites_enemies = list()

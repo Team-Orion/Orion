@@ -33,7 +33,7 @@ class Ferme(Infrastructure):
             self.compteurpopulation+=10
         else:
             self.compteurpopulation=0
-            if(self.planete.nbpopulation>0):
+            if(self.planete.foinexploite>0):
                 self.planete.foinexploite-= self.planete.nbpopulation*0.10
             else:
                 self.planete.nbpopulation-=1

@@ -304,7 +304,8 @@ class Vue():
                 InfosImg("planete6", "images/planete/planete6.png"),
                 InfosImg("planete7", "images/planete/planete7.png"),
                 InfosImg("planete8", "images/planete/planete8.png"),
-                InfosImg("pomme", "images/attaque/pomme.png")
+                InfosImg("pomme", "images/attaque/pomme.png"),
+                InfosImg("trounoir", "images/attaque/trounoir.png")
                 ]
 
     
