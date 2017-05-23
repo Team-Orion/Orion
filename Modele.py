@@ -251,7 +251,7 @@ class IA(Joueur):
         if self.delaiaction==0:
             c=self.parent.parent.cadre+5 #Je ne sais pas ca sert a quoi #io 12-05
             
-            action = random.choice(["attaquer", "explorer", "creerunite"])
+            action = random.choice(["attaquer", "explorer"])#, "creerunite"])
             if action == "attaquer":
                 unites_IA = list()
                 unites_enemies = list()
@@ -291,7 +291,7 @@ class IA(Joueur):
                         if unite.lieu == cible.lieu:
                             unite.cible = cible
                             unite.action = unite.avancer
-            
+            """
             elif action == "creerunite":
                 id_astres = list()
                 type_lieu = random.choice(["galaxie", "systeme"])
@@ -315,7 +315,7 @@ class IA(Joueur):
             appelant = random.choice(sorted(self.systemesvisites, key=(lambda sys: sys.id)))#[0]
             type_unite = random.choice(["sonde", "attaquegalaxie", "cargogalaxie", "stationgalaxie"])
             self.parent.actionsafaire[c].append([self.nom,"creerunite", {"id_appelant":appelant.id,"type_unite": type_unite}])
-            """
+            
             self.delaiaction=random.randrange(5,10)*5
         else:
             self.delaiaction-=1

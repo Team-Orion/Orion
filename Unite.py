@@ -341,7 +341,7 @@ class VaisseauAttaqueGalactique(Unite):
                          portee = 50/echelle,
                          portee_projectile = 60/echelle,
                          vitesse_projectile = 6/echelle,
-                         taille_projectile = 10/echelle,
+                         taille_projectile = 5/echelle,
                          type_projectile = "trou_noir",
                          taille = 16/echelle,
                          cout = 5
